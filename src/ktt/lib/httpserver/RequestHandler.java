@@ -3,6 +3,7 @@ package ktt.lib.httpserver;
 import ktt.lib.httpserver.http.HTTPCode;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 
 /**
  * <i>This class is a simplified implementation of {@link com.sun.net.httpserver.HttpHandler}.</i>
@@ -17,14 +18,13 @@ import java.io.IOException;
 public abstract class RequestHandler implements Authenticator {
 
     /**
-     * Handles the given request and generates a response; returns code 500 error if no response is sent. Information from the client is provided in an {@link ExchangePacket}. <b>Exceptions thrown are suppressed by the handler and will not throw a response.</b>
+     * Handles the given request and generates a response; returns code 500 error if no response is sent. Information from the client is provided in an {@link ExchangePacket}.
      * @param packet a packet of data containing client information
      * @throws IOException internal failure
-     * @throws Exception any exceptions thrown within the handler
      * @see ExchangePacket
      * @since 01.00.00
      */
-    public abstract void handle(ExchangePacket packet) throws Exception;
+    public abstract void handle(ExchangePacket packet) throws IOException;
 
     /**
      * Encapsulates the {@link #handle(ExchangePacket)} for the authenticator. Applications do not normally use this class.
@@ -35,15 +35,16 @@ public abstract class RequestHandler implements Authenticator {
         if(authenticate(packet)){
             try {
                 handle(packet);
-            } catch (Exception ignored) { /* internal failure */ }
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
+            }
         }else{
             try {
                 packet.send(HTTPCode.HTTP_Unauthorized);
-            } catch (IOException e) { /* severe failure */ }
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
+            }
         }
-        try {
-            packet.send(500);
-        } catch (IOException ignored) { /* severe failure */ }
         packet.close();
     }
 

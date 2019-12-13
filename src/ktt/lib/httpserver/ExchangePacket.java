@@ -196,6 +196,7 @@ public abstract class ExchangePacket {
      * @see #hasPost()
      * @since 01.00.00
      */
+    @SuppressWarnings("rawtypes")
     public abstract HashMap getPostMap();
 
     /**

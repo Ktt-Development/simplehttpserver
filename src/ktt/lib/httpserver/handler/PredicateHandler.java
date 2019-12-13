@@ -34,7 +34,7 @@ public class PredicateHandler extends RequestHandler {
     }
 
     @Override
-    public final void handle(ExchangePacket packet) throws Exception {
+    public final void handle(ExchangePacket packet) {
         if(predicate.test(packet)){
             T.handle(packet);
         }else{
