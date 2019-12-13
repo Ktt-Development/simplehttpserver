@@ -1,3 +1,6 @@
+# IntelliJ ignore
 .idea
 out
 *.iml
+# Project ignore
+src/LICENSE.txt
