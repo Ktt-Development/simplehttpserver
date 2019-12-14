@@ -1,2 +1,0 @@
-# ktt-http-server
-Enhanced version of the the default Http Server
