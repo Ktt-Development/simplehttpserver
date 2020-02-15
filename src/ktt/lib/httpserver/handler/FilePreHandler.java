@@ -3404,7 +3404,7 @@ public class FilePreHandler extends RequestHandler {
 //
 
     @Override
-    public final void handle(ExchangePacket packet) throws Exception {
+    public final void handle(ExchangePacket packet) throws IOException{
         String rel = __.startSlash(URLDecoder.decode(packet.getRelativeContext(), StandardCharsets.UTF_8));
 
         final _pair<File,byte[]> out = dat.get(rel);
@@ -3420,10 +3420,10 @@ public class FilePreHandler extends RequestHandler {
      * @param packet a packet of data containing client information
      * @param source the file requested by the user
      * @param bytes the file's preloaded bytes
-     * @throws Exception a handler
+     * @throws IOException internal server error
      * since 01.00.00
      */
-    public void handle(ExchangePacket packet, File source, byte[] bytes) throws Exception {
+    public void handle(ExchangePacket packet, File source, byte[] bytes) throws IOException{
         packet.send(bytes);
     }
 
