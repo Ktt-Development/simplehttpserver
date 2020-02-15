@@ -3,4 +3,5 @@
 out
 *.iml
 # Project ignore
+.docs
 src/LICENSE.txt
