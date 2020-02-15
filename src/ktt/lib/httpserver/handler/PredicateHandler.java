@@ -3,6 +3,7 @@ package ktt.lib.httpserver.handler;
 import ktt.lib.httpserver.ExchangePacket;
 import ktt.lib.httpserver.RequestHandler;
 
+import java.io.IOException;
 import java.util.function.Predicate;
 
 /**
@@ -34,7 +35,7 @@ public class PredicateHandler extends RequestHandler {
     }
 
     @Override
-    public final void handle(ExchangePacket packet) {
+    public final void handle(ExchangePacket packet) throws IOException{
         if(predicate.test(packet)){
             T.handle(packet);
         }else{

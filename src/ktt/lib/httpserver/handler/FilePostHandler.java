@@ -240,7 +240,7 @@ public class FilePostHandler extends RequestHandler {
             }
 
     @Override
-    public final void handle(ExchangePacket packet) throws Exception {
+    public final void handle(ExchangePacket packet) throws IOException{
         String rel = URLDecoder.decode(__.startSlash(packet.getRelativeContext()), StandardCharsets.UTF_8);
 
         String match = "";
@@ -273,10 +273,9 @@ public class FilePostHandler extends RequestHandler {
      * @param packet a packet of data containing client information
      * @param source the file requested by the user
      * @throws IOException internal failure
-     * @throws Exception any exceptions thrown within the handler
      * @since 01.01.01
      */
-    public void handle(ExchangePacket packet, File source) throws Exception{
+    public void handle(ExchangePacket packet, File source) throws IOException{
         try {
             packet.send(Files.readAllBytes(source.toPath()));
         } catch (IOException ignored) {

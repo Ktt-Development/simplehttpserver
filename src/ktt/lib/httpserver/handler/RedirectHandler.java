@@ -4,6 +4,8 @@ import ktt.lib.httpserver.ExchangePacket;
 import ktt.lib.httpserver.RequestHandler;
 import ktt.lib.httpserver.http.HTTPCode;
 
+import java.io.IOException;
+
 /**
  * A Request Handler that redirects to a different URL without saving to the history.
  * @see RequestHandler
@@ -26,7 +28,7 @@ public final class RedirectHandler extends RequestHandler {
     }
 
     @Override
-    public void handle(ExchangePacket packet) throws Exception {
+    public void handle(ExchangePacket packet) throws IOException{
         packet.getResponseHeaders().set("Location",link);
         packet.send(HTTPCode.HTTP_Found);
     }
