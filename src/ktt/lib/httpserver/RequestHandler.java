@@ -37,16 +37,12 @@ public abstract class RequestHandler implements Authenticator {
                 handle(packet);
             } catch (IOException e) {
                 throw new UncheckedIOException(e);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
             }
         }else{
             try {
                 packet.send(HTTPCode.HTTP_Unauthorized);
             } catch (IOException e) {
                 throw new UncheckedIOException(e);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
             }
         }
         packet.close();
