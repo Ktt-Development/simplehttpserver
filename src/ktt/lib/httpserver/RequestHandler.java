@@ -4,6 +4,7 @@ import ktt.lib.httpserver.http.HTTPCode;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.io.RuntimeException;
 
 /**
  * <i>This class is a simplified implementation of {@link com.sun.net.httpserver.HttpHandler}.</i>
@@ -37,12 +38,16 @@ public abstract class RequestHandler implements Authenticator {
                 handle(packet);
             } catch (IOException e) {
                 throw new UncheckedIOException(e);
+            } catch (Exception e){
+                throw new RuntimeException(e);
             }
         }else{
             try {
                 packet.send(HTTPCode.HTTP_Unauthorized);
             } catch (IOException e) {
                 throw new UncheckedIOException(e);
+            } catch (Exception e){
+                throw new RuntimeException(e)
             }
         }
         packet.close();
