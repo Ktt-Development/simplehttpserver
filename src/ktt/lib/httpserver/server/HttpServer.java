@@ -1,7 +1,5 @@
 package ktt.lib.httpserver.server;
 
-import com.sun.net.httpserver.HttpContext;
-import ktt.lib.httpserver.RequestHandler;
 import ktt.lib.httpserver.handler.HttpHandler;
 
 import java.io.IOException;
@@ -16,22 +14,22 @@ public abstract class HttpServer {
 //
 
     public static HttpServer create() throws IOException {
-
+        return HttpServerImpl.createHttpServer(80, 0);
     }
 
     public static HttpServer create(int port) throws IOException {
-
+        return HttpServerImpl.createHttpServer(port, 0);
     }
 
     public static HttpServer create(int port, int backlog) throws IOException {
-
+        return HttpServerImpl.createHttpServer(port, backlog);
     }
 
 //
 
-    public abstract void bind(final int port) throws IOException;
+    public abstract InetSocketAddress bind(final int port) throws IOException;
 
-    public abstract void bind(final int port, final int backlog) throws IOException;
+    public abstract InetSocketAddress bind(final int port, final int backlog) throws IOException;
 
     public abstract void bind(final InetSocketAddress addr) throws IOException;
 
@@ -49,19 +47,15 @@ public abstract class HttpServer {
 
 //
 
-    // todo              ↓
     public abstract HttpContext createContext(final String path);
 
-    // todo              ↓                                            ↓
     public abstract HttpContext createContext(final String path, HttpHandler handler);
 
     public abstract void removeContext(final String path);
 
-    // todo                                       ↓
     public abstract void removeContext(final HttpContext context);
 
-    // todo                           ↓
-    public abstract Map<String,HttpHandler> getContexts();
+    public abstract Map<HttpContext,HttpHandler> getContexts();
 
 //
 

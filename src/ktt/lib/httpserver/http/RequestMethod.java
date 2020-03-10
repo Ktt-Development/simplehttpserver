@@ -7,7 +7,6 @@ package ktt.lib.httpserver.http;
  * @version 01.00.00
  * @author Ktt Development
  */
-@Deprecated
 public enum RequestMethod {
     GET,
     HEAD,

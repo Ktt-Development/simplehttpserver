@@ -13,8 +13,8 @@ public abstract class HttpContext {
 
 //
 
-    protected static HttpContext createHttpContext(){
-
+    static HttpContext createHttpContext(final String protocol, final String path, final HttpHandler handler, final HttpServer server){
+        return HttpContextImpl.createHttpContext(protocol, path, handler, server);
     }
 
 //
@@ -25,9 +25,11 @@ public abstract class HttpContext {
 
 //
 
-    public abstract String getPath();
-
     public abstract HttpServer getServer();
+
+    public abstract String getProtocol();
+
+    public abstract String getPath();
 
 //
 
