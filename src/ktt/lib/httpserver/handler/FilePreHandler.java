@@ -26,6 +26,7 @@ import java.util.Map;
  * @author Ktt Development
  */
 @SuppressWarnings({"unused","WeakerAccess"})
+@Deprecated
 public class FilePreHandler extends RequestHandler {
 
     private final Map<String,_pair<File,byte[]>> dat = new HashMap<>();

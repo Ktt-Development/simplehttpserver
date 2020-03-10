@@ -11,6 +11,7 @@ import ktt.lib.httpserver.RequestHandler;
  * @author Ktt Development
  */
 @SuppressWarnings({"WeakerAccess","unused"})
+@Deprecated
 public final class RootHandler extends PredicateHandler {
 
     /**

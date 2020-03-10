@@ -11,6 +11,7 @@ import java.io.File;
  * @author Ktt Development
  */
 @SuppressWarnings("WeakerAccess")
+@Deprecated
 public interface FileNameAdapter {
 
     /**

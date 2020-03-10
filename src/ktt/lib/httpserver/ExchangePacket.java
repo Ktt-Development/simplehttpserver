@@ -47,6 +47,7 @@ import java.util.HashMap;
  * @author Ktt Development
  */
 @SuppressWarnings("unused")
+@Deprecated
 public abstract class ExchangePacket {
 
     /**

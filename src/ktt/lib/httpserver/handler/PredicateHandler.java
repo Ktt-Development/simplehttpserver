@@ -15,6 +15,7 @@ import java.util.function.Predicate;
  * @author Ktt Development
  */
 @SuppressWarnings("WeakerAccess")
+@Deprecated
 public class PredicateHandler extends RequestHandler {
 
     private final RequestHandler T, F;

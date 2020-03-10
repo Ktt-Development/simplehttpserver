@@ -15,6 +15,7 @@ import java.io.UncheckedIOException;
  * @version 01.01.01
  * @author Ktt Development
  */
+@Deprecated
 public abstract class RequestHandler implements Authenticator {
 
     /**

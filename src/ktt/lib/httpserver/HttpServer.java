@@ -16,6 +16,7 @@ import java.util.concurrent.Executor;
  * @author Ktt Development
  */
 @SuppressWarnings("unused")
+@Deprecated
 public abstract class HttpServer {
 
     /**

@@ -7,6 +7,7 @@ package ktt.lib.httpserver;
  * @author Ktt Development
  */
 @SuppressWarnings({"unused","WeakerAccess"})
+@Deprecated
 class __ {
 
     /**

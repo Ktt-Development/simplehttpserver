@@ -8,6 +8,7 @@ package ktt.lib.httpserver.http;
  * @author Ktt Development
  */
 @SuppressWarnings("unused")
+@Deprecated
 public abstract class HTTPCode {
 
     public static final int HTTP_Continue = 100;

@@ -27,6 +27,7 @@ import java.util.zip.GZIPOutputStream;
  * @author Ktt Development
  */
 @SuppressWarnings({"unchecked", "WeakerAccess", "unused"})
+@Deprecated
 public abstract class ExchangePacketProvider {
 
     /**

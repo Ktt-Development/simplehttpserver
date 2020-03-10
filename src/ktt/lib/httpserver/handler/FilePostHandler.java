@@ -20,6 +20,7 @@ import java.util.Map;
  * @author Ktt Development
  */
 @SuppressWarnings({"unused","WeakerAccess"})
+@Deprecated
 public class FilePostHandler extends RequestHandler {
 
     private final Map<String,_pair<File,Boolean>> dat = new HashMap<>();

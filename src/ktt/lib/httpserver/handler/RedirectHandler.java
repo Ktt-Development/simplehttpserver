@@ -14,6 +14,7 @@ import java.io.IOException;
  * @author Ktt Development
  */
 @SuppressWarnings("unused")
+@Deprecated
 public final class RedirectHandler extends RequestHandler {
 
     private final String link;
