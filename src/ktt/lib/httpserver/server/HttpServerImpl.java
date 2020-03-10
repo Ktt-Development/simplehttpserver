@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executor;
 
+@Deprecated
 abstract class HttpServerImpl {
 
     static HttpServer createHttpServer(final int port, final int backlog) throws IOException{

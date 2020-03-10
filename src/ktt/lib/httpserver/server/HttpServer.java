@@ -7,6 +7,7 @@ import java.net.InetSocketAddress;
 import java.util.Map;
 import java.util.concurrent.Executor;
 
+@Deprecated
 public abstract class HttpServer {
 
     HttpServer(){ }

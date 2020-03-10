@@ -10,6 +10,7 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
+@Deprecated
 abstract class HttpExchangeImpl {
 
     static HttpExchange createHttpExchange(final com.sun.net.httpserver.HttpExchange exchange){

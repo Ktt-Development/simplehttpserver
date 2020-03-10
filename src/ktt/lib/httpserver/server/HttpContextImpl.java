@@ -6,6 +6,7 @@ import java.net.Authenticator;
 import java.util.*;
 import java.util.logging.Filter;
 
+@Deprecated
 abstract class HttpContextImpl {
 
     static HttpContext createHttpContext(final String protocol, final String path, final HttpHandler handler, final HttpServer server){

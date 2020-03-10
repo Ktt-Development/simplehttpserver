@@ -8,6 +8,7 @@ import java.net.InetSocketAddress;
 import java.net.URI;
 import java.util.HashMap;
 
+@Deprecated
 public abstract class HttpExchange {
 
     HttpExchange(){ }
