@@ -8,7 +8,7 @@ assignees: ''
 ---
 
 ### Prerequisites
-*If **all** checks are not passed then the pull request will be closed*
+*If **all** checks are not passed then the request will be closed*
 - [ ] I have checked that no other similar feature request already exists
 - [ ] The feature request makes sense for the project
 
