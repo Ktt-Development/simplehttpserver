@@ -41,9 +41,16 @@ public abstract class SimpleHttpExchange {
 
     public abstract String getProtocol();
 
+    public abstract String getScheme();
+
+    public abstract String getAuthority();
+
+    @Deprecated
+    public abstract String getQuery();
+
     public abstract String getContext();
 
-    public abstract String getScheme();
+    public abstract String getFragment();
 
 //
 
@@ -82,11 +89,19 @@ public abstract class SimpleHttpExchange {
 
     public abstract void send(final byte[] response) throws IOException;
 
+    public abstract void send(final byte[] response, final boolean gzip) throws IOException;
+
     public abstract void send(final byte[] response, int responseCode) throws IOException;
+
+    public abstract void send(final byte[] response, int responseCode, final boolean gzip) throws IOException;
 
     public abstract void send(final String response) throws IOException;
 
+    public abstract void send(final String response, final boolean gzip) throws IOException;
+
     public abstract void send(final String response, final int responseCode) throws IOException;
+
+    public abstract void send(final String response, final int responseCode, final boolean gzip) throws IOException;
 
 //
 
