@@ -57,6 +57,10 @@ public abstract class SimpleHttpServer {
 
     public abstract HttpContext createContext(final String path, HttpHandler handler);
 
+    public abstract HttpHandler getContextHandler(final String path);
+
+    public abstract HttpHandler getContextHandler(final HttpContext context);
+
     public abstract void removeContext(final String path);
 
     public abstract void removeContext(final HttpContext context);

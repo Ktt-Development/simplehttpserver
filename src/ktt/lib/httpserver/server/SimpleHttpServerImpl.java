@@ -94,6 +94,21 @@ abstract class SimpleHttpServerImpl {
             }
 
             @Override
+            public final HttpHandler getContextHandler(final String path){
+                for(final HttpContext context : contexts.keySet()){
+                    if(context.getPath().equalsIgnoreCase(getContext(path))){
+                        return context.getHandler();
+                    }
+                }
+                return null;
+            }
+
+            @Override
+            public final HttpHandler getContextHandler(final HttpContext context){
+                return contexts.get(context);
+            }
+
+            @Override
             public synchronized final void removeContext(final String path){
                 server.removeContext(getContext(path));
                 for(final HttpContext context : contexts.keySet()){
