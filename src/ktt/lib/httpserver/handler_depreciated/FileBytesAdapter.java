@@ -1,4 +1,4 @@
-package ktt.lib.httpserver.handler;
+package ktt.lib.httpserver.handler_depreciated;
 
 import java.io.File;
 

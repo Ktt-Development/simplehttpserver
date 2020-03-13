@@ -1,4 +1,4 @@
-package ktt.lib.httpserver.handler;
+package ktt.lib.httpserver.handler_depreciated;
 
 /**
  * Private methods to help resolve variable slashes. Applications do not normally use this class.
