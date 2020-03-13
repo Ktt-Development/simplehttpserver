@@ -399,10 +399,4 @@ abstract class SimpleHttpExchangeImpl {
         };
     }
 
-    private static String getContext(final String path){
-        final String linSlash = path.toLowerCase().replace("\\","/");
-        final String seSlash = (!linSlash.startsWith("/") ? "/" : "") + linSlash + (!linSlash.endsWith("/") ? "/" : "");
-        return seSlash.substring(0,seSlash.length()-1);
-    }
-
 }
