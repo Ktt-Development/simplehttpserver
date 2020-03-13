@@ -1,6 +1,7 @@
 package ktt.lib.httpserver.server;
 
-import com.sun.net.httpserver.Headers;
+import com.sun.net.httpserver.*;
+import com.sun.net.httpserver.HttpExchange;
 import ktt.lib.httpserver.http.RequestMethod;
 
 import java.io.IOException;
@@ -8,20 +9,23 @@ import java.net.InetSocketAddress;
 import java.net.URI;
 import java.util.HashMap;
 
-@Deprecated
-public abstract class HttpExchange {
+public abstract class SimpleHttpExchange {
 
-    HttpExchange(){ }
+    SimpleHttpExchange() { }
 
 //
 
-    static HttpExchange create(com.sun.net.httpserver.HttpExchange exchange){
-        return HttpExchangeImpl.createHttpExchange(exchange);
+    static SimpleHttpExchange create(final HttpExchange exchange){
+        return SimpleHttpExchangeImpl.createSimpleHttpExchange(exchange);
     }
 
 //
 
-    public abstract HttpServer getServer();
+    public abstract HttpServer getHttpServer();
+
+    public abstract HttpExchange getHttpExchange();
+
+//
 
     public abstract URI getURI();
 
@@ -37,10 +41,8 @@ public abstract class HttpExchange {
 
     public abstract String getProtocol();
 
-    @Deprecated
     public abstract String getContext();
 
-    @Deprecated
     public abstract String getScheme();
 
 //

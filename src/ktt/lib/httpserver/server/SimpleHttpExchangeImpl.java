@@ -1,6 +1,7 @@
 package ktt.lib.httpserver.server;
 
-import com.sun.net.httpserver.Headers;
+import com.sun.net.httpserver.*;
+import com.sun.net.httpserver.HttpExchange;
 import ktt.lib.httpserver.http.HTTPCode;
 import ktt.lib.httpserver.http.RequestMethod;
 
@@ -10,26 +11,20 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
-@Deprecated
-abstract class HttpExchangeImpl {
+abstract class SimpleHttpExchangeImpl {
 
-    static HttpExchange createHttpExchange(final com.sun.net.httpserver.HttpExchange exchange){
-        return new HttpExchange() {
+    static SimpleHttpExchange createSimpleHttpExchange(final HttpExchange exchange){
+        return new SimpleHttpExchange() {
 
-            private final com.sun.net.httpserver.HttpExchange httpExchange = exchange;
-            private boolean closed = false;
+            private final HttpServer httpServer;
+            private final HttpExchange httpExchange;
 
-            private final HttpServer server;
             private final URI URI;
-            private final InetSocketAddress publicAddr;
-            private final InetSocketAddress localAddr;
+            private final InetSocketAddress publicAddr, localAddr;
 
             private final HttpContext httpContext;
             private final HttpPrincipal httpPrincipal;
-            private final String
-                protocol,
-                context,
-                scheme;
+            private final String protocol, context, scheme;
 
             private final Headers requestHeaders;
             private final RequestMethod requestMethod;
@@ -42,22 +37,22 @@ abstract class HttpExchangeImpl {
             private final HashMap postMap;
             private final boolean hasPost;
 
-            private Headers responseHeaders;
-            private int responseCode;
+            private boolean closed = false;
 
             {
-                server = null; // todo: http context needs http server
-                URI = exchange.getRequestURI();
-                publicAddr = exchange.getRemoteAddress();
-                localAddr = exchange.getLocalAddress();
-
-                httpContext = null; // todo: context needs wrapper or #create(...);
-                httpPrincipal = null; // todo: principal needs wrapper or #create(...);
-                protocol = null; // todo: needs impl
+                httpServer = (httpContext = exchange.getHttpContext()).getServer();
+                httpExchange = exchange;
+            //
+                URI = httpExchange.getRequestURI();
+                publicAddr = httpExchange.getRemoteAddress();
+                localAddr = httpExchange.getLocalAddress();
+            //
+                httpPrincipal = httpExchange.getPrincipal();
+                protocol = httpExchange.getProtocol();
                 context = null; // todo: needs impl
                 scheme = null; // todo: needs impl
-
-                requestHeaders = exchange.getRequestHeaders();
+            //
+                requestHeaders = httpExchange.getRequestHeaders();
                 switch(exchange.getRequestMethod()){
                     case "GET":
                         requestMethod = RequestMethod.GET; break;
@@ -80,21 +75,29 @@ abstract class HttpExchangeImpl {
                     default:
                         requestMethod = RequestMethod.UNSUPPORTED; break;
                 }
-
+            //
                 hasGet = (rawGet = URI.getQuery()) != null;
                 getMap = null; // todo: needs parse
-
+            //
                 rawPost = null; // todo: needs impl
                 postMap = null; // todo: needs impl
-                hasPost = null; // todo: needs impl
+                hasPost = false; // todo: needs impl
+
             }
 
         //
 
             @Override
-            public final HttpServer getServer(){
-                return server;
+            public final HttpServer getHttpServer(){
+                return httpServer;
             }
+
+            @Override
+            public final HttpExchange getHttpExchange(){
+                return httpExchange;
+            }
+
+        //
 
             @Override
             public final URI getURI(){
@@ -130,7 +133,7 @@ abstract class HttpExchangeImpl {
 
             @Override
             public final String getContext(){
-                return context;
+                return protocol;
             }
 
             @Override
@@ -188,12 +191,12 @@ abstract class HttpExchangeImpl {
 
             @Override
             public final Headers getResponseHeaders(){
-                return responseHeaders;
+                return httpExchange.getResponseHeaders();
             }
 
             @Override
             public final int getResponseCode(){
-                return responseCode;
+                return httpExchange.getResponseCode();
             }
 
         //
@@ -202,14 +205,12 @@ abstract class HttpExchangeImpl {
             public synchronized final void sendResponseHeaders(final int code, final long length) throws IOException{
                 if(closed) return;
                 httpExchange.sendResponseHeaders(code, length);
-                responseCode = code;
-                responseHeaders = httpExchange.getResponseHeaders();
                 close();
             }
 
             @Override
             public synchronized final void send(final int responseCode) throws IOException{
-                sendResponseHeaders(responseCode, 0);
+                sendResponseHeaders(responseCode,0);
             }
 
             @Override
@@ -218,10 +219,10 @@ abstract class HttpExchangeImpl {
             }
 
             @Override
-            public synchronized final void send(final byte[] response, final int responseCode) throws IOException{
+            public synchronized final void send(final byte[] response, final int responseCode) throws IOException {
                 if(closed) return;
 
-                // todo: impl
+                // todo: needs impl
             }
 
             @Override
@@ -231,7 +232,7 @@ abstract class HttpExchangeImpl {
 
             @Override
             public synchronized final void send(final String response, final int responseCode) throws IOException{
-                send(response.getBytes(StandardCharsets.UTF_8), responseCode);
+                send(response.getBytes(StandardCharsets.UTF_8),responseCode);
             }
 
         //
@@ -247,13 +248,13 @@ abstract class HttpExchangeImpl {
         //
 
             @Override
-            public Object getAttribute(final String name){
-                return null;
+            public final Object getAttribute(final String name){
+                return httpExchange.getAttribute(name);
             }
 
             @Override
-            public void setAttribute(final String name, final Object value){
-
+            public synchronized final void setAttribute(final String name, final Object value){
+                httpExchange.setAttribute(name, value);
             }
 
         };
