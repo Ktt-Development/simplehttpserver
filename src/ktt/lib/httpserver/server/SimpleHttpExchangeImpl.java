@@ -2,8 +2,7 @@ package ktt.lib.httpserver.server;
 
 import com.sun.net.httpserver.*;
 import com.sun.net.httpserver.HttpExchange;
-import ktt.lib.httpserver.http.HTTPCode;
-import ktt.lib.httpserver.http.RequestMethod;
+import ktt.lib.httpserver.http.*;
 
 import java.io.*;
 import java.net.*;
@@ -39,6 +38,8 @@ abstract class SimpleHttpExchangeImpl {
             private final String rawPost;
             private final HashMap postMap;
             private final boolean hasPost;
+
+            private final HashMap<String,String> cookies;
 
             private boolean closed = false;
 
@@ -164,6 +165,16 @@ abstract class SimpleHttpExchangeImpl {
                     postMap = parseWwwFormEnc.apply(rawPost);
                 }
                 // endregion
+
+                final String rawCookie = requestHeaders.getFirst("Cookie");
+                cookies = new HashMap<>();
+                if(rawCookie != null && !rawCookie.isEmpty()){
+                    final String[] cookedCookie = rawCookie.split("; "); // pair
+                    for(final String pair : cookedCookie){
+                        String[] value = pair.split("=");
+                        cookies.put(value[0],value[1]);
+                    }
+                }
             }
 
         //
@@ -297,6 +308,19 @@ abstract class SimpleHttpExchangeImpl {
             @Override
             public final int getResponseCode(){
                 return httpExchange.getResponseCode();
+            }
+
+        //
+
+
+            @Override
+            public HashMap<String, String> getCookies(){
+                return new HashMap<>(cookies);
+            }
+
+            @Override
+            public synchronized final void setCookie(final SimpleHTTPCookie cookie){
+                getResponseHeaders().add("Set-Cookie",cookie.toString());
             }
 
         //

@@ -3,6 +3,7 @@ package ktt.lib.httpserver.server;
 import com.sun.net.httpserver.*;
 import com.sun.net.httpserver.HttpExchange;
 import ktt.lib.httpserver.http.RequestMethod;
+import ktt.lib.httpserver.http.SimpleHTTPCookie;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -80,6 +81,12 @@ public abstract class SimpleHttpExchange {
     public abstract Headers getResponseHeaders();
 
     public abstract int getResponseCode();
+
+//
+
+    public abstract HashMap<String,String> getCookies();
+
+    public abstract void setCookie(final SimpleHTTPCookie cookie);
 
 //
 
