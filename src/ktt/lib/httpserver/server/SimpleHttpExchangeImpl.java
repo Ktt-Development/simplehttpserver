@@ -314,7 +314,7 @@ abstract class SimpleHttpExchangeImpl {
 
 
             @Override
-            public HashMap<String, String> getCookies(){
+            public final HashMap<String, String> getCookies(){
                 return new HashMap<>(cookies);
             }
 
