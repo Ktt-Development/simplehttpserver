@@ -41,6 +41,18 @@ public class FileHandler extends SimpleHttpHandler {
 
     @Override
     public final void handle(final SimpleHttpExchange exchange) throws IOException{
+        final String rel = exchange.getContext().substring(exchange.getHttpContext().getPath().length());
+
+        String match = "";
+        for(String key : files.keySet())
+            if(rel.startsWith(key) && key.startsWith(match))
+                match = key;
+
+        if(match.isEmpty())
+            for(String key : directories.keySet())
+                if(rel.startsWith(key) && key.startsWith(match))
+                    match = key;
+
         // todo
     }
 

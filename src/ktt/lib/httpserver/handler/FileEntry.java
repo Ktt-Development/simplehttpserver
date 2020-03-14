@@ -1,7 +1,6 @@
 package ktt.lib.httpserver.handler;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
@@ -11,7 +10,10 @@ class FileEntry {
     private final boolean isPreloaded;
     private byte[] preloadedBytes;
 
-    FileEntry(final File file, final boolean isPreloaded, final FileBytesAdapter bytesAdapter){
+    FileEntry(final File file, final boolean isPreloaded, final FileBytesAdapter bytesAdapter) throws FileNotFoundException{
+        if(!file.exists() || file.isDirectory())
+            throw new FileNotFoundException("File at " + file.getAbsoluteFile() + " was not found");
+
         this.file = file;
         this.isPreloaded = isPreloaded;
 
@@ -38,7 +40,7 @@ class FileEntry {
             try{
                 return Files.readAllBytes(file.toPath());
             }catch(final IOException ignored){
-                return "Failed to read file".getBytes(StandardCharsets.UTF_8);
+                return null;
             }
     }
 
