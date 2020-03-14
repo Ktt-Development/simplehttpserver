@@ -21,7 +21,7 @@ import java.util.concurrent.Executor;
 abstract class SimpleHttpServerImpl {
 
     /**
-     * Creates a {@link SimpleHttpExchange}.
+     * Creates a {@link SimpleHttpServer}.
      *
      * @param port port to run the server on
      * @param backlog how many requests to backlog

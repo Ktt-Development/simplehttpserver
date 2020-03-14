@@ -3,6 +3,14 @@ package ktt.lib.httpserver.http;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * An HTTP Cookie to be sent in a response header.
+ *
+ * @see ktt.lib.httpserver.server.SimpleHttpExchange
+ * @since 02.00.00
+ * @version 02.00.00
+ * @author Ktt Development
+ */
 public class SimpleHTTPCookie {
 
     private final String
@@ -18,6 +26,22 @@ public class SimpleHTTPCookie {
         secure,
         httpOnly;
 
+    /**
+     * Creates an HTTP cookie.
+     *
+     * @param name name of the cookie
+     * @param value value of the cookie
+     * @param domain what domain to send the cookie to
+     * @param path what path to send the cookie to
+     * @param sameSite should the cookie be prevented from being sent cross-site
+     * @param expires when the cookie expires
+     * @param maxAge how long the cookie can live
+     * @param secure is the cookie limited to an HTTPS protocol only
+     * @param httpOnly should the cookie only be read by the server
+     *
+     * @since 02.00.00
+     * @author Ktt Development
+     */
     public SimpleHTTPCookie(final String name, final String value, final String domain, final String path, final String sameSite, final Date expires, final int maxAge, final boolean secure, final boolean httpOnly){
         this.name = name;
         this.value = value;
@@ -30,6 +54,15 @@ public class SimpleHTTPCookie {
         this.httpOnly = httpOnly;
     }
 
+    /**
+     * Converts the cookie to a readable string for the cookie header.
+     *
+     * @return cookie header
+     *
+     * @see ktt.lib.httpserver.server.SimpleHttpExchange#setCookie(SimpleHTTPCookie)
+     * @since 02.00.00
+     * @author Ktt Development
+     */
     @SuppressWarnings("ConstantConditions")
     @Override
     public final String toString(){

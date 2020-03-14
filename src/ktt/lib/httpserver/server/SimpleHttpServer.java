@@ -9,70 +9,331 @@ import java.net.InetSocketAddress;
 import java.util.Map;
 import java.util.concurrent.Executor;
 
+/**
+ * <i>This class is a simplified implementation of {@link HttpServer}.</i><br>
+ * At least one {@link HttpHandler} must be created in order to process requests. When handling requests the server will use the most specific context. If no handler can be found it is rejected with a 404 response.
+ *
+ * @see HttpServer
+ * @see HttpHandler
+ * @see SimpleHttpHandler
+ * @since 02.00.00
+ * @version 02.00.00
+ * @author Ktt Development
+ */
 public abstract class SimpleHttpServer {
 
+    /**
+     * Create an empty {@link SimpleHttpServer}. Applications don't use this method.
+     *
+     * @see SimpleHttpServerImpl#createSimpleHttpServer(int, int)
+     * @since 02.00.00
+     * @author Ktt Development
+     */
     SimpleHttpServer(){ }
 
 //
 
+    /**
+     * Create a {@link SimpleHttpServer} at port 80 with no backlog.
+     *
+     * @return a {@link SimpleHttpServer}
+     * @throws java.net.BindException if server can not bind to port
+     * @throws IOException uncaught exception
+     *
+     * @since 02.00.00
+     * @author Ktt Development
+     */
     public static SimpleHttpServer create() throws IOException {
         return SimpleHttpServerImpl.createSimpleHttpServer(80,0);
     }
 
+    /**
+     * Create a {@link SimpleHttpServer} at with no backlog.
+     *
+     * @param port port to bind to
+     * @return a {@link SimpleHttpServer}
+     * @throws java.net.BindException if server can not bind to port
+     * @throws IOException uncaught exception
+     *
+     * @since 02.00.00
+     * @author Ktt Development
+     */
     public static SimpleHttpServer create(final int port) throws IOException {
         return SimpleHttpServerImpl.createSimpleHttpServer(port,0);
     }
 
+    /**
+     * Create a {@link SimpleHttpServer}.
+     *
+     * @param port port to bind to
+     * @param backlog request backlog
+     * @return a {@link SimpleHttpServer}
+     * @throws java.net.BindException if server can not bind to port
+     * @throws IOException uncaught exception
+     *
+     * @since 02.00.00
+     * @author Ktt Development
+     */
     public static SimpleHttpServer create(final int port, final int backlog) throws IOException {
         return SimpleHttpServerImpl.createSimpleHttpServer(port,backlog);
     }
 
 //
 
+    /**
+     * Returns the native http server.
+     *
+     * @return http server
+     *
+     * @see HttpServer
+     * @since 02.00.00
+     * @author Ktt Development
+     */
     public abstract HttpServer getHttpServer();
 
 //
 
+    /**
+     * Binds the server to a port.
+     *
+     * @param port port to bind the server to
+     * @return address the server is binded to
+     * @throws java.net.BindException if server could not be bound to port, or if it's already bound
+     * @throws NullPointerException if address is <code>null</code>
+     * @throws IOException uncaught exception
+     *
+     * @see #bind(int, int)
+     * @see #bind(InetSocketAddress)
+     * @see #bind(InetSocketAddress, int)
+     * @since 02.00.00
+     * @author Ktt Development
+     */
     public abstract InetSocketAddress bind(final int port) throws IOException;
 
+    /**
+     * Binds the server to a port.
+     *
+     * @param port port to bind the server to
+     * @param backlog request backlog
+     * @return address the server is binded to
+     * @throws java.net.BindException if server could not be bound to port, or if it's already bound
+     * @throws NullPointerException if address is <code>null</code>
+     * @throws IOException uncaught exception
+     *
+     * @see #bind(int)
+     * @see #bind(InetSocketAddress)
+     * @see #bind(InetSocketAddress, int)
+     * @since 02.00.00
+     * @author Ktt Development
+     */
     public abstract InetSocketAddress bind(final int port, final int backlog) throws IOException;
 
+    /**
+     * Binds the server to a port.
+     *
+     * @param addr address to bind the server to
+     * @throws java.net.BindException if server could not be bound to port, or if it's already bound
+     * @throws NullPointerException if address is <code>null</code>
+     * @throws IOException uncaught exception
+     *
+     * @see InetSocketAddress
+     * @see #bind(int)
+     * @see #bind(int, int)
+     * @see #bind(InetSocketAddress, int)
+     * @since 02.00.00
+     * @author Ktt Development
+     */
     public abstract void bind(final InetSocketAddress addr) throws IOException;
 
+    /**
+     * Binds the server to a port.
+     *
+     * @param addr address to bind the server to
+     * @param backlog request backlog
+     * @throws java.net.BindException if server could not be bound to port, or if it's already bound
+     * @throws NullPointerException if address is <code>null</code>
+     * @throws IOException uncaught exception
+     *
+     * @see InetSocketAddress
+     * @see #bind(int)
+     * @see #bind(int, int)
+     * @see #bind(InetSocketAddress)
+     * @since 02.00.00
+     * @author Ktt Development
+     */
     public abstract void bind(final InetSocketAddress addr, final int backlog) throws IOException;
 
 //
 
+    /**
+     * Returns the address that the server is binded to.
+     *
+     * @return binded address
+     *
+     * @see InetSocketAddress
+     * @since 02.00.00
+     * @author Ktt Development
+     */
     public abstract InetSocketAddress getAddress();
 
 //
 
+    /**
+     * Sets the server's executor
+     *
+     * @param executor server executor
+     *
+     * @see #getExecutor()
+     * @see Executor
+     * @since 02.00.00
+     * @author Ktt Development
+     */
     public abstract void setExecutor(final Executor executor);
 
+    /**
+     * Returns the server's executor or null if none exists.
+     *
+     * @return server executor
+     *
+     * @see #setExecutor(Executor)
+     * @see Executor
+     * @since 02.00.00
+     * @author Ktt Development
+     */
     public abstract Executor getExecutor();
 
 //
 
+    /**
+     * Creates an empty context.
+     *
+     * @param path the path
+     * @return the http context associated with the path
+     * @throws IllegalArgumentException if the path is invalid or taken
+     * @throws NullPointerException if the path is null
+     *
+     * @see HttpContext
+     * @see #createContext(String, HttpHandler)
+     * @see #removeContext(String)
+     * @see #removeContext(HttpContext)
+     * @since 02.00.00
+     * @author Ktt Development
+     */
     public abstract HttpContext createContext(final String path);
 
+    /**
+     * Creates a context mapped to a specified {@link HttpHandler}.
+     *
+     * @param path the path
+     * @param handler the handler
+     * @return the http context associated with the path
+     * @throws IllegalArgumentException if the path is invalid or taken
+     * @throws NullPointerException if the path is null
+     *
+     * @see HttpContext
+     * @see HttpHandler
+     * @see #createContext(String)
+     * @see #removeContext(String)
+     * @see #removeContext(HttpContext)
+     * @since 02.00.00
+     * @author Ktt Development
+     */
     public abstract HttpContext createContext(final String path, HttpHandler handler);
 
-    public abstract HttpHandler getContextHandler(final String path);
-
-    public abstract HttpHandler getContextHandler(final HttpContext context);
-
+    /**
+     * Removes the context at the path.
+     *
+     * @param path the path to remove
+     * @throws IllegalArgumentException if no handler at that context exists
+     * @throws NullPointerException if the path is null
+     *
+     * @see #createContext(String)
+     * @see #createContext(String, HttpHandler)
+     * @see #removeContext(HttpContext)
+     * @since 02.00.00
+     * @author Ktt Development
+     */
     public abstract void removeContext(final String path);
 
+    /**
+     * Removes the context from the server.
+     * @param context the context to remove
+     * @throws IllegalArgumentException if no handler at that context exists
+     * @throws NullPointerException if the context is null
+     *
+     * @see #createContext(String)
+     * @see #createContext(String, HttpHandler)
+     * @see #removeContext(String)
+     * @since 02.00.00
+     * @author Ktt Development
+     */
     public abstract void removeContext(final HttpContext context);
 
+    /**
+     * Returns the handler mapped to a context.
+     *
+     * @param path path to retrieve
+     * @return handler associated with that path
+     *
+     * @see #getContextHandler(HttpContext)
+     * @since 02.00.00
+     * @author Ktt Development
+     */
+    public abstract HttpHandler getContextHandler(final String path);
+
+    /**
+     * Returns the handler mapped to a context.
+     *
+     * @param context context to retrieve
+     * @return handler associated with that context
+     *
+     * @see #getContextHandler(String)
+     * @since 02.00.00
+     * @author Ktt Development
+     */
+    public abstract HttpHandler getContextHandler(final HttpContext context);
+
+    /**
+     * Returns a copy of the server's contexts and their respective handlers.
+     *
+     * @return server's contexts
+     * @since 02.00.00
+     * @author Ktt Development
+     */
     public abstract Map<HttpContext,HttpHandler> getContexts();
 
 //
 
+    /**
+     * Starts the server.
+     *
+     * @see #stop()
+     * @see #stop(int)
+     * @since 2.00.00
+     * @author Ktt Development
+     */
     public abstract void start();
 
+    /**
+     * Stops the server and all active requests.
+     *
+     * @see #start()
+     * @see #stop(int)
+     * @since 02.00.00
+     * @author Ktt Development
+     */
     public abstract void stop();
 
+    /**
+     * Stops the server with a delay for remaining requests.
+     *
+     * @param delay delay until server stops all active requests
+     *
+     * @see #start()
+     * @see #stop(int)
+     * @since 02.00.00
+     * @author Ktt Development
+     */
     public abstract void stop(final int delay);
 
 }

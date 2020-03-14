@@ -55,6 +55,7 @@ abstract class SimpleHttpExchangeImpl {
             private final boolean hasGet;
 
             private final String rawPost;
+            @SuppressWarnings("rawtypes")
             private final HashMap postMap;
             private final boolean hasPost;
 
