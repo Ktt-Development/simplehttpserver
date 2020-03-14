@@ -13,8 +13,27 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPOutputStream;
 
+/**
+ * Implementation for {@link SimpleHttpExchange}. Applications do not use this class.
+ *
+ * @see SimpleHttpExchange
+ * @since 02.00.00
+ * @version 02.00.00
+ * @author Ktt Development
+ */
 abstract class SimpleHttpExchangeImpl {
 
+    /**
+     * Creates a {@link SimpleHttpExchange}.
+     *
+     * @param exchange native {@link HttpExchange}
+     * @return an {@link SimpleHttpExchange}
+     *
+     * @see SimpleHttpExchange
+     * @see HttpExchange
+     * @since 02.00.00
+     * @author Ktt Development
+     */
     static SimpleHttpExchange createSimpleHttpExchange(final HttpExchange exchange){
         return new SimpleHttpExchange() {
 

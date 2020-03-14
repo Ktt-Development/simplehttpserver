@@ -6,10 +6,27 @@ import ktt.lib.httpserver.server.SimpleHttpHandler;
 
 import java.io.IOException;
 
+/**
+ * A request handler that redirects to a different URL without pushing to the history.
+ *
+ * @see SimpleHttpHandler
+ * @see com.sun.net.httpserver.HttpHandler
+ * @since 01.00.00
+ * @version 02.00.00
+ * @author Ktt Development
+ */
 public class RedirectHandler extends SimpleHttpHandler {
 
     private final String link;
 
+    /**
+     * Creates a redirect to a URL.
+     *
+     * @param link URL to redirect to
+     *
+     * @since 01.00.00
+     * @author Ktt Development
+     */
     public RedirectHandler(final String link){
         this.link = link;
     }

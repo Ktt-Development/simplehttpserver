@@ -10,8 +10,29 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executor;
 
+/**
+ * Implementation for {@link SimpleHttpServer}. Applications do not use this class.
+ *
+ * @see SimpleHttpServer
+ * @since 02.00.00
+ * @version 02.00.00
+ * @author Ktt Development
+ */
 abstract class SimpleHttpServerImpl {
 
+    /**
+     * Creates a {@link SimpleHttpExchange}.
+     *
+     * @param port port to run the server on
+     * @param backlog how many requests to backlog
+     * @return a {@link SimpleHttpServer}
+     * @throws java.net.BindException if server can not bind to port
+     * @throws IOException uncaught exception
+     *
+     * @see SimpleHttpServer
+     * @since 02.00.00
+     * @author Ktt Development
+     */
     static SimpleHttpServer createSimpleHttpServer(final int port, final int backlog) throws IOException {
         return new SimpleHttpServer() {
 
