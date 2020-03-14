@@ -18,7 +18,11 @@ public class FileHandler extends SimpleHttpHandler {
 
     private final FileHandlerAdapter adapter;
 
-//
+    public FileHandler(final FileHandlerAdapter adapter){
+        this.adapter = adapter;
+    }
+
+    //
         /*
             Hash ->
             - Path (string)

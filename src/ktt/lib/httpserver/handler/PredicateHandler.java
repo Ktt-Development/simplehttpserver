@@ -20,11 +20,7 @@ public class PredicateHandler extends SimpleHttpHandler {
 
     @Override
     public final void handle(final SimpleHttpExchange exchange) throws IOException{
-        if(predicate.test(exchange)){
-            T.handle(exchange.getHttpExchange());
-        }else{
-            F.handle(exchange.getHttpExchange());
-        }
+        (predicate.test(exchange) ? T : F).handle(exchange.getHttpExchange());
     }
 
 }
