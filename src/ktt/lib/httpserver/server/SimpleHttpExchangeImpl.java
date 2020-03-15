@@ -349,7 +349,7 @@ abstract class SimpleHttpExchangeImpl {
             public synchronized final HttpSession getHttpSession(){
                 final String sessionId;
                 final HttpSession session;
-                if((sessionId = cookies.get("__session-id")) == null){
+                if((sessionId = cookies.get("__session-id")) == null || !HttpSession.sessions.containsKey(sessionId)){
                     session = HttpSession.create();
                     setCookie(new SimpleHTTPCookie("__session-id",session.getSessionID(),null,null,null,null,null,false,true));
                 }else{
@@ -357,7 +357,7 @@ abstract class SimpleHttpExchangeImpl {
                 }
                 return session;
             }
-            
+
             //
 
             @Override
