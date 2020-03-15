@@ -50,7 +50,8 @@ class DirectoryEntry {
 
         if(isFilesPreloaded){
             if(!isWalkthrough){
-                for(final File file : Objects.requireNonNull(directory.listFiles())){
+                final File[] listFiles = directory.listFiles();
+                for(final File file : (listFiles == null) ? new File[0] : listFiles){
                     files.put(
                         getContext(adapter.getName(file)),
                         new FileEntry(file, true, adapter)
@@ -61,20 +62,17 @@ class DirectoryEntry {
 
                 Files.walk(dirPath).filter(path -> path.toFile().isDirectory()).forEach(path -> {
                     final File pathFile = path.toFile();
-
                     final String rel = dirPath.relativize(path).toString();
-                    final File[] files = pathFile.listFiles();
 
-                    if(files == null) return;
-
-                    for(final File file : files){
+                    final File[] listFiles = pathFile.listFiles();
+                    for(final File file : (listFiles == null) ? new File[0] : listFiles){
                         try{
                             DirectoryEntry.this.files.put(
                                 getContext(rel + "/" + adapter.getName(file)),
                                 new FileEntry(file, true, adapter)
                             );
-                        }catch(FileNotFoundException e){
-                            // failed
+                        }catch(final FileNotFoundException ignored){
+                            // #listFiles assume that all files exist, so this exception should never occur unless the user modified the directory mid-read.
                         }
                     }
                 });
@@ -156,26 +154,24 @@ class DirectoryEntry {
             for(final String key : files.keySet())
                 if(rel.startsWith(key) && key.startsWith(match))
                     match = key;
-            if(!match.isEmpty()){
-                return files.get(match).getFile();
-            }else{
-                return null;
-            }
+            return !match.isEmpty() ? files.get(match).getFile() : null;
         }else{
             if(isWalkthrough){
-                final File parent = new File(directory.getAbsolutePath() + path).getParentFile();
-                final File target = new File(parent.getAbsolutePath() + path.substring(0,path.lastIndexOf('/')));
-                return target.exists() ? target : null;
+                final File parent = new File(directory.getAbsolutePath() + path).getParentFile(); // todo // ⚠ security flaw: user may have access to folders outside of directory by using ../
+                final String name = path.substring(path.lastIndexOf('/'));
+                final File[] listFiles = parent.listFiles(pathname -> !pathname.isDirectory());
+
+                for(final File file : (listFiles == null) ? new File[0] : listFiles)
+                    if(adapter.getName(file).equalsIgnoreCase(name))
+                        return file;
             }else{
-                final File[] files = directory.listFiles(pathname -> !pathname.isDirectory());
+                final File[] listFiles = directory.listFiles(pathname -> !pathname.isDirectory());
 
-                if(files == null) return null;
-
-                for(final File file : files)
+                for(final File file : (listFiles == null) ? new File[0] : listFiles)
                     if(adapter.getName(file).equalsIgnoreCase(path))
                         return file;
-                return null;
             }
+            return null;
         }
     }
 
