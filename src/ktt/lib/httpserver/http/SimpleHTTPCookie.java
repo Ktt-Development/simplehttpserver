@@ -27,7 +27,7 @@ public class SimpleHTTPCookie {
         httpOnly;
 
     /**
-     * Creates an HTTP cookie.
+     * Creates an HTTP cookie. All fields except for <code>name</code> and <code>value</code> can be set to nul if unused.
      *
      * @param name name of the cookie
      * @param value value of the cookie
