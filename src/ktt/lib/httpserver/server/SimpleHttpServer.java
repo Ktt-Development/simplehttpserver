@@ -207,10 +207,10 @@ public abstract class SimpleHttpServer {
     /**
      * Creates an empty context.
      *
-     * @param path the path
-     * @return the http context associated with the path
-     * @throws IllegalArgumentException if the path is invalid or taken
-     * @throws NullPointerException if the path is null
+     * @param context the context
+     * @return the http context associated with the context
+     * @throws IllegalArgumentException if the context is invalid or taken
+     * @throws NullPointerException if the context is null
      *
      * @see HttpContext
      * @see #createContext(String, HttpHandler)
@@ -219,16 +219,16 @@ public abstract class SimpleHttpServer {
      * @since 02.00.00
      * @author Ktt Development
      */
-    public abstract HttpContext createContext(final String path);
+    public abstract HttpContext createContext(final String context);
 
     /**
      * Creates a context mapped to a specified {@link HttpHandler}.
      *
-     * @param path the path
+     * @param context the context
      * @param handler the handler
-     * @return the http context associated with the path
-     * @throws IllegalArgumentException if the path is invalid or taken
-     * @throws NullPointerException if the path is null
+     * @return the http context associated with the context
+     * @throws IllegalArgumentException if the context is invalid or taken
+     * @throws NullPointerException if the context is null
      *
      * @see HttpContext
      * @see HttpHandler
@@ -238,14 +238,213 @@ public abstract class SimpleHttpServer {
      * @since 02.00.00
      * @author Ktt Development
      */
-    public abstract HttpContext createContext(final String path, HttpHandler handler);
+    public abstract HttpContext createContext(final String context, final HttpHandler handler);
+
+//
 
     /**
-     * Removes the context at the path.
+     * Creates a temporary context at a random address that will remove itself after the first connection. This type of context is typically used for single use downloads or media file hosting. <br>
+     * To get the context use {@link HttpContext#getPath()}.
      *
-     * @param path the path to remove
+     * @return the http context associated with the context
+     *
+     * @see HttpContext
+     * @see #createTemporaryContext(long)
+     * @see #createTemporaryContext(HttpHandler)
+     * @see #createTemporaryContext(HttpHandler, long)
+     * @see #createTemporaryContext(String)
+     * @see #createTemporaryContext(String, long)
+     * @see #createTemporaryContext(String, HttpHandler)
+     * @see #createTemporaryContext(String, HttpHandler, long)
+     * @see #removeContext(String)
+     * @see #removeContext(HttpContext)
+     * @since 02.00.00
+     * @author Ktt Development
+     */
+    public abstract HttpContext createTemporaryContext();
+
+    /**
+     * Creates a temporary context at a random address that will remove itself after the first connection or after the max time is passed. This type of context is typically used for single use downloads or media file hosting. <br>
+     * To get the context use {@link HttpContext#getPath()}.
+     *
+     * @param maxTime the maximum time the context may exist for (in milliseconds)
+     * @return the http context associated with the context
+     *
+     * @see HttpContext
+     * @see #createTemporaryContext()
+     * @see #createTemporaryContext(HttpHandler)
+     * @see #createTemporaryContext(HttpHandler, long)
+     * @see #createTemporaryContext(String)
+     * @see #createTemporaryContext(String, long)
+     * @see #createTemporaryContext(String, HttpHandler)
+     * @see #createTemporaryContext(String, HttpHandler, long)
+     * @see #removeContext(String)
+     * @see #removeContext(HttpContext)
+     * @since 02.00.00
+     * @author Ktt Development
+     */
+    public abstract HttpContext createTemporaryContext(final long maxTime);
+
+    /**
+     * Creates a temporary context at a random address that will remove itself after the first connection. This type of context is typically used for single use downloads or media file hosting. <br>
+     * To get the context use {@link HttpContext#getPath()}. <br>
+     * This method encapsulates the handler with a temporary one, so {@link HttpContext#getHandler()} will not return the one passed in the parameter, instead it will return the encapsulating handler.
+     *
+     * @param handler handler to use
+     * @return the http context associated with the context
+     *
+     * @see HttpContext
+     * @see HttpHandler
+     * @see #createTemporaryContext()
+     * @see #createTemporaryContext(long)
+     * @see #createTemporaryContext(HttpHandler, long)
+     * @see #createTemporaryContext(String)
+     * @see #createTemporaryContext(String, long)
+     * @see #createTemporaryContext(String, HttpHandler)
+     * @see #createTemporaryContext(String, HttpHandler, long)
+     * @see #removeContext(String)
+     * @see #removeContext(HttpContext)
+     * @since 02.00.00
+     * @author Ktt Development
+     */
+    public abstract HttpContext createTemporaryContext(final HttpHandler handler);
+
+    /**
+     * Creates a temporary context at a random address that will remove itself after the first connection or after the max time is passed. This type of context is typically used for single use downloads or media file hosting. <br>
+     * To get the context use {@link HttpContext#getPath()}. <br>
+     * This method encapsulates the handler with a temporary one, so {@link HttpContext#getHandler()} will not return the one passed in the parameter, instead it will return the encapsulating handler.
+     *
+     * @param handler handler to use
+     * @param maxTime the maximum time the context may exist for (in milliseconds)
+     * @return the http context associated with the context
+     *
+     * @see HttpContext
+     * @see HttpHandler
+     * @see #createTemporaryContext()
+     * @see #createTemporaryContext(long)
+     * @see #createTemporaryContext(HttpHandler)
+     * @see #createTemporaryContext(String)
+     * @see #createTemporaryContext(String, long)
+     * @see #createTemporaryContext(String, HttpHandler)
+     * @see #createTemporaryContext(String, HttpHandler, long)
+     * @see #removeContext(String)
+     * @see #removeContext(HttpContext)
+     * @since 02.00.00
+     * @author Ktt Development
+     */
+    public abstract HttpContext createTemporaryContext(final HttpHandler handler, final long maxTime);
+
+    /**
+     * Creates a temporary context at a specified address that will remove itself after the first connection. This type of context is typically used for single use downloads or media file hosting. <br>
+     *
+     * @param context the context
+     * @return the http context associated with the context
+     * @throws IllegalArgumentException if the context is invalid or taken
+     * @throws NullPointerException if the context is null
+     *
+     * @see HttpContext
+     * @see #createTemporaryContext()
+     * @see #createTemporaryContext(long)
+     * @see #createTemporaryContext(HttpHandler)
+     * @see #createTemporaryContext(HttpHandler, long)
+     * @see #createTemporaryContext(String, long)
+     * @see #createTemporaryContext(String, HttpHandler)
+     * @see #createTemporaryContext(String, HttpHandler, long)
+     * @see #removeContext(String)
+     * @see #removeContext(HttpContext)
+     * @since 02.00.00
+     * @author Ktt Development
+     */
+    public abstract HttpContext createTemporaryContext(final String context);
+
+    /**
+     * Creates a temporary context at a specified address that will remove itself after the first connection or after the max time is passed. This type of context is typically used for single use downloads or media file hosting. <br>
+     *
+     * @param context the context
+     * @param maxTime the maximum time the context may exist for (in milliseconds)
+     * @return the http context associated with the context
+     * @throws IllegalArgumentException if the context is invalid or taken
+     * @throws NullPointerException if the context is null
+     *
+     * @see HttpContext
+     * @see HttpHandler
+     * @see #createTemporaryContext()
+     * @see #createTemporaryContext(long)
+     * @see #createTemporaryContext(HttpHandler)
+     * @see #createTemporaryContext(HttpHandler, long)
+     * @see #createTemporaryContext(String)
+     * @see #createTemporaryContext(String, HttpHandler)
+     * @see #createTemporaryContext(String, HttpHandler, long)
+     * @see #removeContext(String)
+     * @see #removeContext(HttpContext)
+     * @since 02.00.00
+     * @author Ktt Development
+     */
+    public abstract HttpContext createTemporaryContext(final String context, final long maxTime);
+
+    /**
+     * Creates a temporary context at a specified address that will remove itself after the first connection. This type of context is typically used for single use downloads or media file hosting. <br>
+     * This method encapsulates the handler with a temporary one, so {@link HttpContext#getHandler()} will not return the one passed in the parameter, instead it will return the encapsulating handler.
+     *
+     * @param context the context
+     * @param handler handler to use
+     * @return the http context associated with the context
+     * @throws IllegalArgumentException if the context is invalid or taken
+     * @throws NullPointerException if the context is null
+     *
+     * @see HttpContext
+     * @see HttpHandler
+     * @see #createTemporaryContext()
+     * @see #createTemporaryContext(long)
+     * @see #createTemporaryContext(HttpHandler)
+     * @see #createTemporaryContext(HttpHandler, long)
+     * @see #createTemporaryContext(String)
+     * @see #createTemporaryContext(String, long)
+     * @see #createTemporaryContext(String, HttpHandler, long)
+     * @see #removeContext(String)
+     * @see #removeContext(HttpContext)
+     * @since 02.00.00
+     * @author Ktt Development
+     */
+    public abstract HttpContext createTemporaryContext(final String context, final HttpHandler handler);
+
+
+    /**
+     * Creates a temporary context at a random address that will remove itself after the first connection or after the max time is passed. This type of context is typically used for single use downloads or media file hosting. <br>
+     * To get the context use {@link HttpContext#getPath()}. <br>
+     * This method encapsulates the handler with a temporary one, so {@link HttpContext#getHandler()} will not return the one passed in the parameter, instead it will return the encapsulating handler.
+     *
+     * @param context the context
+     * @param handler handler to use
+     * @param maxTime the maximum time the context may exist for (in milliseconds)
+     * @return the http context associated with the context
+     * @throws IllegalArgumentException if the context is invalid or taken
+     * @throws NullPointerException if the context is null
+     *
+     * @see HttpContext
+     * @see HttpHandler
+     * @see #createTemporaryContext()
+     * @see #createTemporaryContext(long)
+     * @see #createTemporaryContext(HttpHandler)
+     * @see #createTemporaryContext(HttpHandler, long)
+     * @see #createTemporaryContext(String)
+     * @see #createTemporaryContext(String, long)
+     * @see #createTemporaryContext(String, HttpHandler)
+     * @see #removeContext(String)
+     * @see #removeContext(HttpContext)
+     * @since 02.00.00
+     * @author Ktt Development
+     */
+    public abstract HttpContext createTemporaryContext(final String context, final HttpHandler handler, final long maxTime);
+
+//
+
+    /**
+     * Removes the context at the context.
+     *
+     * @param context the context to remove
      * @throws IllegalArgumentException if no handler at that context exists
-     * @throws NullPointerException if the path is null
+     * @throws NullPointerException if the context is null
      *
      * @see #createContext(String)
      * @see #createContext(String, HttpHandler)
@@ -253,7 +452,7 @@ public abstract class SimpleHttpServer {
      * @since 02.00.00
      * @author Ktt Development
      */
-    public abstract void removeContext(final String path);
+    public abstract void removeContext(final String context);
 
     /**
      * Removes the context from the server.
@@ -270,19 +469,19 @@ public abstract class SimpleHttpServer {
     public abstract void removeContext(final HttpContext context);
 
     /**
-     * Returns the handler mapped to a context.
+     * Returns the handler mapped to a context or null if none is found.
      *
-     * @param path path to retrieve
-     * @return handler associated with that path
+     * @param context context to retrieve
+     * @return handler associated with that context
      *
      * @see #getContextHandler(HttpContext)
      * @since 02.00.00
      * @author Ktt Development
      */
-    public abstract HttpHandler getContextHandler(final String path);
+    public abstract HttpHandler getContextHandler(final String context);
 
     /**
-     * Returns the handler mapped to a context.
+     * Returns the handler mapped to a context or null if it is not found.
      *
      * @param context context to retrieve
      * @return handler associated with that context

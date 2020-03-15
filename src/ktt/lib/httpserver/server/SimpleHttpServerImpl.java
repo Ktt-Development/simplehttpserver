@@ -6,8 +6,7 @@ import com.sun.net.httpserver.*;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Executor;
 
 /**
@@ -114,20 +113,85 @@ abstract class SimpleHttpServerImpl {
                 return context;
             }
 
+        //
+
+            private String generateRandomContext(){
+                String targetContext;
+
+                do targetContext = UUID.randomUUID().toString();
+                    while(getContextHandler(targetContext) != null);
+
+                return targetContext;
+            }
+
+            //
+
             @Override
-            public final HttpHandler getContextHandler(final String path){
-                for(final HttpContext context : contexts.keySet()){
-                    if(context.getPath().equalsIgnoreCase(getContext(path))){
-                        return context.getHandler();
-                    }
-                }
-                return null;
+            public synchronized final HttpContext createTemporaryContext(){
+                return createTemporaryContext(generateRandomContext());
             }
 
             @Override
-            public final HttpHandler getContextHandler(final HttpContext context){
-                return contexts.get(context);
+            public synchronized final HttpContext createTemporaryContext(final long maxTime){
+                return createTemporaryContext(generateRandomContext(),maxTime);
             }
+
+            @Override
+            public synchronized final HttpContext createTemporaryContext(final HttpHandler handler){
+                return createTemporaryContext(generateRandomContext(),handler);
+            }
+
+            @Override
+            public synchronized final HttpContext createTemporaryContext(final HttpHandler handler, final long maxTime){
+                return createTemporaryContext(generateRandomContext(),handler,maxTime);
+            }
+
+            @Override
+            public synchronized final HttpContext createTemporaryContext(final String context){
+                return createContext(context, (exchange) -> removeContext(context));
+            }
+
+            @Override
+            public synchronized final HttpContext createTemporaryContext(final String context, final long maxTime){
+                final HttpContext httpContext = createContext(context, (exchange) -> removeContext(context));
+
+                new Thread(() -> {
+                    try{
+                        Thread.sleep(maxTime);
+                    }catch(final InterruptedException ignored){ }
+                    removeContext(httpContext);
+                }).start();
+
+                return httpContext;
+            }
+
+            @Override
+            public synchronized final HttpContext createTemporaryContext(final String context, final HttpHandler handler){
+                return createContext(context, (exchange) -> {
+                    handler.handle(exchange);
+                    removeContext(context);
+                });
+            }
+
+            @Override
+            public synchronized final HttpContext createTemporaryContext(final String context, final HttpHandler handler, final long maxTime){
+                final HttpContext httpContext = createContext(context, (exchange) -> {
+                    handler.handle(exchange);
+                    removeContext(context);
+                });
+
+                new Thread(() -> {
+                    try{
+                        Thread.sleep(maxTime);
+                    }catch(final InterruptedException ignored){ }
+                    removeContext(httpContext);
+                }).start();
+
+                return httpContext;
+            }
+
+
+            //
 
             @Override
             public synchronized final void removeContext(final String path){
@@ -147,6 +211,21 @@ abstract class SimpleHttpServerImpl {
             }
 
         //
+
+            @Override
+            public final HttpHandler getContextHandler(final String path){
+                for(final HttpContext context : contexts.keySet()){
+                    if(context.getPath().equalsIgnoreCase(getContext(path))){
+                        return context.getHandler();
+                    }
+                }
+                return null;
+            }
+
+            @Override
+            public final HttpHandler getContextHandler(final HttpContext context){
+                return contexts.get(context);
+            }
 
             @Override
             public final Map<HttpContext, HttpHandler> getContexts(){
@@ -184,5 +263,6 @@ abstract class SimpleHttpServerImpl {
         final String seSlash = (!linSlash.startsWith("/") ? "/" : "") + linSlash + (!linSlash.endsWith("/") ? "/" : "");
         return seSlash.substring(0,seSlash.length()-1);
     }
+
 
 }
