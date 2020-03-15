@@ -411,6 +411,19 @@ public abstract class SimpleHttpExchange {
 //
 
     /**
+     * Returns the http session of the exchange if one exists; if one does not exist it will create one. <b>A new session will only persist if the exchange is sent.</b>
+     *
+     * @return http session
+     *
+     * @see HttpSession
+     * @since 02.00.00
+     * @author Ktt Development
+     */
+    public abstract HttpSession getHttpSession();
+
+//
+
+    /**
      * Sends response headers to the client.
      *
      * @param code response code

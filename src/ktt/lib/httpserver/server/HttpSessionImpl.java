@@ -32,6 +32,7 @@ abstract class HttpSessionImpl {
                 sessionID = UUID.randomUUID().toString();
                 creationTime = System.currentTimeMillis();
                 lastAccessTime = creationTime;
+                sessions.put(sessionID,this);
             }
 
             @Override

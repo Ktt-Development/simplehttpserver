@@ -1,5 +1,6 @@
 package ktt.lib.httpserver.http;
 
+import javax.swing.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -27,7 +28,7 @@ public class SimpleHTTPCookie {
         httpOnly;
 
     /**
-     * Creates an HTTP cookie. All fields except for <code>name</code> and <code>value</code> can be set to nul if unused.
+     * Creates an HTTP cookie. All fields except for <code>name</code>, <code>secure</code>, </code><code>httpOnly</code>, and <code>value</code> can be set to null if unused.
      *
      * @param name name of the cookie
      * @param value value of the cookie
@@ -42,7 +43,7 @@ public class SimpleHTTPCookie {
      * @since 02.00.00
      * @author Ktt Development
      */
-    public SimpleHTTPCookie(final String name, final String value, final String domain, final String path, final String sameSite, final Date expires, final int maxAge, final boolean secure, final boolean httpOnly){
+    public SimpleHTTPCookie(final String name, final String value, final String domain, final String path, final String sameSite, final Date expires, final Integer maxAge, final boolean secure, final boolean httpOnly){
         this.name = name;
         this.value = value;
         this.domain = domain;

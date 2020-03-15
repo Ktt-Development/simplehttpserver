@@ -1,13 +1,18 @@
 package ktt.lib.httpserver.server;
 
+import java.util.HashMap;
+import java.util.UUID;
+
 /**
  * A session keeps track of a single client across multiple exchanges. This is typically used for login persistence.
  *
  * @since 02.00.00
- * @verion 02.00.00
+ * @version 02.00.00
  * @author Ktt Development
  */
 public abstract class HttpSession {
+
+    static final HashMap<String,HttpSession> sessions = new HashMap<>();
 
     /**
      * Creates an empty {@link HttpSession}. Applications don't use this method.

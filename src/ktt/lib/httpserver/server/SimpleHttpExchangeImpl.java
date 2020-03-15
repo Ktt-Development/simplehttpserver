@@ -346,6 +346,21 @@ abstract class SimpleHttpExchangeImpl {
         //
 
             @Override
+            public synchronized final HttpSession getHttpSession(){
+                final String sessionId;
+                final HttpSession session;
+                if((sessionId = cookies.get("__session-id")) == null){
+                    session = HttpSession.create();
+                    setCookie(new SimpleHTTPCookie("__session-id",session.getSessionID(),null,null,null,null,null,false,true));
+                }else{
+                    session = HttpSession.sessions.get(sessionId);
+                }
+                return session;
+            }
+            
+            //
+
+            @Override
             public synchronized final void sendResponseHeaders(final int code, final long length) throws IOException{
                 if(closed) return;
                 httpExchange.sendResponseHeaders(code, length);
