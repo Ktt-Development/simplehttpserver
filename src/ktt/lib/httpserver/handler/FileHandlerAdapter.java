@@ -1,7 +1,7 @@
 package ktt.lib.httpserver.handler;
 
 /**
- * This interface determines the file name and bytes to use when adding to {@link FileHandler}. <br>
+ * This interface determines the file name and bytes to use when adding to {@link FileHandler}. Not intended for directories.<br>
  * Only handles files before the exchange.
  *
  * @see FileHandler

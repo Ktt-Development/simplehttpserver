@@ -3,7 +3,7 @@ package ktt.lib.httpserver.handler;
 import java.io.File;
 
 /**
- * This interface determines the file name to use when adding to {@link FileHandler}.
+ * This interface determines the file name to use when adding to {@link FileHandler}. Not intended for directories.
  *
  * @see FileHandlerAdapter
  * @see FileHandler
