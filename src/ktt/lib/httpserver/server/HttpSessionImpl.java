@@ -40,6 +40,8 @@ abstract class HttpSessionImpl {
                 return sessionID;
             }
 
+        //
+
             @Override
             public final long getCreationTime(){
                 return creationTime;
@@ -53,6 +55,19 @@ abstract class HttpSessionImpl {
             @Override
             public synchronized final void updateLastAccessTime(){
                 lastAccessTime = System.currentTimeMillis();
+            }
+
+        //
+
+            @Override
+            public final String toString(){
+                final StringBuilder OUT = new StringBuilder();
+                OUT.append("HttpSession")   .append("{");
+                OUT.append("sessionID")     .append("= ")   .append(sessionID)          .append(", ");
+                OUT.append("creationTime")  .append("= ")   .append(creationTime)       .append(", ");
+                OUT.append("lastAccessTime").append("= ")   .append(lastAccessTime);
+                OUT.append("}");
+                return OUT.toString();
             }
 
         };

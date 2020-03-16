@@ -190,7 +190,6 @@ abstract class SimpleHttpServerImpl {
                 return httpContext;
             }
 
-
             //
 
             @Override

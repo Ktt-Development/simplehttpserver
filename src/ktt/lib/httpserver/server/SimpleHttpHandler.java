@@ -28,11 +28,10 @@ public abstract class SimpleHttpHandler implements HttpHandler, SimpleHttpExchan
     @Override
     public final void handle(final HttpExchange exchange) throws IOException{
         final SimpleHttpExchange sxe = SimpleHttpExchange.create(exchange);
-        if(authenticate(sxe)){
+        if(authenticate(sxe))
             handle(sxe);
-        }else{
+        else
             sxe.close();
-        }
     }
 
     /**
