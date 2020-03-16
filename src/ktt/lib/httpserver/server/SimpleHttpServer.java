@@ -179,7 +179,8 @@ public abstract class SimpleHttpServer {
 //
 
     /**
-     * Sets the server's executor
+     * Sets the server's executor. <br>
+     * For unlimited simultaneous threading use {@link java.util.concurrent.Executors#newCachedThreadPool()}; for limited simultaneous threading use {@link java.util.concurrent.Executors#newFixedThreadPool(int)}. <br>
      *
      * @param executor server executor
      *
