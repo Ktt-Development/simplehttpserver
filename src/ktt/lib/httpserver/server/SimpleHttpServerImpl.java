@@ -37,7 +37,7 @@ abstract class SimpleHttpServerImpl {
 
             private final HttpServer server = HttpServer.create();
 
-            private final Map<HttpContext,HttpHandler> contexts = new HashMap<>();
+            private final HashMap<HttpContext,HttpHandler> contexts = new HashMap<>();
 
             private boolean running = false;
 
@@ -255,6 +255,20 @@ abstract class SimpleHttpServerImpl {
                 }
             }
 
+        //
+
+            @Override
+            public final String toString(){
+                final StringBuilder OUT = new StringBuilder();
+                OUT.append("SimpleHttpServer")  .append("{");
+                OUT.append("httpServer")        .append("= ")   .append(server.toString())          .append(", ");
+                OUT.append("contexts")          .append("= ")   .append(contexts.toString())        .append(", ");
+                OUT.append("address")           .append("= ")   .append(getAddress().toString())    .append(", ");
+                OUT.append("executor")          .append("= ")   .append(getExecutor().toString());
+                OUT.append("}");
+                return OUT.toString();
+            }
+
         };
     }
 
@@ -263,6 +277,5 @@ abstract class SimpleHttpServerImpl {
         final String seSlash = (!linSlash.startsWith("/") ? "/" : "") + linSlash + (!linSlash.endsWith("/") ? "/" : "");
         return seSlash.substring(0,seSlash.length()-1);
     }
-
 
 }

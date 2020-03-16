@@ -37,4 +37,16 @@ public class RedirectHandler extends SimpleHttpHandler {
         exchange.send(HTTPCode.HTTP_Found);
     }
 
+//
+
+
+    @Override
+    public String toString(){
+        final StringBuilder OUT = new StringBuilder();
+        OUT.append("RedirectHandler")   .append("{");
+        OUT.append("link")              .append("= ")   .append(link);
+        OUT.append("}");
+        return OUT.toString();
+    }
+
 }

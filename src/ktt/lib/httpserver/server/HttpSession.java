@@ -77,4 +77,17 @@ public abstract class HttpSession {
      */
     public abstract void updateLastAccessTime();
 
+//
+
+    @Override
+    public String toString(){
+        final StringBuilder OUT = new StringBuilder();
+        OUT.append("HttpSession")   .append("{");
+        OUT.append("sessionID")     .append("= ")   .append(getSessionID())     .append(", ");
+        OUT.append("creationTime")  .append("= ")   .append(getCreationTime())  .append(", ");
+        OUT.append("lastAccessTime").append("= ")   .append(getLastAccessTime());
+        OUT.append("}");
+        return OUT.toString();
+    }
+
 }

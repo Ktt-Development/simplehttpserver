@@ -2,6 +2,7 @@ package ktt.lib.httpserver.handler;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.util.Arrays;
 
 /**
  * Represent a file in the {@link FileHandler}. Applications do not use this class.
@@ -91,6 +92,20 @@ class FileEntry {
             }catch(final IOException ignored){
                 return null;
             }
+    }
+
+//
+
+
+    @Override
+    public String toString(){
+        final StringBuilder OUT = new StringBuilder();
+        OUT.append("FileEntry")         .append("{");
+        OUT.append("isPreloaded")       .append("= ")   .append(isPreloaded)                        .append(", ");
+        OUT.append("file")              .append("= ")   .append(file.toString())                    .append(", ");
+        OUT.append("(preloaded) bytes") .append("= ")   .append(Arrays.toString(preloadedBytes)) .append(", ");
+        OUT.append("}");
+        return OUT.toString();
     }
 
 }

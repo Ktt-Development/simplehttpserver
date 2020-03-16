@@ -9,10 +9,10 @@ import java.util.*;
 
 public class FileHandler extends SimpleHttpHandler {
 
-    private final HashMap<String,DirectoryEntry> directories = new HashMap<>();
-    private final HashMap<String,FileEntry> files = new HashMap<>();
-
     private final FileHandlerAdapter adapter;
+
+    private final HashMap<String,FileEntry> files = new HashMap<>();
+    private final HashMap<String,DirectoryEntry> directories = new HashMap<>();
 
     public FileHandler(final FileHandlerAdapter adapter){
         this.adapter = adapter;
@@ -174,6 +174,20 @@ public class FileHandler extends SimpleHttpHandler {
         final String linSlash = path.toLowerCase().replace("\\","/");
         final String seSlash = (!linSlash.startsWith("/") ? "/" : "") + linSlash + (!linSlash.endsWith("/") ? "/" : "");
         return seSlash.substring(0,seSlash.length()-1);
+    }
+
+//
+
+
+    @Override
+    public String toString(){
+        final StringBuilder OUT = new StringBuilder();
+        OUT.append("FileHandler")           .append("{");
+        OUT.append("adapter")               .append("= ")   .append(adapter.toString()) .append(", ");
+        OUT.append("(loaded) files")        .append("= ")   .append(files)              .append(", ");
+        OUT.append("(loaded) directories")  .append("= ")   .append(directories);
+        OUT.append("}");
+        return OUT.toString();
     }
 
 }
