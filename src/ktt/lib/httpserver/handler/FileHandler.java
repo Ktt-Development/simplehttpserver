@@ -130,7 +130,7 @@ public class FileHandler extends SimpleHttpHandler {
     /**
      * Adds a file to the handler and preloads the bytes.
      *
-     * @param file file to use
+     * @param file file to add
      * @param fileName file name to use
      * @param preload whether to load the bytes now or at the exchange
      *
@@ -153,7 +153,7 @@ public class FileHandler extends SimpleHttpHandler {
      * Adds a file to the handler at a specified context at a name given by the adapter.
      *
      * @param context context to use
-     * @param file file to use
+     * @param file file to add
      *
      * @see FileHandlerAdapter
      * @see #addFile(File)
@@ -174,8 +174,8 @@ public class FileHandler extends SimpleHttpHandler {
      * Adds a file to the handler at a specified context at a name given by the adapter and preloads the bytes.
      *
      * @param context context to use
-     * @param file file to use
-     * @param preload whether to load the bytes not or at the exchange
+     * @param file file to add
+     * @param preload whether to load the bytes now or at the exchange
      *
      * @see FileHandlerAdapter
      * @see #addFile(File)
@@ -196,7 +196,7 @@ public class FileHandler extends SimpleHttpHandler {
      * Adds a file to the handler at a specified context.
      *
      * @param context context to use
-     * @param file file to use
+     * @param file file to add
      * @param fileName file name to use
      *
      * @see FileHandlerAdapter
@@ -218,7 +218,7 @@ public class FileHandler extends SimpleHttpHandler {
      * Adds a file to the handler at a specified context and preloads the bytes.
      *
      * @param context context to use
-     * @param file file to use
+     * @param file file to add
      * @param fileName file name to use
      * @param preload whether to load the bytes now or at the exchange.
      *
@@ -246,6 +246,7 @@ public class FileHandler extends SimpleHttpHandler {
      *
      * @param files files to add
      *
+     * @see FileHandlerAdapter
      * @see #addFiles(File[], boolean)
      * @see #addFiles(String, File[])
      * @see #addFiles(String, File[], boolean)
@@ -263,6 +264,7 @@ public class FileHandler extends SimpleHttpHandler {
      * @param files files to add
      * @param preload whether to load the bytes now or at the exchange
      *
+     * @see FileHandlerAdapter
      * @see #addFiles(File[])
      * @see #addFiles(String, File[])
      * @see #addFiles(String, File[], boolean)
@@ -280,6 +282,7 @@ public class FileHandler extends SimpleHttpHandler {
      * @param context context to use
      * @param files files to add
      *
+     * @see FileHandlerAdapter
      * @see #addFiles(File[])
      * @see #addFiles(File[], boolean)
      * @see #addFiles(String, File[], boolean)
@@ -298,6 +301,7 @@ public class FileHandler extends SimpleHttpHandler {
      * @param files files to add
      * @param preload whether to read the bytes now or at the exchange
      *
+     * @see FileHandlerAdapter
      * @see #addFiles(File[])
      * @see #addFiles(File[], boolean)
      * @see #addFiles(String, File[])
@@ -306,7 +310,7 @@ public class FileHandler extends SimpleHttpHandler {
      */
     public final void addFiles(final String context, final File[] files, final boolean preload){
         for(final File file : files)
-            addFile(context,file);
+            addFile(context,file,preload);
     }
 
     //
@@ -316,6 +320,7 @@ public class FileHandler extends SimpleHttpHandler {
      *
      * @param directory directory to add
      *
+     * @see FileHandlerAdapter
      * @see #addDirectory(File, boolean)
      * @see #addDirectory(File, boolean, boolean)
      * @see #addDirectory(File, String)
@@ -337,7 +342,8 @@ public class FileHandler extends SimpleHttpHandler {
     /**
      * Adds a directory to the handler and preloads the files' bytes.
      *
-     * @param directory directory to use
+     * @see FileHandlerAdapter
+     * @param directory directory to add
      * @param preload whether to read the bytes now or at the exchange
      *
      * @see #addDirectory(File)
@@ -361,9 +367,10 @@ public class FileHandler extends SimpleHttpHandler {
     /**
      * Adds a directory and all its inner folders to the handler and preloads the files' bytes.
      *
-     * @param directory directory to use
+     * @see FileHandlerAdapter
+     * @param directory directory to add
      * @param preload whether to read the bytes now or at the exchange
-     * @param walk whether to use inner folders or not
+     * @param walk whether to use the inner directories or not
      *
      * @see #addDirectory(File)
      * @see #addDirectory(File, boolean)
@@ -386,7 +393,8 @@ public class FileHandler extends SimpleHttpHandler {
     /**
      * Adds a directory with a specified name to the handler.
      *
-     * @param directory directory to use
+     * @see FileHandlerAdapter
+     * @param directory directory to add
      * @param directoryName directory name
      *
      * @see #addDirectory(File)
@@ -410,10 +418,11 @@ public class FileHandler extends SimpleHttpHandler {
     /**
      * Adds a directory with a specified name to the handler and preloads the bytes.
      *
-     * @param directory directory to use
+     * @param directory directory to add
      * @param directoryName directory name
      * @param preload whether to read the bytes now or at the exchange
      *
+     * @see FileHandlerAdapter
      * @see #addDirectory(File)
      * @see #addDirectory(File, boolean)
      * @see #addDirectory(File, boolean, boolean)
@@ -435,11 +444,12 @@ public class FileHandler extends SimpleHttpHandler {
     /**
      * Adds a directory with a specified name to the handler and all its inner folders and preloads the bytes.
      *
-     * @param directory directory to use
+     * @param directory directory to add
      * @param directoryName directory name
      * @param preload whether to read the bytes now or at the exchange
-     * @param walk whether to use inner folders or not
+     * @param walk whether to use the inner directories or not
      *
+     * @see FileHandlerAdapter
      * @see #addDirectory(File)
      * @see #addDirectory(File, boolean)
      * @see #addDirectory(File, boolean, boolean)
@@ -464,6 +474,7 @@ public class FileHandler extends SimpleHttpHandler {
      * @param context context to use
      * @param directory directory to add
      *
+     * @see FileHandlerAdapter
      * @see #addDirectory(File)
      * @see #addDirectory(File, boolean)
      * @see #addDirectory(File, boolean, boolean)
@@ -489,6 +500,7 @@ public class FileHandler extends SimpleHttpHandler {
      * @param directory directory to add
      * @param preload whether to read the bytes now or at the exchange
      *
+     * @see FileHandlerAdapter
      * @see #addDirectory(File)
      * @see #addDirectory(File, boolean)
      * @see #addDirectory(File, boolean, boolean)
@@ -511,10 +523,11 @@ public class FileHandler extends SimpleHttpHandler {
      * Adds a directory at a specified context and its inner folders and preloads the bytes.
      *
      * @param context context to use
-     * @param directory directory to use
+     * @param directory directory to add
      * @param preload whether to read the bytes now or at the exchange
-     * @param walk whether to use inner folders or not
+     * @param walk whether to use the inner directories or not`
      *
+     * @see FileHandlerAdapter
      * @see #addDirectory(File)
      * @see #addDirectory(File, boolean)
      * @see #addDirectory(File, boolean, boolean)
@@ -537,9 +550,10 @@ public class FileHandler extends SimpleHttpHandler {
      * Adds a directory at a specified context with a specified name.
      *
      * @param context context to use
-     * @param directory directory to use
+     * @param directory directory to add
      * @param directoryName directory name
      *
+     * @see FileHandlerAdapter
      * @see #addDirectory(File)
      * @see #addDirectory(File, boolean)
      * @see #addDirectory(File, boolean, boolean)
@@ -562,10 +576,11 @@ public class FileHandler extends SimpleHttpHandler {
      * Adds a directory at a specified context with a specified name and preloads the bytes.
      *
      * @param context context to use
-     * @param directory directory to use
+     * @param directory directory to add
      * @param directoryName directory name
      * @param preload whether to read the bytes now or at the exchange
      *
+     * @see FileHandlerAdapter
      * @see #addDirectory(File)
      * @see #addDirectory(File, boolean)
      * @see #addDirectory(File, boolean, boolean)
@@ -588,11 +603,12 @@ public class FileHandler extends SimpleHttpHandler {
      * Adds a directory at a specified context with a specified name and all its inner folders and preloads the bytes.
      *
      * @param context context to use
-     * @param directory directory to use
+     * @param directory directory to add
      * @param directoryName directory name
      * @param preload whether to read the bytes now or at the exchange
-     * @param walk whether to use the inner folders or not
+     * @param walk whether to use the inner directories or not
      *
+     * @see FileHandlerAdapter
      * @see #addDirectory(File)
      * @see #addDirectory(File, boolean)
      * @see #addDirectory(File, boolean, boolean)
