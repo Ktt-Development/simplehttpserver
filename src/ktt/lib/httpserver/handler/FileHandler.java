@@ -7,6 +7,7 @@ import ktt.lib.httpserver.server.SimpleHttpHandler;
 import java.io.*;
 import java.util.*;
 
+// todo: documentation
 public class FileHandler extends SimpleHttpHandler {
 
     private final FileHandlerAdapter adapter;

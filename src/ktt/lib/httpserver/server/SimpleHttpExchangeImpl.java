@@ -62,8 +62,6 @@ abstract class SimpleHttpExchangeImpl {
 
             private final HashMap<String,String> cookies;
 
-            private boolean closed = false;
-
         //
 
             private final Function<String,HashMap<String,String>> parseWwwFormEnc = s -> {
@@ -368,9 +366,7 @@ abstract class SimpleHttpExchangeImpl {
 
             @Override
             public synchronized final void sendResponseHeaders(final int code, final long length) throws IOException{
-                if(closed) return;
                 httpExchange.sendResponseHeaders(code, length);
-                close();
             }
 
             @Override
@@ -395,8 +391,6 @@ abstract class SimpleHttpExchangeImpl {
 
             @Override
             public void send(final byte[] response, final int responseCode, final boolean gzip) throws IOException{
-                if(closed) return;
-
                 if(gzip){
                     exchange.getResponseHeaders().set("Accept-Encoding","gzip");
                     exchange.getResponseHeaders().set("Content-Encoding","gzip");
@@ -405,17 +399,11 @@ abstract class SimpleHttpExchangeImpl {
                     GZIPOutputStream OUT = new GZIPOutputStream(exchange.getResponseBody());
                     OUT.write(response);
                     OUT.finish();
-                    OUT.close();
-                    exchange.getResponseBody().close();
-
-                    close();
                 }else{
                     sendResponseHeaders(responseCode,response.length);
                     final OutputStream OUT = exchange.getResponseBody();
                     OUT.write(response);
-                    OUT.close();
-
-                    close();
+                    OUT.flush();
                 }
             }
 
@@ -443,10 +431,7 @@ abstract class SimpleHttpExchangeImpl {
 
             @Override
             public synchronized final void close(){
-                if(!closed){
-                    exchange.close();
-                    closed = true;
-                }
+                exchange.close();
             }
 
         //

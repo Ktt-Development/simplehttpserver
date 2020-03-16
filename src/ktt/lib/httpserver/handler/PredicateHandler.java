@@ -24,7 +24,7 @@ public class PredicateHandler extends SimpleHttpHandler {
     private final Predicate<SimpleHttpExchange> predicate;
 
     /**
-     * Creates a predicate handler
+     * Creates a predicate handler.
      *
      * @param trueHandler handler to use if true
      * @param falseHandler handler to use if false

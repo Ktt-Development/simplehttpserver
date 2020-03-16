@@ -1,14 +1,24 @@
 package ktt.lib.httpserver.handler;
 
 import ktt.lib.httpserver.http.RequestMethod;
-import ktt.lib.httpserver.server.*;
+import ktt.lib.httpserver.server.SimpleHttpExchange;
+import ktt.lib.httpserver.server.SimpleHttpHandler;
 
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * This handler processes event-streams.
+ *
+ * @see SimpleHttpHandler
+ * @see com.sun.net.httpserver.HttpHandler
+ * @since 02.00.00
+ * @version 02.00.00
+ * @author Ktt Development
+ */
 public class SSEHandler extends SimpleHttpHandler {
 
-    private final List<HttpSession> listeners = new ArrayList<>(); // listeners
+    private final List<SimpleHttpExchange> listeners = new ArrayList<>(); // listeners
     private int id = -1;
     private final LinkedList<String> queue = new LinkedList<>(); // event queue
 
@@ -24,13 +34,36 @@ public class SSEHandler extends SimpleHttpHandler {
             return;
         }
         exchange.getResponseHeaders().add("content-type","text/event-stream");
-        final int latest = exchange.getRequestHeaders().getFirst("Last-Event-ID")
-        exchange.send(200);
+        int latest = 0;
+        try{
+            latest = Integer.parseInt(exchange.getRequestHeaders().getFirst("Last-Event-ID"));
+        }catch(final NumberFormatException | NullPointerException ignored){ }
+
+        for(int index = latest; index < queue.size(); index++)
+            exchange.send(queue.get(index));
+
+        listeners.add(exchange);
     }
 
-    public final void addToEventQueue(final String s){
+    /**
+     * Pushes an event to the event stream.
+     *
+     * @param s event data
+     *
+     * @since 02.00.00
+     * @author Ktt Development
+     */
+    public final void push(final String s){
         id++;
         queue.add(s);
+        listeners.forEach(exchange -> {
+            final StringBuilder OUT = new StringBuilder();
+            OUT.append("id: ").append(id).append("\n");
+            OUT.append("data: ").append(s).append("\n\n");
+            try{
+                exchange.send(OUT.toString());
+            }catch(final IOException ignored){}
+        });
     }
 
 }

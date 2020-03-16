@@ -12,7 +12,7 @@ import java.util.HashMap;
 
 /**
  * <i>This class is a simplified implementation of {@link HttpExchange}</i>. <br>
- * This class provides methods to process requests from the client and send a response back. Each request can only send a single response. <br><br>
+ * This class provides methods to process requests from the client and send a response back. <br><br>
  * Get/post type requests for <code>application/x-www-form-urlencoded</code> (default) will be a simple key/value map. <br>
  * Get/post type requests for <code>multipart/form-data</code> will use an expanded map. <br>
  * Example:
