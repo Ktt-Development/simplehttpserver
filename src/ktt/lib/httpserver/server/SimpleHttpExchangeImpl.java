@@ -34,6 +34,7 @@ abstract class SimpleHttpExchangeImpl {
      * @since 02.00.00
      * @author Ktt Development
      */
+    @SuppressWarnings({"rawtypes","unchecked"})
     static SimpleHttpExchange createSimpleHttpExchange(final HttpExchange exchange){
         return new SimpleHttpExchange() {
 
@@ -63,21 +64,25 @@ abstract class SimpleHttpExchangeImpl {
 
             private boolean closed = false;
 
-            private final Function<String,HashMap<String,String>> parseWwwFormEnc = s -> {
-                            final LinkedHashMap<String,String> OUT = new LinkedHashMap<>();
-                            final String[] pairs = s.split("&");
+        //
 
-                            for(final String pair : pairs){
-                                if(pair.contains("=")){
-                                    final String[] kv = pair.split("=");
-                                    OUT.put(
-                                        URLDecoder.decode(kv[0],StandardCharsets.UTF_8),
-                                        kv.length == 2 ? URLDecoder.decode(kv[1],StandardCharsets.UTF_8) : null
-                                    );
-                                }
-                            }
-                            return OUT;
-                        };
+            private final Function<String,HashMap<String,String>> parseWwwFormEnc = s -> {
+                final LinkedHashMap<String,String> OUT = new LinkedHashMap<>();
+                final String[] pairs = s.split("&");
+
+                for(final String pair : pairs){
+                    if(pair.contains("=")){
+                        final String[] kv = pair.split("=");
+                        OUT.put(
+                            URLDecoder.decode(kv[0],StandardCharsets.UTF_8),
+                            kv.length == 2 ? URLDecoder.decode(kv[1],StandardCharsets.UTF_8) : null
+                        );
+                    }
+                }
+                return OUT;
+            };
+
+        //
 
             {
                 httpServer = (httpContext = exchange.getHttpContext()).getServer();
@@ -135,38 +140,38 @@ abstract class SimpleHttpExchangeImpl {
                 hasPost = (rawPost = OUT) != null;
 
                 // region todo: optimize this
-                final String content_type = requestHeaders.getFirst("Content-type");
-                if(content_type != null && content_type.startsWith("multipart/form-data")){
-                    final Pattern hpat = Pattern.compile("(.*): (.*?)(?:$|; )(.*)");
-                    final Pattern vpat = Pattern.compile("(.*?)=\"(.*?)\"(?:; |$)");
+                if(hasPost){
+                    final String content_type = requestHeaders.getFirst("Content-type");
+                    if(content_type != null && content_type.startsWith("multipart/form-data")){
+                        final Pattern boundaryHeaderPattern = Pattern.compile("(.*): (.*?)(?:$|; )(.*)"); // returns the headers listed after each webkit boundary
+                        final Pattern contentDispositionKVPPattern = Pattern.compile("(.*?)=\"(.*?)\"(?:; |$)"); // returns the keys, values, and parameters for the content disposition header
 
-                    final String webkitBoundary = content_type.substring(content_type.indexOf("; boundary=") + 11);
-                    final String startBoundary = "--" + webkitBoundary + "\r\n";
-                    final String endBoundary = "--" + webkitBoundary + "--\r\n";
+                        final String webkitBoundary = content_type.substring(content_type.indexOf("; boundary=") + 11);
+                        final String startBoundary = "--" + webkitBoundary + "\r\n";
+                        final String endBoundary = "--" + webkitBoundary + "--\r\n"; // the final boundary in the request
 
-                    postMap = new HashMap<>();
-                    /* Parse multipart/form-data */ {
+                        postMap = new HashMap<>();
                         final String[] pairs = OUT.replace(endBoundary,"").split(Pattern.quote(startBoundary));
-                        for (String pair : pairs) {
+                        for(String pair : pairs){
                             final HashMap<String, HashMap> postHeaders = new HashMap<>();
-                            if (pair.contains("\r\n\r\n")) {
+                            if(pair.contains("\r\n\r\n")){
                                 final String[] headers = pair.substring(0, pair.indexOf("\r\n\r\n")).split("\r\n");
 
                                 for (String header : headers) {
-                                    final HashMap hmap = new HashMap<>();
+                                    final HashMap headerMap = new HashMap<>();
                                     final HashMap<String, String> val = new HashMap<>();
 
-                                    final Matcher hmatch = hpat.matcher(header);
-                                    if (hmatch.find()) {
-                                        final Matcher vmatch = vpat.matcher(hmatch.group(3));
-                                        while (vmatch.find()) {
-                                            val.put(vmatch.group(1), vmatch.group(2));
-                                        }
-                                        hmap.put("header-name", hmatch.group(1));
-                                        hmap.put("header-value", hmatch.group(2));
-                                        hmap.put("parameter", val);
+                                    final Matcher headerMatcher = boundaryHeaderPattern.matcher(header);
+                                    if (headerMatcher.find()) {
+                                        final Matcher contentDispositionKVPMatcher = contentDispositionKVPPattern.matcher(headerMatcher.group(3));
+                                        while (contentDispositionKVPMatcher.find())
+                                            val.put(contentDispositionKVPMatcher.group(1), contentDispositionKVPMatcher.group(2));
+
+                                        headerMap.put("header-name", headerMatcher.group(1));
+                                        headerMap.put("header-value", headerMatcher.group(2));
+                                        headerMap.put("parameter", val);
                                     }
-                                    postHeaders.put((String) hmap.get("header-name"), hmap);
+                                    postHeaders.put((String) headerMap.get("header-name"), headerMap);
                                 }
 
                                 final HashMap row = new HashMap();
@@ -177,12 +182,13 @@ abstract class SimpleHttpExchangeImpl {
                                     ((HashMap<String, String>) postHeaders.get("Content-Disposition").get("parameter")).get("name"),
                                     row
                                 );
-
                             }
                         }
+                    }else{
+                        postMap = parseWwwFormEnc.apply(rawPost);
                     }
                 }else{
-                    postMap = parseWwwFormEnc.apply(rawPost);
+                    postMap = new HashMap();
                 }
                 // endregion
 
