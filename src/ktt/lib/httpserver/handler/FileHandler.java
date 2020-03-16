@@ -13,33 +13,105 @@ public class FileHandler extends SimpleHttpHandler {
     private final HashMap<String,DirectoryEntry> directories = new HashMap<>();
     private final HashMap<String,FileEntry> files = new HashMap<>();
 
-    //private final FileNameAdapter nameAdapter;   // at adding
-    //private final FileBytesAdapter bytesAdapter; // pre: at adding; post: at handling;
-
     private final FileHandlerAdapter adapter;
 
     public FileHandler(final FileHandlerAdapter adapter){
         this.adapter = adapter;
     }
 
-    //
-        /*
-            Hash ->
-            - Path (string)
-            - File (file)
-            - isPreloaded (boolean)
-            use instanceof
-            - pre: byte[]
-            - post: walkInner
-         */
+//
 
-        /*
-            Pref order ->
-            - Exact File
-            - File
-            - Exact Directory
-            - Directory
-         */
+    public final void addFile(final File file){ }
+
+    public final void addFile(final File file, final boolean preload){ }
+
+    public final void addFile(final File file, final FileHandlerAdapter adapter){ }
+
+    public final void addFile(final File file, final FileHandlerAdapter adapter, final boolean preload){ }
+
+    public final void addFile(final String context, final File file){ }
+
+    public final void addFile(final String context, final File file, final boolean preload){ }
+
+    public final void addFile(final String context, final File file, final FileHandlerAdapter adapter){ }
+
+    public final void addFile(final String context, final File file, final FileHandlerAdapter adapter, final boolean preload){ }
+
+    //
+
+    public final void addFiles(final File[] file){ }
+
+    public final void addFiles(final File[] files, final boolean preload){ }
+
+    public final void addFiles(final File[] files, final FileHandlerAdapter adapter){ }
+
+    public final void addFiles(final File[] files, final FileHandlerAdapter adapter, final boolean preload){ }
+
+    public final void addFiles(final String context, final File[] files){ }
+
+    public final void addFiles(final String context, final File[] files, final boolean preload){ }
+
+    public final void addFiles(final String context, final File[] files, final FileHandlerAdapter adapter){ }
+
+    public final void addFiles(final String context, final File[] files, final FileHandlerAdapter adapter, final boolean preload){ }
+
+    //
+
+    public final void addDirectory(final File directory){ }
+
+    public final void addDirectory(final File directory, final boolean preload){ }
+
+    public final void addDirectory(final File directory, final boolean preload, final boolean walk){ }
+
+    public final void addDirectory(final File directory, final FileHandlerAdapter adapter){ }
+
+    public final void addDirectory(final File directory, final FileHandlerAdapter adapter, final boolean preload){ }
+
+    public final void addDirectory(final File directory, final FileHandlerAdapter adapter, final boolean preload, final boolean walk){ }
+
+    public final void addDirectory(final String context, final File directory){ }
+
+    public final void addDirectory(final String context, final File directory, final boolean preload){ }
+
+    public final void addDirectory(final String context, final File directory, final boolean preload, final boolean walk){ }
+
+    public final void addDirectory(final String context, final File directory, final FileHandlerAdapter adapter){ }
+
+    public final void addDirectory(final String context, final File directory, final FileHandlerAdapter adapter, final boolean preload){ }
+
+    public final void addDirectory(final String context, final File directory, final FileHandlerAdapter adapter, final boolean preload, final boolean walk){ }
+
+    public final void addDirectory(final File directory, final String directoryName){ }
+
+    public final void addDirectory(final File directory, final String directoryName, final boolean preload){ }
+
+    public final void addDirectory(final File directory, final String directoryName, final boolean preload, final boolean walk){ }
+
+    public final void addDirectory(final File directory, final String directoryName, final FileHandlerAdapter adapter){ }
+
+    public final void addDirectory(final File directory, final String directoryName, final FileHandlerAdapter adapter, final boolean preload){ }
+
+    public final void addDirectory(final File directory, final String directoryName, final FileHandlerAdapter adapter, final boolean preload, final boolean walk){ }
+
+    public final void addDirectory(final String context, final File directory, final String directoryName){ }
+
+    public final void addDirectory(final String context, final File directory, final String directoryName, final boolean preload){ }
+
+    public final void addDirectory(final String context, final File directory, final String directoryName, final boolean preload, final boolean walk){ }
+
+    public final void addDirectory(final String context, final File directory, final String directoryName, final FileHandlerAdapter adapter){ }
+
+    public final void addDirectory(final String context, final File directory, final String directoryName, final FileHandlerAdapter adapter, final boolean preload){ }
+
+    public final void addDirectory(final String context, final File directory, final String directoryName, final FileHandlerAdapter adapter, final boolean preload, final boolean walk){ }
+
+    //
+
+    public final void removeFile(final File file){ }
+
+    public final void removeFiles(final File[] files){ }
+
+    public final void removeDirectory(final File directory){ }
 
 //
 
