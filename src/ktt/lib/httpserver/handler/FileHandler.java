@@ -48,16 +48,33 @@ public class FileHandler extends SimpleHttpHandler {
         final String rel = exchange.getContext().substring(exchange.getHttpContext().getPath().length());
 
         String match = "";
-        for(String key : files.keySet())
+        for(final String key : files.keySet())
             if(rel.startsWith(key) && key.startsWith(match))
                 match = key;
 
-        if(match.isEmpty())
-            for(String key : directories.keySet())
+        if(!match.isEmpty() && files.containsKey(match)){
+            final FileEntry entry = files.get(match);
+            handle(exchange,entry.getFile(),entry.getBytes());
+        }else{
+            match = "";
+            for(final String key : directories.keySet())
                 if(rel.startsWith(key) && key.startsWith(match))
                     match = key;
 
-        // todo
+            if(!match.isEmpty() && directories.containsKey(match)){
+                final DirectoryEntry entry = directories.get(match);
+                final String rel2;
+                try{
+                    rel2 = rel.substring(match.length()+1);
+
+                    final File file;
+                    if((file = entry.getFile(rel2)) != null){
+                        handle(exchange, file, entry.getBytes(rel2)); return;
+                    }
+                }catch(final IndexOutOfBoundsException ignored){ }
+            }
+            handle(exchange,null,null);
+        }
     }
 
     public void handle(final SimpleHttpExchange exchange, final File source, final byte[] bytes) throws IOException {
