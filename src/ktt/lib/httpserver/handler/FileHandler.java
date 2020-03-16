@@ -4,8 +4,7 @@ import ktt.lib.httpserver.http.HTTPCode;
 import ktt.lib.httpserver.server.SimpleHttpExchange;
 import ktt.lib.httpserver.server.SimpleHttpHandler;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public class FileHandler extends SimpleHttpHandler {
@@ -21,103 +20,119 @@ public class FileHandler extends SimpleHttpHandler {
 
 //
 
-    public final void addFile(final File file){ }
+    public final void addFile(final File file){
+        addFile("",file,adapter.getName(file),false);
+    }
 
-    public final void addFile(final File file, final boolean preload){ }
+    public final void addFile(final File file, final boolean preload){
+        addFile("",file,adapter.getName(file),preload);
+    }
 
-    public final void addFile(final File file, final FileHandlerAdapter adapter){ }
+    public final void addFile(final String context, final File file){
+        addFile(context,file,adapter.getName(file),false);
+    }
 
-    public final void addFile(final File file, final FileHandlerAdapter adapter, final boolean preload){ }
+    public final void addFile(final String context, final File file, final boolean preload){
+        addFile(context,file,adapter.getName(file),preload);
+    }
 
-    public final void addFile(final String context, final File file){ }
+    public final void addFile(final File file, final String fileName){
+        addFile("",file,fileName,false);
+    }
 
-    public final void addFile(final String context, final File file, final boolean preload){ }
+    public final void addFile(final File file, final String fileName, final boolean preload){
+        addFile("",file,fileName,preload);
+    }
 
-    public final void addFile(final String context, final File file, final FileHandlerAdapter adapter){ }
+    public final void addFile(final String context, final File file, final String fileName){
+        addFile(context,file,fileName,false);
+    }
 
-    public final void addFile(final String context, final File file, final FileHandlerAdapter adapter, final boolean preload){ }
-
-    //
-
-    public final void addFiles(final File[] file){ }
-
-    public final void addFiles(final File[] files, final boolean preload){ }
-
-    public final void addFiles(final File[] files, final FileHandlerAdapter adapter){ }
-
-    public final void addFiles(final File[] files, final FileHandlerAdapter adapter, final boolean preload){ }
-
-    public final void addFiles(final String context, final File[] files){ }
-
-    public final void addFiles(final String context, final File[] files, final boolean preload){ }
-
-    public final void addFiles(final String context, final File[] files, final FileHandlerAdapter adapter){ }
-
-    public final void addFiles(final String context, final File[] files, final FileHandlerAdapter adapter, final boolean preload){ }
-
-    //
-
-    public final void addDirectory(final File directory){ }
-
-    public final void addDirectory(final File directory, final boolean preload){ }
-
-    public final void addDirectory(final File directory, final boolean preload, final boolean walk){ }
-
-    public final void addDirectory(final File directory, final FileHandlerAdapter adapter){ }
-
-    public final void addDirectory(final File directory, final FileHandlerAdapter adapter, final boolean preload){ }
-
-    public final void addDirectory(final File directory, final FileHandlerAdapter adapter, final boolean preload, final boolean walk){ }
-
-    public final void addDirectory(final String context, final File directory){ }
-
-    public final void addDirectory(final String context, final File directory, final boolean preload){ }
-
-    public final void addDirectory(final String context, final File directory, final boolean preload, final boolean walk){ }
-
-    public final void addDirectory(final String context, final File directory, final FileHandlerAdapter adapter){ }
-
-    public final void addDirectory(final String context, final File directory, final FileHandlerAdapter adapter, final boolean preload){ }
-
-    public final void addDirectory(final String context, final File directory, final FileHandlerAdapter adapter, final boolean preload, final boolean walk){ }
-
-    public final void addDirectory(final File directory, final String directoryName){ }
-
-    public final void addDirectory(final File directory, final String directoryName, final boolean preload){ }
-
-    public final void addDirectory(final File directory, final String directoryName, final boolean preload, final boolean walk){ }
-
-    public final void addDirectory(final File directory, final String directoryName, final FileHandlerAdapter adapter){ }
-
-    public final void addDirectory(final File directory, final String directoryName, final FileHandlerAdapter adapter, final boolean preload){ }
-
-    public final void addDirectory(final File directory, final String directoryName, final FileHandlerAdapter adapter, final boolean preload, final boolean walk){ }
-
-    public final void addDirectory(final String context, final File directory, final String directoryName){ }
-
-    public final void addDirectory(final String context, final File directory, final String directoryName, final boolean preload){ }
-
-    public final void addDirectory(final String context, final File directory, final String directoryName, final boolean preload, final boolean walk){ }
-
-    public final void addDirectory(final String context, final File directory, final String directoryName, final FileHandlerAdapter adapter){ }
-
-    public final void addDirectory(final String context, final File directory, final String directoryName, final FileHandlerAdapter adapter, final boolean preload){ }
-
-    public final void addDirectory(final String context, final File directory, final String directoryName, final FileHandlerAdapter adapter, final boolean preload, final boolean walk){ }
+    public final void addFile(final String context, final File file, final String fileName, final boolean preload){
+        try{
+            files.put(getContext(context) + getContext(fileName),new FileEntry(file,preload,adapter));
+        }catch(final FileNotFoundException ignored){ }
+    }
 
     //
 
-    public final void removeFile(final File file){ }
+    public final void addFiles(final File[] files){
+        for(final File file : files)
+            addFile(file);
+    }
 
-    public final void removeFiles(final File[] files){ }
+    public final void addFiles(final File[] files, final boolean preload){
+        for(final File file : files)
+            addFile(file,preload);
+    }
 
-    public final void removeDirectory(final File directory){ }
+    public final void addFiles(final String context, final File[] files){
+        for(final File file : files)
+            addFile(context,file);
+    }
+
+    public final void addFiles(final String context, final File[] files, final boolean preload){
+        for(final File file : files)
+            addFile(context,file);
+    }
+
+    //
+
+    public final void addDirectory(final File directory){
+        addDirectory("",directory,directory.getName(),false,false);
+    }
+
+    public final void addDirectory(final File directory, final boolean preload){
+        addDirectory("",directory,directory.getName(),preload,false);
+    }
+
+    public final void addDirectory(final File directory, final boolean preload, final boolean walk){
+        addDirectory("",directory,directory.getName(),preload,walk);
+    }
+
+    public final void addDirectory(final String context, final File directory){
+        addDirectory(context,directory,directory.getName(),false,false);
+    }
+
+    public final void addDirectory(final String context, final File directory, final boolean preload){
+        addDirectory(context,directory,directory.getName(),preload,false);
+    }
+
+    public final void addDirectory(final String context, final File directory, final boolean preload, final boolean walk){
+        addDirectory(context,directory,directory.getName(),preload,walk);
+    }
+
+    public final void addDirectory(final File directory, final String directoryName){
+        addDirectory("",directory,directoryName,false,false);
+    }
+
+    public final void addDirectory(final File directory, final String directoryName, final boolean preload){
+        addDirectory("",directory,directoryName,preload,false);
+    }
+
+    public final void addDirectory(final File directory, final String directoryName, final boolean preload, final boolean walk){
+        addDirectory("",directory,directoryName,preload,walk);
+    }
+
+    public final void addDirectory(final String context, final File directory, final String directoryName){
+        addDirectory(context,directory,directoryName,false,false);
+    }
+
+    public final void addDirectory(final String context, final File directory, final String directoryName, final boolean preload){
+        addDirectory(context,directory,directoryName,preload,false);
+    }
+
+    public final void addDirectory(final String context, final File directory, final String directoryName, final boolean preload, final boolean walk){
+        try{
+            directories.put(getContext(context) + getContext(directoryName), new DirectoryEntry(directory, preload, adapter, walk));
+        }catch(final IOException ignored){ }
+    }
 
 //
 
     @Override
     public final void handle(final SimpleHttpExchange exchange) throws IOException{
-        final String rel = exchange.getContext().substring(exchange.getHttpContext().getPath().length());
+        final String rel = getContext(exchange.getContext().substring(exchange.getHttpContext().getPath().length()));
 
         String match = "";
         for(final String key : files.keySet())
@@ -151,6 +166,14 @@ public class FileHandler extends SimpleHttpHandler {
 
     public void handle(final SimpleHttpExchange exchange, final File source, final byte[] bytes) throws IOException {
         exchange.send(bytes, HTTPCode.HTTP_OK);
+    }
+
+//
+
+    private static String getContext(final String path){
+        final String linSlash = path.toLowerCase().replace("\\","/");
+        final String seSlash = (!linSlash.startsWith("/") ? "/" : "") + linSlash + (!linSlash.endsWith("/") ? "/" : "");
+        return seSlash.substring(0,seSlash.length()-1);
     }
 
 }
