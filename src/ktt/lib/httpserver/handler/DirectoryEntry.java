@@ -157,7 +157,8 @@ class DirectoryEntry {
             return !match.isEmpty() ? files.get(match).getFile() : null;
         }else{
             if(isWalkthrough){
-                final File parent = new File(directory.getAbsolutePath() + path).getParentFile(); // todo // ⚠ security flaw: user may have access to folders outside of directory by using ../
+                final File parent = new File(directory.getAbsolutePath() + path).getParentFile();
+                if(!parent.getAbsolutePath().startsWith(directory.getAbsolutePath())) return null;
                 final String name = path.substring(path.lastIndexOf('/'));
                 final File[] listFiles = parent.listFiles(pathname -> !pathname.isDirectory());
 
