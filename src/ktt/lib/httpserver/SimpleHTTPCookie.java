@@ -1,13 +1,12 @@
-package ktt.lib.httpserver.http;
+package ktt.lib.httpserver;
 
-import javax.swing.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
  * An HTTP Cookie to be sent in a response header.
  *
- * @see ktt.lib.httpserver.server.SimpleHttpExchange
+ * @see SimpleHttpExchange
  * @since 02.00.00
  * @version 02.00.00
  * @author Ktt Development
@@ -60,7 +59,7 @@ public class SimpleHTTPCookie {
      *
      * @return cookie header
      *
-     * @see ktt.lib.httpserver.server.SimpleHttpExchange#setCookie(SimpleHTTPCookie)
+     * @see SimpleHttpExchange#setCookie(SimpleHTTPCookie)
      * @since 02.00.00
      * @author Ktt Development
      */

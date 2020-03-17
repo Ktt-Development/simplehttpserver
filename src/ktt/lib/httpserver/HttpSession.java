@@ -1,7 +1,6 @@
-package ktt.lib.httpserver.server;
+package ktt.lib.httpserver;
 
 import java.util.HashMap;
-import java.util.UUID;
 
 /**
  * A session keeps track of a single client across multiple exchanges. This is typically used for login persistence.

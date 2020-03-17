@@ -1,4 +1,4 @@
-package ktt.lib.httpserver.server;
+package ktt.lib.httpserver;
 
 import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpServer;

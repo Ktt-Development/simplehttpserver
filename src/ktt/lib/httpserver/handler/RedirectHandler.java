@@ -1,8 +1,8 @@
 package ktt.lib.httpserver.handler;
 
-import ktt.lib.httpserver.http.HTTPCode;
-import ktt.lib.httpserver.server.SimpleHttpExchange;
-import ktt.lib.httpserver.server.SimpleHttpHandler;
+import ktt.lib.httpserver.var.HTTPCode;
+import ktt.lib.httpserver.SimpleHttpExchange;
+import ktt.lib.httpserver.SimpleHttpHandler;
 
 import java.io.IOException;
 

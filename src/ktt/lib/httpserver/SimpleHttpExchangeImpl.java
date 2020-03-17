@@ -1,8 +1,8 @@
-package ktt.lib.httpserver.server;
+package ktt.lib.httpserver;
 
 import com.sun.net.httpserver.*;
 import com.sun.net.httpserver.HttpExchange;
-import ktt.lib.httpserver.http.*;
+import ktt.lib.httpserver.var.*;
 
 import java.io.*;
 import java.net.*;

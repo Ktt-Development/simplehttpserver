@@ -1,9 +1,8 @@
-package ktt.lib.httpserver.server;
+package ktt.lib.httpserver;
 
 import com.sun.net.httpserver.*;
 import com.sun.net.httpserver.HttpExchange;
-import ktt.lib.httpserver.http.RequestMethod;
-import ktt.lib.httpserver.http.SimpleHTTPCookie;
+import ktt.lib.httpserver.var.RequestMethod;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -377,7 +376,7 @@ public abstract class SimpleHttpExchange {
      *
      * @return response code
      *
-     * @see ktt.lib.httpserver.http.HTTPCode
+     * @see ktt.lib.httpserver.var.HTTPCode
      * @see #sendResponseHeaders(int, long)
      * @since 02.00.00
      * @author Ktt Development
@@ -431,7 +430,7 @@ public abstract class SimpleHttpExchange {
      * @throws IOException internal server error
      *
      * @see #getResponseHeaders()
-     * @see ktt.lib.httpserver.http.HTTPCode
+     * @see ktt.lib.httpserver.var.HTTPCode
      * @since 02.00.00
      * @author Ktt Development
      */

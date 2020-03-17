@@ -1,4 +1,4 @@
-package ktt.lib.httpserver.server;
+package ktt.lib.httpserver;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
