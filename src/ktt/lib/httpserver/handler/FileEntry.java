@@ -97,6 +97,7 @@ class FileEntry {
 //
 
 
+    @SuppressWarnings("StringBufferReplaceableByString")
     @Override
     public String toString(){
         final StringBuilder OUT = new StringBuilder();

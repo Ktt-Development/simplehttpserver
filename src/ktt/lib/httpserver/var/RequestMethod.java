@@ -7,6 +7,7 @@ package ktt.lib.httpserver.var;
  * @version 01.00.00
  * @author Ktt Development
  */
+@SuppressWarnings("SpellCheckingInspection")
 public enum RequestMethod {
     GET,
     HEAD,
