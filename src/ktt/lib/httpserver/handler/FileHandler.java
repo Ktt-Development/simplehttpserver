@@ -1,6 +1,6 @@
 package ktt.lib.httpserver.handler;
 
-import ktt.lib.httpserver.var.HTTPCode;
+import ktt.lib.httpserver.var.HttpCode;
 import ktt.lib.httpserver.SimpleHttpExchange;
 import ktt.lib.httpserver.SimpleHttpHandler;
 
@@ -677,7 +677,7 @@ public class FileHandler extends SimpleHttpHandler {
      * @author Ktt Development
      */
     public void handle(final SimpleHttpExchange exchange, final File source, final byte[] bytes) throws IOException {
-        exchange.send(bytes, HTTPCode.HTTP_OK);
+        exchange.send(bytes, HttpCode.HTTP_OK);
     }
 
 //

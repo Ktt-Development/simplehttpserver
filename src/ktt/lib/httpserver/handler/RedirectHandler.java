@@ -1,6 +1,6 @@
 package ktt.lib.httpserver.handler;
 
-import ktt.lib.httpserver.var.HTTPCode;
+import ktt.lib.httpserver.var.HttpCode;
 import ktt.lib.httpserver.SimpleHttpExchange;
 import ktt.lib.httpserver.SimpleHttpHandler;
 
@@ -34,7 +34,7 @@ public class RedirectHandler extends SimpleHttpHandler {
     @Override
     public final void handle(final SimpleHttpExchange exchange) throws IOException{
         exchange.getResponseHeaders().set("Location",link);
-        exchange.send(HTTPCode.HTTP_Found);
+        exchange.send(HttpCode.HTTP_Found);
     }
 
 //

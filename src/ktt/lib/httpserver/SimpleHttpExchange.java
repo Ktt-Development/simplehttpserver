@@ -1,6 +1,7 @@
 package ktt.lib.httpserver;
 
 import com.sun.net.httpserver.*;
+import ktt.lib.httpserver.var.HttpCode;
 import ktt.lib.httpserver.var.RequestMethod;
 
 import java.io.IOException;
@@ -376,7 +377,7 @@ public abstract class SimpleHttpExchange {
      *
      * @return response code
      *
-     * @see ktt.lib.httpserver.var.HTTPCode
+     * @see HttpCode
      * @see #sendResponseHeaders(int, long)
      * @since 02.00.00
      * @author Ktt Development
@@ -400,12 +401,12 @@ public abstract class SimpleHttpExchange {
      *
      * @param cookie cookie to set
      *
-     * @see SimpleHTTPCookie
+     * @see SimpleHttpCookie
      * @see #getResponseHeaders()
      * @since 02.00.00
      * @author Ktt Development
      */
-    public abstract void setCookie(final SimpleHTTPCookie cookie);
+    public abstract void setCookie(final SimpleHttpCookie cookie);
 
 //
 
@@ -430,7 +431,7 @@ public abstract class SimpleHttpExchange {
      * @throws IOException internal server error
      *
      * @see #getResponseHeaders()
-     * @see ktt.lib.httpserver.var.HTTPCode
+     * @see HttpCode
      * @since 02.00.00
      * @author Ktt Development
      */

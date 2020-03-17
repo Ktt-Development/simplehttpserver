@@ -339,7 +339,7 @@ abstract class SimpleHttpExchangeImpl {
             }
 
             @Override
-            public synchronized final void setCookie(final SimpleHTTPCookie cookie){
+            public synchronized final void setCookie(final SimpleHttpCookie cookie){
                 getResponseHeaders().add("Set-Cookie",cookie.toString());
             }
 
@@ -351,7 +351,7 @@ abstract class SimpleHttpExchangeImpl {
                 final HttpSession session;
                 if((sessionId = cookies.get("__session-id")) == null || !HttpSession.sessions.containsKey(sessionId)){
                     session = HttpSession.create();
-                    setCookie(new SimpleHTTPCookie("__session-id",session.getSessionID(),null,null,null,null,null,false,true));
+                    setCookie(new SimpleHttpCookie("__session-id", session.getSessionID(), null, null, null, null, null, false, true));
                 }else{
                     session = HttpSession.sessions.get(sessionId);
                 }
@@ -372,12 +372,12 @@ abstract class SimpleHttpExchangeImpl {
 
             @Override
             public synchronized final void send(final byte[] response) throws IOException{
-                send(response, HTTPCode.HTTP_OK,false);
+                send(response, HttpCode.HTTP_OK, false);
             }
 
             @Override
             public void send(final byte[] response, final boolean gzip) throws IOException{
-                send(response,HTTPCode.HTTP_OK,gzip);
+                send(response, HttpCode.HTTP_OK, gzip);
             }
 
             @Override
@@ -405,12 +405,12 @@ abstract class SimpleHttpExchangeImpl {
 
             @Override
             public synchronized final void send(final String response) throws IOException{
-                send(response.getBytes(StandardCharsets.UTF_8),HTTPCode.HTTP_OK,false);
+                send(response.getBytes(StandardCharsets.UTF_8), HttpCode.HTTP_OK, false);
             }
 
             @Override
             public void send(final String response, final boolean gzip) throws IOException{
-                send(response.getBytes(StandardCharsets.UTF_8),HTTPCode.HTTP_OK,gzip);
+                send(response.getBytes(StandardCharsets.UTF_8), HttpCode.HTTP_OK, gzip);
             }
 
             @Override
