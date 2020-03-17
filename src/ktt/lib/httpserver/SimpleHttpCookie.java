@@ -11,7 +11,7 @@ import java.util.Date;
  * @version 02.00.00
  * @author Ktt Development
  */
-public class SimpleHTTPCookie {
+public class SimpleHttpCookie {
 
     private final String
         name,
@@ -42,7 +42,7 @@ public class SimpleHTTPCookie {
      * @since 02.00.00
      * @author Ktt Development
      */
-    public SimpleHTTPCookie(final String name, final String value, final String domain, final String path, final String sameSite, final Date expires, final Integer maxAge, final boolean secure, final boolean httpOnly){
+    public SimpleHttpCookie(final String name, final String value, final String domain, final String path, final String sameSite, final Date expires, final Integer maxAge, final boolean secure, final boolean httpOnly){
         this.name = name;
         this.value = value;
         this.domain = domain;
@@ -59,7 +59,7 @@ public class SimpleHTTPCookie {
      *
      * @return cookie header
      *
-     * @see SimpleHttpExchange#setCookie(SimpleHTTPCookie)
+     * @see SimpleHttpExchange#setCookie(SimpleHttpCookie)
      * @since 02.00.00
      * @author Ktt Development
      */

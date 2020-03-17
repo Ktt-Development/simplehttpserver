@@ -8,7 +8,7 @@ package ktt.lib.httpserver.var;
  * @author Ktt Development
  */
 @SuppressWarnings({"unused", "SpellCheckingInspection"})
-public abstract class HTTPCode {
+public abstract class HttpCode {
 
     public static final int HTTP_Continue = 100;
     public static final int HTTP_SwitchingProtocols = 101;
