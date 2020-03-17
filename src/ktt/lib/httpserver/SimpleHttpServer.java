@@ -26,7 +26,7 @@ public abstract class SimpleHttpServer {
     /**
      * Create an empty {@link SimpleHttpServer}. Applications don't use this method.
      *
-     * @see SimpleHttpServerImpl#createSimpleHttpServer(int, int)
+     * @see SimpleHttpServerImpl#createSimpleHttpServer(Integer, Integer)
      * @since 02.00.00
      * @author Ktt Development
      */
@@ -35,41 +35,44 @@ public abstract class SimpleHttpServer {
 //
 
     /**
-     * Create a {@link SimpleHttpServer} at port 80 with no backlog.
+     * Creates a {@link SimpleHttpServer}.
      *
      * @return a {@link SimpleHttpServer}
-     * @throws java.net.BindException if server can not bind to port
      * @throws IOException uncaught exception
      *
      * @since 02.00.00
      * @author Ktt Development
      */
     public static SimpleHttpServer create() throws IOException {
-        return SimpleHttpServerImpl.createSimpleHttpServer(80,0);
+        return SimpleHttpServerImpl.createSimpleHttpServer(null,null);
     }
 
     /**
-     * Create a {@link SimpleHttpServer} at with no backlog.
+     * Creates a {@link SimpleHttpServer} bounded to a port.
      *
      * @param port port to bind to
      * @return a {@link SimpleHttpServer}
      * @throws java.net.BindException if server can not bind to port
+     * @throws NullPointerException if address is <code>null</code>
+     * @throws IllegalArgumentException if port is out of range
      * @throws IOException uncaught exception
      *
      * @since 02.00.00
      * @author Ktt Development
      */
     public static SimpleHttpServer create(final int port) throws IOException {
-        return SimpleHttpServerImpl.createSimpleHttpServer(port,0);
+        return SimpleHttpServerImpl.createSimpleHttpServer(port,null);
     }
 
     /**
-     * Create a {@link SimpleHttpServer}.
+     * Creates a {@link SimpleHttpServer} bounded to a port.
      *
      * @param port port to bind to
      * @param backlog request backlog
      * @return a {@link SimpleHttpServer}
      * @throws java.net.BindException if server can not bind to port
+     * @throws NullPointerException if address is <code>null</code>
+     * @throws IllegalArgumentException if port is out of range
      * @throws IOException uncaught exception
      *
      * @since 02.00.00
@@ -100,6 +103,7 @@ public abstract class SimpleHttpServer {
      * @param port port to bind the server to
      * @return address the server is binded to
      * @throws java.net.BindException if server could not be bound to port, or if it's already bound
+     * @throws IllegalArgumentException if port is out of range
      * @throws NullPointerException if address is <code>null</code>
      * @throws IOException uncaught exception
      *
@@ -118,6 +122,7 @@ public abstract class SimpleHttpServer {
      * @param backlog request backlog
      * @return address the server is binded to
      * @throws java.net.BindException if server could not be bound to port, or if it's already bound
+     * @throws IllegalArgumentException if port is out of range
      * @throws NullPointerException if address is <code>null</code>
      * @throws IOException uncaught exception
      *
@@ -134,6 +139,7 @@ public abstract class SimpleHttpServer {
      *
      * @param addr address to bind the server to
      * @throws java.net.BindException if server could not be bound to port, or if it's already bound
+     * @throws IllegalArgumentException if port is out of range
      * @throws NullPointerException if address is <code>null</code>
      * @throws IOException uncaught exception
      *
@@ -448,8 +454,6 @@ public abstract class SimpleHttpServer {
      * @throws IllegalArgumentException if no handler at that context exists
      * @throws NullPointerException if the context is null
      *
-     * @see #createContext(String)
-     * @see #createContext(String, HttpHandler)
      * @see #removeContext(HttpContext)
      * @since 02.00.00
      * @author Ktt Development
@@ -462,8 +466,6 @@ public abstract class SimpleHttpServer {
      * @throws IllegalArgumentException if no handler at that context exists
      * @throws NullPointerException if the context is null
      *
-     * @see #createContext(String)
-     * @see #createContext(String, HttpHandler)
      * @see #removeContext(String)
      * @since 02.00.00
      * @author Ktt Development
@@ -507,6 +509,8 @@ public abstract class SimpleHttpServer {
 
     /**
      * Starts the server.
+     *
+     * @throws IllegalStateException if server is not bound to a valid port
      *
      * @see #stop()
      * @see #stop(int)

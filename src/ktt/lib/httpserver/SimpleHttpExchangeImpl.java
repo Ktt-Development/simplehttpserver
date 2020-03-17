@@ -123,7 +123,8 @@ abstract class SimpleHttpExchangeImpl {
                 }
             //
                 hasGet = (rawGet = URI.getQuery()) != null;
-                getMap = parseWwwFormEnc.apply(rawGet);
+                getMap = hasGet ? parseWwwFormEnc.apply(rawGet) : new HashMap<>();
+
             //
                 String OUT;
                 final InputStream IN = httpExchange.getRequestBody();
@@ -131,7 +132,7 @@ abstract class SimpleHttpExchangeImpl {
                 try(final Scanner scanner = new Scanner(IN,StandardCharsets.UTF_8)){
                     OUT = scanner.useDelimiter("\\A").next();
                     IN.close();
-                }catch(IOException e){
+                }catch(IOException | NoSuchElementException e){
                     OUT = null;
                 }
 
@@ -449,29 +450,29 @@ abstract class SimpleHttpExchangeImpl {
             public final String toString(){
                 final StringBuilder OUT = new StringBuilder();
                 OUT.append("SimpleHttpExchange").append("{");
-                OUT.append("httpServer")        .append("= ")   .append(httpServer.toString())              .append(", ");
-                OUT.append("httpExchange")      .append("= ")   .append(httpExchange.toString())            .append(", ");
-                OUT.append("URI")               .append("= ")   .append(URI.toString())                     .append(", ");
-                OUT.append("publicAddress")     .append("= ")   .append(publicAddr.toString())              .append(", ");
-                OUT.append("localAddress")      .append("= ")   .append(localAddr.toString())               .append(", ");
-                OUT.append("httpContext")       .append("= ")   .append(httpContext.toString())             .append(", ");
-                OUT.append("httpPrincipal")     .append("= ")   .append(httpPrincipal.toString())           .append(", ");
-                OUT.append("protocol")          .append("= ")   .append(protocol)                           .append(", ");
-                OUT.append("authority")         .append("= ")   .append(authority)                          .append(", ");
-                OUT.append("scheme")            .append("= ")   .append(scheme)                             .append(", ");
-                OUT.append("context")           .append("= ")   .append(context)                            .append(", ");
-                OUT.append("fragment")          .append("= ")   .append(fragment)                           .append(", ");
-                OUT.append("requestHeaders")    .append("= ")   .append(requestHeaders.toString())          .append(", ");
-                OUT.append("requestMethod")     .append("= ")   .append(requestMethod.toString())           .append(", ");
-                OUT.append("responseHeader")    .append("= ")   .append(getResponseHeaders().toString())    .append(", ");
-                OUT.append("responseCode")      .append("= ")   .append(getResponseCode())                  .append(", ");
-                OUT.append("rawGet")            .append("= ")   .append(rawGet)                             .append(", ");
-                OUT.append("getMap")            .append("= ")   .append(getMap.toString())                  .append(", ");
-                OUT.append("hasGet")            .append("= ")   .append(hasGet)                             .append(", ");
-                OUT.append("rawPost")           .append("= ")   .append(rawPost)                            .append(", ");
-                OUT.append("postMap")           .append("= ")   .append(postMap.toString())                 .append(", ");
-                OUT.append("hasPost")           .append("= ")   .append(hasPost)                            .append(", ");
-                OUT.append("cookies")           .append("= ")   .append(cookies.toString());
+                OUT.append("httpServer")        .append("= ")   .append(httpServer)              .append(", ");
+                OUT.append("httpExchange")      .append("= ")   .append(httpExchange)            .append(", ");
+                OUT.append("URI")               .append("= ")   .append(URI)                     .append(", ");
+                OUT.append("publicAddress")     .append("= ")   .append(publicAddr)              .append(", ");
+                OUT.append("localAddress")      .append("= ")   .append(localAddr)               .append(", ");
+                OUT.append("httpContext")       .append("= ")   .append(httpContext)             .append(", ");
+                OUT.append("httpPrincipal")     .append("= ")   .append(httpPrincipal)           .append(", ");
+                OUT.append("protocol")          .append("= ")   .append(protocol)                .append(", ");
+                OUT.append("authority")         .append("= ")   .append(authority)               .append(", ");
+                OUT.append("scheme")            .append("= ")   .append(scheme)                  .append(", ");
+                OUT.append("context")           .append("= ")   .append(context)                 .append(", ");
+                OUT.append("fragment")          .append("= ")   .append(fragment)                .append(", ");
+                OUT.append("requestHeaders")    .append("= ")   .append(requestHeaders)          .append(", ");
+                OUT.append("requestMethod")     .append("= ")   .append(requestMethod)           .append(", ");
+                OUT.append("responseHeader")    .append("= ")   .append(getResponseHeaders())    .append(", ");
+                OUT.append("responseCode")      .append("= ")   .append(getResponseCode())       .append(", ");
+                OUT.append("rawGet")            .append("= ")   .append(rawGet)                  .append(", ");
+                OUT.append("getMap")            .append("= ")   .append(getMap)                  .append(", ");
+                OUT.append("hasGet")            .append("= ")   .append(hasGet)                  .append(", ");
+                OUT.append("rawPost")           .append("= ")   .append(rawPost)                 .append(", ");
+                OUT.append("postMap")           .append("= ")   .append(postMap)                 .append(", ");
+                OUT.append("hasPost")           .append("= ")   .append(hasPost)                 .append(", ");
+                OUT.append("cookies")           .append("= ")   .append(cookies);
                 OUT.append("}");
                 return OUT.toString();
             }

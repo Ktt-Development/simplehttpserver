@@ -6,7 +6,7 @@ import com.sun.net.httpserver.HttpHandler;
 import java.io.IOException;
 
 /**
- * A simplified implementation of {@link HttpHandler}. It is used to process {@link SimpleHttpExchange}s.
+ * A simplified implementation of {@link HttpHandler}. It is used to process {@link SimpleHttpExchange}s. Each handler is its own thread and will not reveal any exceptions unless a try-catch within the handler is used.
  *
  * @see HttpHandler
  * @see SimpleHttpExchange

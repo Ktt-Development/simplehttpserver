@@ -31,7 +31,7 @@ abstract class SimpleHttpServerImpl {
      * @since 02.00.00
      * @author Ktt Development
      */
-    static SimpleHttpServer createSimpleHttpServer(final int port, final int backlog) throws IOException {
+    static SimpleHttpServer createSimpleHttpServer(final Integer port, final Integer backlog) throws IOException {
         return new SimpleHttpServer() {
 
             private final HttpServer server = HttpServer.create();
@@ -41,7 +41,8 @@ abstract class SimpleHttpServerImpl {
             private boolean running = false;
 
             {
-                server.bind(new InetSocketAddress(port),backlog);
+                if(port != null)
+                    server.bind(new InetSocketAddress(port),backlog != null ? backlog : 0);
             }
 
         //
@@ -260,10 +261,10 @@ abstract class SimpleHttpServerImpl {
             public final String toString(){
                 final StringBuilder OUT = new StringBuilder();
                 OUT.append("SimpleHttpServer")  .append("{");
-                OUT.append("httpServer")        .append("= ")   .append(server.toString())          .append(", ");
-                OUT.append("contexts")          .append("= ")   .append(contexts.toString())        .append(", ");
-                OUT.append("address")           .append("= ")   .append(getAddress().toString())    .append(", ");
-                OUT.append("executor")          .append("= ")   .append(getExecutor().toString());
+                OUT.append("httpServer")        .append("= ")   .append(server)          .append(", ");
+                OUT.append("contexts")          .append("= ")   .append(contexts)        .append(", ");
+                OUT.append("address")           .append("= ")   .append(getAddress())    .append(", ");
+                OUT.append("executor")          .append("= ")   .append(getExecutor());
                 OUT.append("}");
                 return OUT.toString();
             }
@@ -273,6 +274,7 @@ abstract class SimpleHttpServerImpl {
 
     private static String getContext(final String path){
         final String linSlash = path.toLowerCase().replace("\\","/");
+        if(linSlash.equalsIgnoreCase("/")) return "/";
         final String seSlash = (!linSlash.startsWith("/") ? "/" : "") + linSlash + (!linSlash.endsWith("/") ? "/" : "");
         return seSlash.substring(0,seSlash.length()-1);
     }
