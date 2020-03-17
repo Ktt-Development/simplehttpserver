@@ -20,7 +20,7 @@ public class SSEHandler extends SimpleHttpHandler {
 
     private final List<SimpleHttpExchange> listeners = new ArrayList<>(); // listeners
     private int id = -1;
-    private final LinkedList<String> queue = new LinkedList<>(); // event queue
+    private final LinkedList<EventStreamRecord> queue = new LinkedList<>(); // event queue
 
     @Override
     public final void handle(final SimpleHttpExchange exchange) throws IOException{
@@ -40,30 +40,56 @@ public class SSEHandler extends SimpleHttpHandler {
         }catch(final NumberFormatException | NullPointerException ignored){ }
 
         for(int index = latest; index < queue.size(); index++)
-            exchange.send(queue.get(index));
+            exchange.send(queue.get(index).toString(index));
 
         listeners.add(exchange);
     }
 
+//
+
     /**
-     * Pushes an event to the event stream.
+     * Pushes an event to the stream.
      *
-     * @param s event data
+     * @param retry how long to reconnect (leave 0 for no retry)
+     * @param event event name (leave blank for no event)
+     * @param data event data (leave blank for no data)
      *
      * @since 02.00.00
      * @author Ktt Development
      */
-    public final void push(final String s){
+    public synchronized final void push(final int retry, final String event, final String data){
         id++;
-        queue.add(s);
+        final EventStreamRecord record = new EventStreamRecord(retry,event,data);
+        queue.add(record);
         listeners.forEach(exchange -> {
-            final StringBuilder OUT = new StringBuilder();
-            OUT.append("id: ").append(id).append("\n");
-            OUT.append("data: ").append(s).append("\n\n");
             try{
-                exchange.send(OUT.toString());
+                exchange.send(record.toString(id));
             }catch(final IOException ignored){}
         });
+    }
+
+//
+
+    private static class EventStreamRecord {
+
+        private final int retry;
+        private final String event;
+        private final String data;
+
+        public EventStreamRecord(final int retry, final String event, final String data){
+            this.retry = retry;
+            this.event = event;
+            this.data = data;
+        }
+
+        public final String toString(final int id){
+            return
+                "id: " + id + "\n" +
+                (retry > 0 ? "retry: " + retry + "\n" : "") +
+                (!event.isBlank() ? "event: " + event + "\n" : "") +
+                (!data.isBlank() ? "data: " + data + "\n" : "") + "\n";
+        }
+
     }
 
 }
