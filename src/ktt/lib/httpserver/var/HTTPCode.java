@@ -7,7 +7,7 @@ package ktt.lib.httpserver.var;
  * @version 01.00.00
  * @author Ktt Development
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "SpellCheckingInspection"})
 public abstract class HTTPCode {
 
     public static final int HTTP_Continue = 100;

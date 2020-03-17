@@ -15,6 +15,7 @@ import java.util.Objects;
  * @version 02.00.00
  * @author Ktt Development
  */
+@SuppressWarnings("SpellCheckingInspection")
 class DirectoryEntry {
 
     private final boolean isWalkthrough;
@@ -219,6 +220,7 @@ class DirectoryEntry {
 //
 
 
+    @SuppressWarnings("StringBufferReplaceableByString")
     @Override
     public String toString(){
         final StringBuilder OUT = new StringBuilder();

@@ -1,7 +1,5 @@
 package ktt.lib.httpserver;
 
-import com.sun.net.httpserver.HttpContext;
-import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.*;
 
 import java.io.IOException;
@@ -17,6 +15,7 @@ import java.util.concurrent.Executor;
  * @version 02.00.00
  * @author Ktt Development
  */
+@SuppressWarnings("SpellCheckingInspection")
 abstract class SimpleHttpServerImpl {
 
     /**
@@ -256,6 +255,7 @@ abstract class SimpleHttpServerImpl {
 
         //
 
+            @SuppressWarnings("StringBufferReplaceableByString")
             @Override
             public final String toString(){
                 final StringBuilder OUT = new StringBuilder();

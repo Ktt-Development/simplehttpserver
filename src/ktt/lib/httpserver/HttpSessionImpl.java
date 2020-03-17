@@ -59,6 +59,7 @@ abstract class HttpSessionImpl {
 
         //
 
+            @SuppressWarnings("StringBufferReplaceableByString")
             @Override
             public final String toString(){
                 final StringBuilder OUT = new StringBuilder();

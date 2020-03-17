@@ -20,6 +20,7 @@ import java.util.concurrent.Executor;
  * @version 02.00.00
  * @author Ktt Development
  */
+@SuppressWarnings("SpellCheckingInspection")
 public abstract class SimpleHttpServer {
 
     /**

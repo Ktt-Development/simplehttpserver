@@ -1,7 +1,6 @@
 package ktt.lib.httpserver;
 
 import com.sun.net.httpserver.*;
-import com.sun.net.httpserver.HttpExchange;
 import ktt.lib.httpserver.var.*;
 
 import java.io.*;
@@ -21,6 +20,7 @@ import java.util.zip.GZIPOutputStream;
  * @version 02.00.00
  * @author Ktt Development
  */
+@SuppressWarnings("SpellCheckingInspection")
 abstract class SimpleHttpExchangeImpl {
 
     /**
@@ -257,10 +257,6 @@ abstract class SimpleHttpExchangeImpl {
                 return authority;
             }
 
-            /**
-             * @deprecated use {@link #getRawGet()} instead
-             * @return
-             */
             @Override @Deprecated
             public final String getQuery(){
                 return query;
@@ -448,6 +444,7 @@ abstract class SimpleHttpExchangeImpl {
 
         //
 
+            @SuppressWarnings("StringBufferReplaceableByString")
             @Override
             public final String toString(){
                 final StringBuilder OUT = new StringBuilder();

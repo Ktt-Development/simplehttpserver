@@ -51,6 +51,7 @@ public class PredicateHandler extends SimpleHttpHandler {
 //
 
 
+    @SuppressWarnings("StringBufferReplaceableByString")
     @Override
     public String toString(){
         final StringBuilder OUT = new StringBuilder();

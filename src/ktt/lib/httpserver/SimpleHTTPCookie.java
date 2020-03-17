@@ -63,7 +63,7 @@ public class SimpleHTTPCookie {
      * @since 02.00.00
      * @author Ktt Development
      */
-    @SuppressWarnings("ConstantConditions")
+    @SuppressWarnings({"ConstantConditions", "SpellCheckingInspection"})
     @Override
     public final String toString(){
         StringBuilder OUT = new StringBuilder();

@@ -19,6 +19,7 @@ public interface SimpleHttpExchangeAuthenticator {
      * @since 01.00.00
      * @author Ktt Development
      */
+    @SuppressWarnings("SameReturnValue")
     default boolean authenticate(final SimpleHttpExchange exchange){ return true; }
 
 }

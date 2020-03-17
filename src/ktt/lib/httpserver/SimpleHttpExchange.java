@@ -1,7 +1,6 @@
 package ktt.lib.httpserver;
 
 import com.sun.net.httpserver.*;
-import com.sun.net.httpserver.HttpExchange;
 import ktt.lib.httpserver.var.RequestMethod;
 
 import java.io.IOException;
@@ -44,6 +43,7 @@ import java.util.HashMap;
  * @version 02.00.00
  * @author Ktt Development
  */
+@SuppressWarnings("SpellCheckingInspection")
 public abstract class SimpleHttpExchange {
 
     /**
