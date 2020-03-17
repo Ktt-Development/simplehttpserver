@@ -11,7 +11,8 @@ import java.util.concurrent.Executor;
 
 /**
  * <i>This class is a simplified implementation of {@link HttpServer}.</i><br>
- * At least one {@link HttpHandler} must be created in order to process requests. When handling requests the server will use the most specific context. If no handler can be found it is rejected with a 404 response.
+ * At least one {@link HttpHandler} must be created in order to process requests. When handling requests the server will use the most specific context. If no handler can be found it is rejected with a 404 response. <br>
+ * <b>Contexts are case-sensitive.</b>
  *
  * @see HttpServer
  * @see HttpHandler

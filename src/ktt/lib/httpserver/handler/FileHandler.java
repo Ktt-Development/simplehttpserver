@@ -9,7 +9,7 @@ import java.util.*;
 
 /**
  * A request handler that processes files using the {@link FileHandlerAdapter}. <br>
- * The <code>context</code> parameter determines if the relative context of the file within the handler before the name. <br>
+ * The <code>context</code> parameter determines if the relative context of the file within the handler before the name. <i>case-sensitive</i> <br>
  * The <code>fileName</code> parameter overrides the {@link FileHandlerAdapter#getName(File)} and determines the name of the file after the context (if there is one). <br>
  * The <code>directoryName</code> parameter determines the directory's name. Add the files at the top level by keeping this field empty. <br>
  * The <code>preload</code> parameter determines if the handler should read the bytes when they are added or read the file at the exchange. <br>
@@ -683,7 +683,7 @@ public class FileHandler extends SimpleHttpHandler {
 //
 
     private static String getContext(final String path){
-        final String linSlash = path.toLowerCase().replace("\\","/");
+        final String linSlash = path.replace("\\","/");
         if(linSlash.equalsIgnoreCase("/")) return "/";
         final String seSlash = (!linSlash.startsWith("/") ? "/" : "") + linSlash + (!linSlash.endsWith("/") ? "/" : "");
         return seSlash.substring(0,seSlash.length()-1);
