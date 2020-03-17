@@ -464,7 +464,7 @@ abstract class SimpleHttpExchangeImpl {
                 OUT.append("fragment")          .append("= ")   .append(fragment)                .append(", ");
                 OUT.append("requestHeaders")    .append("= ")   .append(requestHeaders)          .append(", ");
                 OUT.append("requestMethod")     .append("= ")   .append(requestMethod)           .append(", ");
-                OUT.append("responseHeader")    .append("= ")   .append(getResponseHeaders())    .append(", ");
+                OUT.append("responseHeaders")   .append("= ")   .append(getResponseHeaders())    .append(", ");
                 OUT.append("responseCode")      .append("= ")   .append(getResponseCode())       .append(", ");
                 OUT.append("rawGet")            .append("= ")   .append(rawGet)                  .append(", ");
                 OUT.append("getMap")            .append("= ")   .append(getMap)                  .append(", ");

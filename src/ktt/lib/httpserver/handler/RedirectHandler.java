@@ -7,7 +7,7 @@ import ktt.lib.httpserver.SimpleHttpHandler;
 import java.io.IOException;
 
 /**
- * A request handler that redirects to a different URL without pushing to the history.
+ * A request handler that redirects to a different URL without pushing to the history. The URL may not work correctly if it does not have a valid authority (<code>http</code>/<code>https</code>).
  *
  * @see SimpleHttpHandler
  * @see com.sun.net.httpserver.HttpHandler
@@ -33,8 +33,13 @@ public class RedirectHandler extends SimpleHttpHandler {
 
     @Override
     public final void handle(final SimpleHttpExchange exchange) throws IOException{
-        exchange.getResponseHeaders().set("Location",link);
-        exchange.send(HttpCode.HTTP_Found);
+        try{
+            System.out.println("started");
+            exchange.getResponseHeaders().set("Location", link);
+            exchange.send(HttpCode.HTTP_Found);
+        }catch(final Exception e){
+            e.printStackTrace();
+        }
     }
 
 //

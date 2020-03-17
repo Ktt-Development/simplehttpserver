@@ -78,9 +78,9 @@ public class SimpleHttpCookie {
         if(path != null)
             OUT.append("; Path=").append(path);
         if(secure)
-            OUT.append(secure);
+            OUT.append("; Secure=").append(secure);
         if(httpOnly)
-            OUT.append(httpOnly);
+            OUT.append("; HttpOnly=").append(httpOnly);
        if(sameSite != null)
            OUT.append("; SameSite=").append(sameSite);
 
