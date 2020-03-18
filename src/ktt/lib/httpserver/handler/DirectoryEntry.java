@@ -164,13 +164,13 @@ class DirectoryEntry {
                 final File[] listFiles = parent.listFiles(pathname -> !pathname.isDirectory());
 
                 for(final File file : (listFiles == null) ? new File[0] : listFiles)
-                    if(adapter.getName(file).equalsIgnoreCase(name))
+                    if(adapter.getName(file).equals(name))
                         return file;
             }else{
                 final File[] listFiles = directory.listFiles(pathname -> !pathname.isDirectory());
 
                 for(final File file : (listFiles == null) ? new File[0] : listFiles)
-                    if(adapter.getName(file).equalsIgnoreCase(path))
+                    if(adapter.getName(file).equals(path))
                         return file;
             }
             return null;
@@ -213,7 +213,7 @@ class DirectoryEntry {
 
     private static String getContext(final String path){
         final String linSlash = path.replace("\\","/");
-        if(linSlash.equalsIgnoreCase("/")) return "/";
+        if(linSlash.equals("/")) return "/";
         final String seSlash = (!linSlash.startsWith("/") ? "/" : "") + linSlash + (!linSlash.endsWith("/") ? "/" : "");
         return seSlash.substring(0,seSlash.length()-1);
     }

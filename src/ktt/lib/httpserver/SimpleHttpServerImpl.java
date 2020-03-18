@@ -214,7 +214,7 @@ abstract class SimpleHttpServerImpl {
             @Override
             public final HttpHandler getContextHandler(final String path){
                 for(final HttpContext context : contexts.keySet()){
-                    if(context.getPath().equalsIgnoreCase(getContext(path))){
+                    if(context.getPath().equals(getContext(path))){
                         return context.getHandler();
                     }
                 }
@@ -274,7 +274,7 @@ abstract class SimpleHttpServerImpl {
 
     private static String getContext(final String path){
         final String linSlash = path.replace("\\","/");
-        if(linSlash.equalsIgnoreCase("/")) return "/";
+        if(linSlash.equals("/")) return "/";
         final String seSlash = (!linSlash.startsWith("/") ? "/" : "") + linSlash + (!linSlash.endsWith("/") ? "/" : "");
         return seSlash.substring(0,seSlash.length()-1);
     }
