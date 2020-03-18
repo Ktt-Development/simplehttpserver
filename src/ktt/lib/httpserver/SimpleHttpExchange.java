@@ -162,98 +162,10 @@ public abstract class SimpleHttpExchange {
      *
      * @return url protocol
      *
-     * @see #getURI()
-     * @see URI
-     * @see #getScheme()
-     * @see #getAuthority()
-     * @see #getRawGet()
-     * @see #getContext()
-     * @see #getFragment()
      * @since 02.00.00
      * @author Ktt Development
      */
     public abstract String getProtocol();
-
-    /**
-     * Returns the scheme for the URI address.
-     *
-     * @return url scheme
-     *
-     * @see #getURI()
-     * @see URI
-     * @see #getProtocol()
-     * @see #getAuthority()
-     * @see #getRawGet()
-     * @see #getContext()
-     * @see #getFragment()
-     * @since 02.00.00
-     * @author Ktt Development
-     */
-    public abstract String getScheme();
-
-    /**
-     * Returns the authority for the URI address.
-     *
-     * @return url authority
-     *
-     * @see #getURI()
-     * @see URI
-     * @see #getProtocol()
-     * @see #getScheme()
-     * @see #getRawGet()
-     * @see #getContext()
-     * @see #getFragment()
-     * @since 02.00.00
-     * @author Ktt Development
-     */
-    public abstract String getAuthority();
-
-    /**
-     * Returns the URI query for the URI address.
-     *
-     * @deprecated use {@link #getRawGet()} instead
-     * @return url query
-     *
-     * @see #getRawGet()
-     * @since 02.00.00
-     * @author Ktt Development
-     */
-    @Deprecated
-    public abstract String getQuery();
-
-    /**
-     * Returns the context for the URI address.
-     *
-     * @return url
-     *
-     * @see #getURI()
-     * @see URI
-     * @see #getProtocol()
-     * @see #getScheme()
-     * @see #getAuthority()
-     * @see #getRawGet()
-     * @see #getFragment()
-     * @since 02.00.00
-     * @author Ktt Development
-     */
-    public abstract String getContext();
-
-    /**
-     * Returns the fragment for the URI address.
-     *
-     * @return url fragment
-     *
-     * @see #getURI()
-     * @see URI
-     * @see #getProtocol()
-     * @see #getScheme()
-     * @see #getAuthority()
-     * @see #getRawGet()
-     * @see #getContext()
-     * @since 02.00.00
-     * @author Ktt Development
-     */
-    public abstract String getFragment();
 
 //
 

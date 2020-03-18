@@ -46,7 +46,7 @@ abstract class SimpleHttpExchangeImpl {
 
             private final HttpContext httpContext;
             private final HttpPrincipal httpPrincipal;
-            private final String protocol, authority, scheme, context, query, fragment;
+            private final String protocol;
 
             private final Headers requestHeaders;
             private final RequestMethod requestMethod;
@@ -92,11 +92,6 @@ abstract class SimpleHttpExchangeImpl {
             //
                 httpPrincipal = httpExchange.getPrincipal();
                 protocol    = httpExchange.getProtocol();
-                authority   = URI.getAuthority();
-                scheme      = URI.getScheme();
-                context     = URI.getPath();
-                query       = URI.getQuery();
-                fragment    = URI.getFragment();
             //
                 requestHeaders = httpExchange.getRequestHeaders();
                 switch(exchange.getRequestMethod()){
@@ -244,31 +239,6 @@ abstract class SimpleHttpExchangeImpl {
             @Override
             public final String getProtocol(){
                 return protocol;
-            }
-
-            @Override
-            public final String getScheme(){
-                return scheme;
-            }
-
-            @Override
-            public final String getAuthority(){
-                return authority;
-            }
-
-            @Override @Deprecated
-            public final String getQuery(){
-                return query;
-            }
-
-            @Override
-            public final String getContext(){
-                return context;
-            }
-
-            @Override
-            public final String getFragment(){
-                return fragment;
             }
 
             //
@@ -456,10 +426,6 @@ abstract class SimpleHttpExchangeImpl {
                 OUT.append("httpContext")       .append("=")   .append(httpContext)             .append(", ");
                 OUT.append("httpPrincipal")     .append("=")   .append(httpPrincipal)           .append(", ");
                 OUT.append("protocol")          .append("=")   .append(protocol)                .append(", ");
-                OUT.append("authority")         .append("=")   .append(authority)               .append(", ");
-                OUT.append("scheme")            .append("=")   .append(scheme)                  .append(", ");
-                OUT.append("context")           .append("=")   .append(context)                 .append(", ");
-                OUT.append("fragment")          .append("=")   .append(fragment)                .append(", ");
                 OUT.append("requestHeaders")    .append("=")   .append(requestHeaders)          .append(", ");
                 OUT.append("requestMethod")     .append("=")   .append(requestMethod)           .append(", ");
                 OUT.append("responseHeaders")   .append("=")   .append(getResponseHeaders())    .append(", ");
