@@ -5,6 +5,7 @@ import ktt.lib.httpserver.SimpleHttpExchange;
 import ktt.lib.httpserver.SimpleHttpHandler;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.util.*;
 
 /**
@@ -14,7 +15,7 @@ import java.util.*;
  * The <code>directoryName</code> parameter determines the directory's name. Add the files at the top level by keeping this field empty. <br>
  * The <code>preload</code> parameter determines if the handler should read the bytes when they are added or read the file at the exchange. <br>
  * The <code>walk</code> parameter determines if all the inner directories should be used.
- * The handler will not add any null files.
+ * The handler will not add any null files and will always use the latest file added for a particular context.
  *
  * @see FileHandlerAdapter
  * @see SimpleHttpHandler
@@ -235,7 +236,10 @@ public class FileHandler extends SimpleHttpHandler {
      */
     public final void addFile(final String context, final File file, final String fileName, final boolean preload){
         try{
-            files.put(getContext(context) + getContext(fileName),new FileEntry(file,preload,adapter));
+            files.put(
+                (context.isEmpty() || context.equals("/") || context.equals("\\") ? "" : getContext(context)) + getContext(fileName),
+                new FileEntry(file,preload,adapter)
+            );
         }catch(final FileNotFoundException ignored){ }
     }
 
@@ -625,8 +629,12 @@ public class FileHandler extends SimpleHttpHandler {
      */
     public final void addDirectory(final String context, final File directory, final String directoryName, final boolean preload, final boolean walk){
         try{
-            directories.put(getContext(context) + (directoryName.isEmpty() ? "" : getContext(directoryName)), new DirectoryEntry(directory, preload, adapter, walk));
-        }catch(final IOException ignored){ }
+            final String target = (context.isEmpty() || context.equals("/") || context.equals("\\") ? "" : getContext(context)) + (directoryName.isEmpty() ? "" : getContext(directoryName));
+            directories.put(
+                target.isEmpty() ? "/" : target,
+                new DirectoryEntry(directory, preload, adapter, walk)
+            );
+        }catch(final Exception ignored){ }
     }
 
 //
@@ -640,10 +648,10 @@ public class FileHandler extends SimpleHttpHandler {
             if(rel.startsWith(key) && key.startsWith(match))
                 match = key;
 
-        if(!match.isEmpty() && files.containsKey(match)){
-            final FileEntry entry = files.get(match);
-            handle(exchange,entry.getFile(),entry.getBytes());
-        }else{
+        if(!match.isEmpty() && files.containsKey(match)){ // exact match
+            final FileEntry entry = files.get(match); // preloaded ? use preloaded bytes : adapt bytes now
+            handle(exchange,entry.getFile(),entry.isPreloaded() ? entry.getBytes() : adapter.getBytes(entry.getFile(),entry.getBytes()));
+        }else{ // beginning match
             match = "";
             for(final String key : directories.keySet())
                 if(rel.startsWith(key) && key.startsWith(match))
@@ -653,15 +661,20 @@ public class FileHandler extends SimpleHttpHandler {
                 final DirectoryEntry entry = directories.get(match);
                 final String rel2;
                 try{
-                    rel2 = rel.substring(match.length()+1);
+                    rel2 = rel.substring(match.length());
 
-                    final File file;
-                    if((file = entry.getFile(rel2)) != null){
-                        handle(exchange, file, entry.getBytes(rel2)); return;
+                    if(entry.isFilesPreloaded()){
+                        final File file;
+                        if((file = entry.getFile(rel2)) != null){
+                            handle(exchange, file, entry.getBytes(rel2)); // use adapted preload
+                        }
+                    }else{
+                        final File file = new File(entry.getDirectory().getAbsolutePath() + "\\" + rel2);
+                        handle(exchange,file,adapter.getBytes(file, Files.readAllBytes(file.toPath()))); // use adapted now
                     }
                 }catch(final IndexOutOfBoundsException ignored){ }
             }
-            handle(exchange,null,null);
+            handle(exchange,null,null); // not found
         }
     }
 

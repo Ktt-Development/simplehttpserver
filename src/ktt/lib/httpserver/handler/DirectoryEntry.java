@@ -52,12 +52,12 @@ class DirectoryEntry {
         if(isFilesPreloaded){
             if(!isWalkthrough){
                 final File[] listFiles = directory.listFiles();
-                for(final File file : (listFiles == null) ? new File[0] : listFiles){
-                    files.put(
-                        getContext(adapter.getName(file)),
-                        new FileEntry(file, true, adapter)
-                    );
-                }
+                for(final File file : (listFiles == null) ? new File[0] : listFiles)
+                    if(!file.isDirectory())
+                        files.put(
+                            getContext(adapter.getName(file)),
+                            new FileEntry(file, true, adapter)
+                        );
             }else{
                 final Path dirPath = directory.toPath();
 
@@ -68,8 +68,8 @@ class DirectoryEntry {
                     final File[] listFiles = pathFile.listFiles();
                     for(final File file : (listFiles == null) ? new File[0] : listFiles){
                         try{
-                            DirectoryEntry.this.files.put(
-                                getContext(rel + "/" + adapter.getName(file)),
+                            files.put(
+                                (rel.isEmpty() || rel.equals("/") || rel.equals("\\") ? "" : getContext(rel)) + getContext(adapter.getName(file)),
                                 new FileEntry(file, true, adapter)
                             );
                         }catch(final FileNotFoundException ignored){
@@ -178,7 +178,7 @@ class DirectoryEntry {
     }
 
     /**
-     * Returns the file's bytes after the {@link FileHandlerAdapter} was used or null if it was not found or failed to read.
+     * Returns the file's bytes after the {@link FileHandlerAdapter} was used or null if it was not found or failed to read. <b>Preload only.</b>
      *
      * @param path context to check
      * @return processed file bytes
@@ -226,11 +226,11 @@ class DirectoryEntry {
     public String toString(){
         final StringBuilder OUT = new StringBuilder();
         OUT.append("DirectoryEntry")    .append("{");
-        OUT.append("isWalkthrough")     .append("= ")   .append(isWalkthrough)          .append(", ");
-        OUT.append("isFilePreloaded")   .append("= ")   .append(isFilesPreloaded)       .append(", ");
-        OUT.append("directory")         .append("= ")   .append(directory.toString())   .append(", ");
-        OUT.append("(preloaded) files") .append("= ")   .append(files.toString())       .append(", ");
-        OUT.append("adapter")           .append("= ")   .append(adapter.toString());
+        OUT.append("isWalkthrough")     .append("= ")   .append(isWalkthrough)      .append(", ");
+        OUT.append("isFilePreloaded")   .append("= ")   .append(isFilesPreloaded)   .append(", ");
+        OUT.append("directory")         .append("= ")   .append(directory)          .append(", ");
+        OUT.append("(preloaded) files") .append("= ")   .append(files)              .append(", ");
+        OUT.append("adapter")           .append("= ")   .append(adapter);
         OUT.append("}");
         return OUT.toString();
     }

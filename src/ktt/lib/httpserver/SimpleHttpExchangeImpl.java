@@ -138,7 +138,6 @@ abstract class SimpleHttpExchangeImpl {
 
                 hasPost = (rawPost = OUT) != null;
 
-                // region todo: optimize this
                 if(hasPost){
                     final String content_type = requestHeaders.getFirst("Content-type");
                     if(content_type != null && content_type.startsWith("multipart/form-data")){
@@ -189,7 +188,6 @@ abstract class SimpleHttpExchangeImpl {
                 }else{
                     postMap = new HashMap();
                 }
-                // endregion
 
                 final String rawCookie = requestHeaders.getFirst("Cookie");
                 cookies = new HashMap<>();

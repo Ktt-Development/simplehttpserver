@@ -85,11 +85,11 @@ class FileEntry {
      */
     public final byte[] getBytes(){
         if(isPreloaded)
-            return preloadedBytes;
+            return preloadedBytes; // adapter determined preloaded bytes
         else
             try{
-                return Files.readAllBytes(file.toPath());
-            }catch(final IOException ignored){
+                return Files.readAllBytes(file.toPath()); // return literal bytes (no preload); adapt bytes in next part
+            }catch(final IOException e){
                 return null;
             }
     }
