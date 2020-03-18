@@ -102,9 +102,9 @@ class FileEntry {
     public String toString(){
         final StringBuilder OUT = new StringBuilder();
         OUT.append("FileEntry")         .append("{");
-        OUT.append("isPreloaded")       .append("= ")   .append(isPreloaded)                        .append(", ");
-        OUT.append("file")              .append("= ")   .append(file.toString())                    .append(", ");
-        OUT.append("(preloaded) bytes") .append("= ")   .append(Arrays.toString(preloadedBytes)) .append(", ");
+        OUT.append("isPreloaded")       .append("=")   .append(isPreloaded)                        .append(", ");
+        OUT.append("file")              .append("=")   .append(file.toString())                    .append(", ");
+        OUT.append("(preloaded) bytes") .append("=")   .append(Arrays.toString(preloadedBytes)) .append(", ");
         OUT.append("}");
         return OUT.toString();
     }

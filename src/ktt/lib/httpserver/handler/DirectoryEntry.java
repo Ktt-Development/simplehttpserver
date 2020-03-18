@@ -226,11 +226,11 @@ class DirectoryEntry {
     public String toString(){
         final StringBuilder OUT = new StringBuilder();
         OUT.append("DirectoryEntry")    .append("{");
-        OUT.append("isWalkthrough")     .append("= ")   .append(isWalkthrough)      .append(", ");
-        OUT.append("isFilePreloaded")   .append("= ")   .append(isFilesPreloaded)   .append(", ");
-        OUT.append("directory")         .append("= ")   .append(directory)          .append(", ");
-        OUT.append("(preloaded) files") .append("= ")   .append(files)              .append(", ");
-        OUT.append("adapter")           .append("= ")   .append(adapter);
+        OUT.append("isWalkthrough")     .append("=")   .append(isWalkthrough)      .append(", ");
+        OUT.append("isFilePreloaded")   .append("=")   .append(isFilesPreloaded)   .append(", ");
+        OUT.append("directory")         .append("=")   .append(directory)          .append(", ");
+        OUT.append("(preloaded) files") .append("=")   .append(files)              .append(", ");
+        OUT.append("adapter")           .append("=")   .append(adapter);
         OUT.append("}");
         return OUT.toString();
     }

@@ -53,7 +53,7 @@ public class PredicateHandler extends SimpleHttpHandler {
 
     @SuppressWarnings("StringBufferReplaceableByString")
     @Override
-    public String toString(){
+    public @param walk whether to use the inner directories or not){
         final StringBuilder OUT = new StringBuilder();
         OUT.append("PredicateHandler")  .append("{");
         OUT.append("(true) handler")    .append("= ")   .append(T.toString())           .append(", ");

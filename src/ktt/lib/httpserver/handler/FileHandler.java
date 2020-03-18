@@ -710,9 +710,9 @@ public class FileHandler extends SimpleHttpHandler {
     public String toString(){
         final StringBuilder OUT = new StringBuilder();
         OUT.append("FileHandler")           .append("{");
-        OUT.append("adapter")               .append("= ")   .append(adapter.toString()) .append(", ");
-        OUT.append("(loaded) files")        .append("= ")   .append(files)              .append(", ");
-        OUT.append("(loaded) directories")  .append("= ")   .append(directories);
+        OUT.append("adapter")               .append("=")   .append(adapter.toString()) .append(", ");
+        OUT.append("(loaded) files")        .append("=")   .append(files)              .append(", ");
+        OUT.append("(loaded) directories")  .append("=")   .append(directories);
         OUT.append("}");
         return OUT.toString();
     }

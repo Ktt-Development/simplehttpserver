@@ -261,10 +261,10 @@ abstract class SimpleHttpServerImpl {
             public final String toString(){
                 final StringBuilder OUT = new StringBuilder();
                 OUT.append("SimpleHttpServer")  .append("{");
-                OUT.append("httpServer")        .append("= ")   .append(server)          .append(", ");
-                OUT.append("contexts")          .append("= ")   .append(contexts)        .append(", ");
-                OUT.append("address")           .append("= ")   .append(getAddress())    .append(", ");
-                OUT.append("executor")          .append("= ")   .append(getExecutor());
+                OUT.append("httpServer")        .append("=")   .append(server)          .append(", ");
+                OUT.append("contexts")          .append("=")   .append(contexts)        .append(", ");
+                OUT.append("address")           .append("=")   .append(getAddress())    .append(", ");
+                OUT.append("executor")          .append("=")   .append(getExecutor());
                 OUT.append("}");
                 return OUT.toString();
             }

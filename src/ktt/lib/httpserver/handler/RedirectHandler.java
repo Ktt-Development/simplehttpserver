@@ -50,7 +50,7 @@ public class RedirectHandler extends SimpleHttpHandler {
     public String toString(){
         final StringBuilder OUT = new StringBuilder();
         OUT.append("RedirectHandler")   .append("{");
-        OUT.append("link")              .append("= ")   .append(link);
+        OUT.append("link")              .append("=")   .append(link);
         OUT.append("}");
         return OUT.toString();
     }

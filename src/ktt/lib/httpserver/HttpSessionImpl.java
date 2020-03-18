@@ -64,9 +64,9 @@ abstract class HttpSessionImpl {
             public final String toString(){
                 final StringBuilder OUT = new StringBuilder();
                 OUT.append("HttpSession")   .append("{");
-                OUT.append("sessionID")     .append("= ")   .append(sessionID)          .append(", ");
-                OUT.append("creationTime")  .append("= ")   .append(creationTime)       .append(", ");
-                OUT.append("lastAccessTime").append("= ")   .append(lastAccessTime);
+                OUT.append("sessionID")     .append("=")   .append(sessionID)          .append(", ");
+                OUT.append("creationTime")  .append("=")   .append(creationTime)       .append(", ");
+                OUT.append("lastAccessTime").append("=")   .append(lastAccessTime);
                 OUT.append("}");
                 return OUT.toString();
             }
