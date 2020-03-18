@@ -1,4 +1,4 @@
-package ktt.lib.httpserver.http;
+package ktt.lib.httpserver.var;
 
 /**
  * A list of expected HTTP status codes.
@@ -7,8 +7,8 @@ package ktt.lib.httpserver.http;
  * @version 01.00.00
  * @author Ktt Development
  */
-@SuppressWarnings("unused")
-public abstract class HTTPCode {
+@SuppressWarnings({"unused", "SpellCheckingInspection"})
+public abstract class HttpCode {
 
     public static final int HTTP_Continue = 100;
     public static final int HTTP_SwitchingProtocols = 101;

@@ -1,45 +1,66 @@
 package ktt.lib.httpserver.handler;
 
-import ktt.lib.httpserver.ExchangePacket;
-import ktt.lib.httpserver.RequestHandler;
+import com.sun.net.httpserver.HttpHandler;
+import ktt.lib.httpserver.SimpleHttpExchange;
+import ktt.lib.httpserver.SimpleHttpHandler;
 
 import java.io.IOException;
 import java.util.function.Predicate;
 
 /**
- * The Request Handler will process each request differently depending on the predicate.
- * @see RequestHandler
+ * The handler will process each request differently depending on the predicate.
+ *
+ * @see SimpleHttpHandler
+ * @see HttpHandler
+ * @see SimpleHttpExchange
  * @see Predicate
  * @since 01.00.00
- * @version 01.01.01
+ * @version 02.00.00
  * @author Ktt Development
  */
-@SuppressWarnings("WeakerAccess")
-public class PredicateHandler extends RequestHandler {
+public class PredicateHandler extends SimpleHttpHandler {
 
-    private final RequestHandler T, F;
-    private final Predicate<ExchangePacket> predicate;
+    private final HttpHandler T, F;
+    private final Predicate<SimpleHttpExchange> predicate;
 
     /**
-     * Creates a varied Request Handler.
-     * @param T handler to use if true
-     * @param F handler to use if false
-     * @param predicate determines which handler to use
-     * @see RequestHandler
+     * Creates a predicate handler.
+     *
+     * @param trueHandler handler to use if true
+     * @param falseHandler handler to use if false
+     * @param predicate predicate to test
+     *
+     * @see SimpleHttpHandler
+     * @see HttpHandler
+     * @see SimpleHttpExchange
+     * @see Predicate
      * @since 01.00.00
+     * @author Ktt Development
      */
-    public PredicateHandler(RequestHandler T, RequestHandler F, Predicate<ExchangePacket> predicate){
-        this.T = T;
-        this.F = F;
+    public PredicateHandler(final HttpHandler trueHandler, final HttpHandler falseHandler, final Predicate<SimpleHttpExchange> predicate){
+        T = trueHandler;
+        F = falseHandler;
         this.predicate = predicate;
     }
 
     @Override
-    public final void handle(ExchangePacket packet) throws IOException{
-        if(predicate.test(packet)){
-            T.handle(packet);
-        }else{
-            F.handle(packet);
-        }
+    public final void handle(final SimpleHttpExchange exchange) throws IOException{
+        (predicate.test(exchange) ? T : F).handle(exchange.getHttpExchange());
     }
+
+//
+
+
+    @SuppressWarnings("StringBufferReplaceableByString")
+    @Override
+    public String toString(){
+        final StringBuilder OUT = new StringBuilder();
+        OUT.append("PredicateHandler")  .append("{");
+        OUT.append("(true) handler")    .append("=")   .append(T.toString())           .append(", ");
+        OUT.append("(false) handler")   .append("=")   .append(F.toString())           .append(", ");
+        OUT.append("predicate")         .append("=")   .append(predicate.toString());
+        OUT.append("}");
+        return OUT.toString();
+    }
+
 }

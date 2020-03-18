@@ -3,22 +3,28 @@ package ktt.lib.httpserver.handler;
 import java.io.File;
 
 /**
- * This interface determines the bytes to save when adding to the {@link FilePreHandler}.
- * @see FilePreHandler
- * @see FileNameAdapter
+ * This interface determines the file bytes to use when adding to {@link FileHandler}.
+ *
+ * @see FileHandlerAdapter
+ * @see FileHandler
  * @since 01.00.00
- * @version 01.00.00
+ * @version 02.00.00
  * @author Ktt Development
  */
-@SuppressWarnings("WeakerAccess")
-public interface FileBytesAdapter {
+interface FileBytesAdapter {
 
     /**
-     * Returns the bytes when given a file.
-     * @param file File to read
-     * @return File bytes
+     * Returns the bytes when given a file and its initial contents
+     *
+     * @param file file to name
+     * @param bytes bytes from preload
+     * @return new bytes
+     *
      * @since 01.00.00
+     * @author Ktt Development
      */
-    byte[] getBytes(File file);
+    default byte[] getBytes(final File file, final byte[] bytes){
+        return bytes;
+    }
 
 }

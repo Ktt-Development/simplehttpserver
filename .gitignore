@@ -5,3 +5,4 @@ out
 # Project ignore
 .docs
 src/LICENSE.txt
+src/_ignore

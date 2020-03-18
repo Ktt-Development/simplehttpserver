@@ -1,27 +1,36 @@
 package ktt.lib.httpserver.handler;
 
-import ktt.lib.httpserver.RequestHandler;
+import com.sun.net.httpserver.HttpHandler;
+import ktt.lib.httpserver.SimpleHttpHandler;
 
 /**
- * By default the Http Server will use the most specific context for requests; This means however, creating a Request Handler using context <code>/</code> will process all requests without a handler instead of sending a 404 response. This workaround will only process requests at <code>/</code> and send all other requests to the alternative handler (typically a 404 page will be set here).
- * @see RequestHandler
- * @see PredicateHandler
+ * By default the {@link com.sun.net.httpserver.HttpServer} will use the most specific context for requests; this however causes the context <code>/</code> to catch all contexts without an associated handler, instead of sending a 404 or no response. This workaround will process requests at <code>/</code> only and send all other requests to a different handler (typically a 404 page will be set here).
+ *
+ * @see SimpleHttpHandler
+ * @see HttpHandler
  * @since 01.00.00
- * @version 01.01.01
+ * @version 02.00.00
  * @author Ktt Development
  */
-@SuppressWarnings({"WeakerAccess","unused"})
-public final class RootHandler extends PredicateHandler {
+public class RootHandler extends PredicateHandler {
 
     /**
      * Creates a root handler.
-     * @param index Http Handler for the context <code>/</code>
-     * @param alt Http Handler fot all other contexts
-     * @see RequestHandler
+     *
+     * @param rootHandler handler for the context <code>/</code>
+     * @param elseHandler handler for all other contexts (typically a 404 page)
+     *
+     * @see SimpleHttpHandler
+     * @see HttpHandler
      * @since 01.00.00
+     * @author Ktt Development
      */
-    public RootHandler(RequestHandler index, RequestHandler alt) {
-        super(index, alt, exchangePacket -> exchangePacket.getRequestContext().equals("/"));
+    public RootHandler(final HttpHandler rootHandler, final HttpHandler elseHandler){
+        super(
+            rootHandler,
+            elseHandler,
+            simpleHttpExchange -> simpleHttpExchange.getURI().getPath().equals("/")
+        );
     }
 
 }

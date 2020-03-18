@@ -3,22 +3,27 @@ package ktt.lib.httpserver.handler;
 import java.io.File;
 
 /**
- * This interface determines the file name to use when adding to the {@link FilePreHandler}.
- * @see FilePreHandler
- * @see FileBytesAdapter
+ * This interface determines the file name to use when adding to {@link FileHandler}. Not intended for directories.
+ *
+ * @see FileHandlerAdapter
+ * @see FileHandler
  * @since 01.00.00
- * @version 01.00.01
+ * @version 02.00.00
  * @author Ktt Development
  */
-@SuppressWarnings("WeakerAccess")
-public interface FileNameAdapter {
+interface FileNameAdapter {
 
     /**
-     * Returns the preferred name when given a file.
-     * @param file File to name
-     * @return preferred name
+     * Returns the name when given a file.
+     *
+     * @param file file to name
+     * @return new name
+     *
      * @since 01.00.00
+     * @author Ktt Development
      */
-    String getName(File file);
+    default String getName(final File file){
+        return file.getName();
+    }
 
 }
