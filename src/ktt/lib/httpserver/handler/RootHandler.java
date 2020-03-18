@@ -29,7 +29,7 @@ public class RootHandler extends PredicateHandler {
         super(
             rootHandler,
             elseHandler,
-            simpleHttpExchange -> simpleHttpExchange.getContext().equals("/")
+            simpleHttpExchange -> simpleHttpExchange.getURI().getPath().equals("/")
         );
     }
 

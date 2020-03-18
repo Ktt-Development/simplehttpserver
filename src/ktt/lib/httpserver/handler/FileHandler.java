@@ -641,7 +641,7 @@ public class FileHandler extends SimpleHttpHandler {
 
     @Override
     public final void handle(final SimpleHttpExchange exchange) throws IOException{
-        final String rel = getContext(exchange.getContext().substring(exchange.getHttpContext().getPath().length()));
+        final String rel = getContext(exchange.getURI().getPath().substring(exchange.getHttpContext().getPath().length()));
 
         String match = "";
         for(final String key : files.keySet())
