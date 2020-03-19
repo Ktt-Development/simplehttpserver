@@ -1,4 +1,4 @@
-[![LATEST](https://jitpack.io/v/com.kttdevelopment/ktt.lib.httpserver.svg?style=flat-square)](https://jitpack.io/#com.kttdevelopment/ktt.lib.httpserver) [![LATEST](https://jitci.com/gh/Ktt-Development/ktt.lib.httpserver/svg?style=flat-square)](https://jitci.com/gh/Ktt-Development/ktt.lib.httpserver)
+[![master](https://jitpack.io/v/com.kttdevelopment/ktt.lib.httpserver.svg)](https://jitpack.io/#com.kttdevelopment/ktt.lib.httpserver) [![master](https://travis-ci.org/Ktt-Development/ktt.lib.httpserver.svg?branch=master&style=flat-square)
 
 # ktt.lib.httpserver
 Enhanced version of the the default Http Server
