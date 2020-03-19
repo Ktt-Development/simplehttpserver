@@ -1,0 +1,16 @@
+plugins {
+    id 'java'
+}
+
+group 'com.kttdevelopment'
+version 'LATEST'
+
+sourceCompatibility = 1.11
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}

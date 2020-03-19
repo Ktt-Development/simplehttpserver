@@ -6,3 +6,5 @@ out
 .docs
 src/LICENSE.txt
 src/_ignore
+# Gradle
+.gradle
