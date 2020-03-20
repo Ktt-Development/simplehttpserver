@@ -1,15 +1,9 @@
 # SimpleHttpServer
-[![watchers](https://img.shields.io/github/watchers/ktt-development/simplehttpserver?color=5555ff&label=watchers&style=flat-square)](https://github.com/Ktt-Development/simplehttpserver/watchers)
-[![stars](https://img.shields.io/github/stars/Ktt-Development/simplehttpserver?color=5555ff&style=flat-square)](https://github.com/Ktt-Development/simplehttpserver/stargazers)
-[![forks](https://img.shields.io/github/forks/Ktt-Development/simplehttpserver?color=5555ff&style=flat-square)](https://github.com/Ktt-Development/simplehttpserver/network/members)
-[![issues](https://img.shields.io/github/issues/Ktt-Development/simplehttpserver?color=ffaa00&style=flat-square)](https://github.com/Ktt-Development/simplehttpserver/issues)
-[![pull](https://img.shields.io/github/issues-pr/ktt-development/simplehttpserver?color=ff55ff&style=flat-square)](https://github.com/Ktt-Development/simplehttpserver/pulls)
-[![license](https://img.shields.io/github/license/Ktt-Development/simplehttpserver?color=ff5555&style=flat-square)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
-
 [![jitpack](https://jitpack.io/v/com.kttdevelopment/simplehttpserver.svg?style=flat-square)](https://jitpack.io/#com.kttdevelopment/simplehttpserver)
 [![jitci](https://jitci.com/gh/Ktt-Development/simplehttpserver/svg?style=flat-square)](https://jitci.com/gh/Ktt-Development/simplehttpserver)
 [![version](https://img.shields.io/github/v/release/ktt-development/simplehttpserver?color=ffaa00&include_prereleases&style=flat-square)](https://github.com/Ktt-Development/simplehttpserver/releases)
 [![downloads](https://img.shields.io/github/downloads/ktt-development/simplehttpserver/total?color=ff5555&style=flat-square)](https://github.com/Ktt-Development/simplehttpserver/releases)
+[![license](https://img.shields.io/github/license/Ktt-Development/simplehttpserver?color=ff5555&style=flat-square)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
 
 Based on the java sun Http Server. Complicated features made easy.
 
