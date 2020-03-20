@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.kttdevelopment</groupId>
-    <artifactId>ktt.lib.httpserver</artifactId>
+    <artifactId>httpserver</artifactId>
     <version>DEVELOPMENT</version>
 
 </project>
