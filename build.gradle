@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'com.kttdevelopment'
-version 'LATEST'
+version 'DEVELOPMENT'
 
 sourceCompatibility = 1.11
 
