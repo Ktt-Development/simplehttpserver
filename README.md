@@ -14,32 +14,32 @@
 Based on the java sun Http Server. Complicated features made easy.
 
 ## New Http Server Methods
-#### Temporary Contexts
+### Temporary Contexts
 Handlers that will process a single request before removing itself. Useful for single use download links or image hosting.
 
-#### Context Retrieval
+### Context Retrieval
 Get the contexts that the server has loaded (why wasn't this already a feature?).
 
 ## New Exchange Methods
-#### HTTP GET
+### HTTP GET
 Get requests are parsed into a hashmap.
-#### HTTP POST
+### HTTP POST
 Post requests are parsed into a hashmap (`multipart/form-data` as well!).
 
 ##Http Handlers
-#### Redirect Handler
+### Redirect Handler
 A simple handler to redirect links without leaving a mark in the history.
-#### Predicate Handler
+### Predicate Handler
 A simple handler to handle requests based on a predicate.
-#### Root Handler
+### Root Handler
 A handler to help process homepage and 404  requests.
-#### File Handler
+### File Handler
 Host files, set their contexts, control their output, host directories and support for file walking,
 
 ## New Features
-#### Constants
+### Constants
 Static variables for HTTP codes and methods.
-#### Http Session
+### Http Session
 Keep track of the user across different exchanges.
-#### Cookies
+### Cookies
 Get and set cookies.
