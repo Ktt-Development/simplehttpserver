@@ -8,7 +8,7 @@
 
 [![jitpack](https://jitpack.io/v/com.kttdevelopment/simplehttpserver.svg?style=flat-square)](https://jitpack.io/#com.kttdevelopment/simplehttpserver)
 [![jitci](https://jitci.com/gh/Ktt-Development/simplehttpserver/svg?style=flat-square)](https://jitci.com/gh/Ktt-Development/simplehttpserver)
-[![version](https://img.shields.io/github/v/release/ktt-development/simplehttpserver?color=ff5555&include_prereleases&style=flat-square)](https://github.com/Ktt-Development/simplehttpserver/releases)
+[![version](https://img.shields.io/github/v/release/ktt-development/simplehttpserver?color=ffaa00&include_prereleases&style=flat-square)](https://github.com/Ktt-Development/simplehttpserver/releases)
 [![downloads](https://img.shields.io/github/downloads/ktt-development/simplehttpserver/total?color=ff5555&style=flat-square)](https://github.com/Ktt-Development/simplehttpserver/releases)
 
 Based on the java sun Http Server. Complicated features made easy.
@@ -26,7 +26,7 @@ Get requests are parsed into a hashmap.
 ### HTTP POST
 Post requests are parsed into a hashmap (`multipart/form-data` as well!).
 
-##Http Handlers
+## Http Handlers
 ### Redirect Handler
 A simple handler to redirect links without leaving a mark in the history.
 ### Predicate Handler
