@@ -1,8 +1,8 @@
-package ktt.lib.httpserver.handler;
+package com.kttdevelopment.simplehttpserver.handler;
 
-import ktt.lib.httpserver.var.HttpCode;
-import ktt.lib.httpserver.SimpleHttpExchange;
-import ktt.lib.httpserver.SimpleHttpHandler;
+import com.kttdevelopment.simplehttpserver.var.HttpCode;
+import com.kttdevelopment.simplehttpserver.SimpleHttpExchange;
+import com.kttdevelopment.simplehttpserver.SimpleHttpHandler;
 
 import java.io.*;
 import java.nio.file.Files;

@@ -1,4 +1,4 @@
-package ktt.lib.httpserver.var;
+package com.kttdevelopment.simplehttpserver.var;
 
 /**
  * A list of expected HTTP status codes.

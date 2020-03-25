@@ -1,4 +1,4 @@
-package ktt.lib.httpserver;
+package com.kttdevelopment.simplehttpserver;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

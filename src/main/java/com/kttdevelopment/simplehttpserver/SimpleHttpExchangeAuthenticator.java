@@ -1,4 +1,4 @@
-package ktt.lib.httpserver;
+package com.kttdevelopment.simplehttpserver;
 
 /**
  * Before each request is processed, the authenticator determines whether to cancel the request or not. The authenticator may also choose to process the request ahead of the handler. By default it returns true.

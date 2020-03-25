@@ -1,7 +1,7 @@
-package ktt.lib.httpserver.handler;
+package com.kttdevelopment.simplehttpserver.handler;
 
 import com.sun.net.httpserver.HttpHandler;
-import ktt.lib.httpserver.SimpleHttpHandler;
+import com.kttdevelopment.simplehttpserver.SimpleHttpHandler;
 
 /**
  * By default the {@link com.sun.net.httpserver.HttpServer} will use the most specific context for requests; this however causes the context <code>/</code> to catch all contexts without an associated handler, instead of sending a 404 or no response. This workaround will process requests at <code>/</code> only and send all other requests to a different handler (typically a 404 page will be set here).

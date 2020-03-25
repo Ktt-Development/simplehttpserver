@@ -1,8 +1,8 @@
-package ktt.lib.httpserver;
+package com.kttdevelopment.simplehttpserver;
 
 import com.sun.net.httpserver.*;
-import ktt.lib.httpserver.var.HttpCode;
-import ktt.lib.httpserver.var.RequestMethod;
+import com.kttdevelopment.simplehttpserver.var.HttpCode;
+import com.kttdevelopment.simplehttpserver.var.RequestMethod;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
