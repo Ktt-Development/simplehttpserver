@@ -8,3 +8,5 @@ src/LICENSE.txt
 src/_ignore
 # Gradle
 .gradle
+# Maven
+target

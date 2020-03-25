@@ -1,4 +1,4 @@
-package ktt.lib.httpserver.handler;
+package com.kttdevelopment.simplehttpserver.handler;
 
 /**
  * This interface determines the file name and bytes to use when adding to {@link FileHandler}. Not intended for directories.<br>

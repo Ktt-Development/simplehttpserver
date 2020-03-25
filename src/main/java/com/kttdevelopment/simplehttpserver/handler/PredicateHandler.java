@@ -1,8 +1,8 @@
-package ktt.lib.httpserver.handler;
+package com.kttdevelopment.simplehttpserver.handler;
 
 import com.sun.net.httpserver.HttpHandler;
-import ktt.lib.httpserver.SimpleHttpExchange;
-import ktt.lib.httpserver.SimpleHttpHandler;
+import com.kttdevelopment.simplehttpserver.SimpleHttpExchange;
+import com.kttdevelopment.simplehttpserver.SimpleHttpHandler;
 
 import java.io.IOException;
 import java.util.function.Predicate;

@@ -1,4 +1,4 @@
-package ktt.lib.httpserver.handler;
+package com.kttdevelopment.simplehttpserver.handler;
 
 import java.io.*;
 import java.nio.file.Files;

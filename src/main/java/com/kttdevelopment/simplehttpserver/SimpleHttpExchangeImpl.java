@@ -1,7 +1,7 @@
-package ktt.lib.httpserver;
+package com.kttdevelopment.simplehttpserver;
 
 import com.sun.net.httpserver.*;
-import ktt.lib.httpserver.var.*;
+import com.kttdevelopment.simplehttpserver.var.*;
 
 import java.io.*;
 import java.net.*;
