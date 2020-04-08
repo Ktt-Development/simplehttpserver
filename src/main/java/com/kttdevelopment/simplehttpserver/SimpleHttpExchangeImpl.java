@@ -122,12 +122,10 @@ abstract class SimpleHttpExchangeImpl {
 
             //
                 String OUT;
-                final InputStream IN = httpExchange.getRequestBody();
 
-                try(final Scanner scanner = new Scanner(IN,StandardCharsets.UTF_8)){
+                try(InputStream IN = httpExchange.getRequestBody(); final Scanner scanner = new Scanner(IN, StandardCharsets.UTF_8)){
                     OUT = scanner.useDelimiter("\\A").next();
-                    IN.close();
-                }catch(IOException | NoSuchElementException e){
+                }catch(final IOException | NoSuchElementException ignored){
                     OUT = null;
                 }
 
@@ -361,14 +359,17 @@ abstract class SimpleHttpExchangeImpl {
                     exchange.getResponseHeaders().set("Content-Encoding","gzip");
                     exchange.getResponseHeaders().set("Connection","keep-alive");
                     sendResponseHeaders(responseCode, 0);
-                    GZIPOutputStream OUT = new GZIPOutputStream(exchange.getResponseBody());
-                    OUT.write(response);
-                    OUT.finish();
+                    try(GZIPOutputStream OUT = new GZIPOutputStream(exchange.getResponseBody())){
+                        OUT.write(response);
+                        OUT.finish();
+                        OUT.flush();
+                    }
                 }else{
                     sendResponseHeaders(responseCode,response.length);
-                    final OutputStream OUT = exchange.getResponseBody();
-                    OUT.write(response);
-                    OUT.flush();
+                    try(final OutputStream OUT = exchange.getResponseBody()){
+                        OUT.write(response);
+                        OUT.flush();
+                    }
                 }
             }
 
