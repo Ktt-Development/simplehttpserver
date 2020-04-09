@@ -2,6 +2,7 @@ package com.kttdevelopment.simplehttpserver.handler;
 
 import com.kttdevelopment.simplehttpserver.SimpleHttpExchange;
 import com.kttdevelopment.simplehttpserver.SimpleHttpHandler;
+import com.kttdevelopment.simplehttpserver.var.HttpCode;
 import com.kttdevelopment.simplehttpserver.var.RequestMethod;
 
 import java.io.IOException;
@@ -19,30 +20,31 @@ public class SSEHandler extends SimpleHttpHandler {
 
     @Override
     public final void handle(final SimpleHttpExchange exchange) throws IOException{
-        try{
-            exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Content-Type");
+        exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Content-Type");
+        if(exchange.getRequestHeaders().getFirst("origin") != null)
             exchange.getResponseHeaders().add("Access-Control-Allow-Origin", exchange.getRequestHeaders().getFirst("origin"));
-            exchange.getResponseHeaders().add("Access-Control-Max-Age", String.valueOf(TimeUnit.HOURS.toSeconds(1)));
+        exchange.getResponseHeaders().add("Access-Control-Allow-Methods","GET, HEAD, POST, PUT, DELETE");
+        exchange.getResponseHeaders().add("Access-Control-Max-Age", String.valueOf(TimeUnit.HOURS.toSeconds(1)));
 
-            exchange.getResponseHeaders().add("content-type", "text/event-stream");
-            int latest = 0;
-            try{
-                latest = Integer.parseInt(exchange.getRequestHeaders().getFirst("Last_Event-ID"));
-            }catch(final NumberFormatException | NullPointerException ignored){ }
-
-            for(int index = latest; index < queue.size(); index++){
-                try{
-                    exchange.getOutputStream().write(queue.get(index).toString(eventId.get()).getBytes(StandardCharsets.UTF_8));
-                    exchange.getOutputStream().flush();
-                }catch(final IOException e){
-                    e.printStackTrace();
-                }
-            }
-
-            listeners.add(exchange.getOutputStream());
-        }catch(final Exception e){
-            e.printStackTrace();
+        if(exchange.getRequestMethod() == RequestMethod.OPTIONS){
+            exchange.sendResponseHeaders(HttpCode.HTTP_OK,0);
+            return;
         }
+
+        exchange.getResponseHeaders().put("content-type", Collections.singletonList("text/event-stream"));
+
+        int latest = 0;
+        try{
+            latest = Integer.parseInt(exchange.getRequestHeaders().getFirst("Last_Event-ID"));
+        }catch(final NumberFormatException | NullPointerException ignored){ }
+
+        exchange.sendResponseHeaders(200,0);
+        for(int index = latest; index < queue.size(); index++){
+            exchange.getOutputStream().write(queue.get(index).toString(eventId.get()).getBytes(StandardCharsets.UTF_8));
+            exchange.getOutputStream().flush();
+        }
+
+        listeners.add(exchange.getOutputStream());
     }
 
     public synchronized final void push(final String data){

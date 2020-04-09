@@ -22,6 +22,8 @@ Get requests are parsed into a hashmap.
 Post requests are parsed into a hashmap (`multipart/form-data` as well!).
 
 ## Http Handlers
+### SSE Handler
+Sever sent event events made easy.
 ### Redirect Handler
 A simple handler to redirect links without leaving a mark in the history.
 ### Predicate Handler
