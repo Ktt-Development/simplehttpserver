@@ -676,6 +676,7 @@ public class FileHandler extends SimpleHttpHandler {
             }
             handle(exchange,null,null); // not found
         }
+        exchange.close();
     }
 
     /**

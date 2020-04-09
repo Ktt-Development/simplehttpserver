@@ -33,13 +33,9 @@ public class RedirectHandler extends SimpleHttpHandler {
 
     @Override
     public final void handle(final SimpleHttpExchange exchange) throws IOException{
-        try{
-            System.out.println("started");
-            exchange.getResponseHeaders().set("Location", link);
-            exchange.send(HttpCode.HTTP_Found);
-        }catch(final Exception e){
-            e.printStackTrace();
-        }
+        exchange.getResponseHeaders().set("Location", link);
+        exchange.send(HttpCode.HTTP_Found);
+        exchange.close();
     }
 
 //
