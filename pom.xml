@@ -6,7 +6,7 @@
 
     <groupId>com.kttdevelopment</groupId>
     <artifactId>simplehttpserver</artifactId>
-    <version>03.00.01</version>
+    <version>03.01.00</version>
     <packaging>jar</packaging>
 
     <dependencies>
