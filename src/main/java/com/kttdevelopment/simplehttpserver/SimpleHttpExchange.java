@@ -5,6 +5,7 @@ import com.kttdevelopment.simplehttpserver.var.HttpCode;
 import com.kttdevelopment.simplehttpserver.var.RequestMethod;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.util.HashMap;
@@ -334,6 +335,15 @@ public abstract class SimpleHttpExchange {
     public abstract HttpSession getHttpSession();
 
 //
+
+    /**
+     * Returns the exchange response stream.
+     * @return exchange output stream
+     *
+     * @since 03.01.00
+     * @author Ktt Development
+     */
+    public abstract OutputStream getOutputStream();
 
     /**
      * Sends response headers to the client.

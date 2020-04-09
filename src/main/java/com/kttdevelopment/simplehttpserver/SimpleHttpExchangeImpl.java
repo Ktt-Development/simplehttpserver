@@ -62,6 +62,8 @@ abstract class SimpleHttpExchangeImpl {
 
             private final HashMap<String,String> cookies;
 
+            private final OutputStream outputStream;
+
         //
 
             private final Function<String,HashMap<String,String>> parseWwwFormEnc = s -> {
@@ -191,6 +193,8 @@ abstract class SimpleHttpExchangeImpl {
                         cookies.put(value[0],value[1]);
                     }
                 }
+
+                outputStream = exchange.getResponseBody();
             }
 
         //
@@ -325,6 +329,11 @@ abstract class SimpleHttpExchangeImpl {
                 return session;
             }
 
+            @Override
+            public final OutputStream getOutputStream(){
+                return outputStream;
+            }
+
             //
 
             @Override
@@ -343,7 +352,7 @@ abstract class SimpleHttpExchangeImpl {
             }
 
             @Override
-            public void send(final byte[] response, final boolean gzip) throws IOException{
+            public final void send(final byte[] response, final boolean gzip) throws IOException{
                 send(response, HttpCode.HTTP_OK, gzip);
             }
 
@@ -353,7 +362,7 @@ abstract class SimpleHttpExchangeImpl {
             }
 
             @Override
-            public void send(final byte[] response, final int responseCode, final boolean gzip) throws IOException{
+            public final void send(final byte[] response, final int responseCode, final boolean gzip) throws IOException{
                 if(gzip){
                     exchange.getResponseHeaders().set("Accept-Encoding","gzip");
                     exchange.getResponseHeaders().set("Content-Encoding","gzip");
@@ -379,7 +388,7 @@ abstract class SimpleHttpExchangeImpl {
             }
 
             @Override
-            public void send(final String response, final boolean gzip) throws IOException{
+            public final void send(final String response, final boolean gzip) throws IOException{
                 send(response.getBytes(StandardCharsets.UTF_8), HttpCode.HTTP_OK, gzip);
             }
 
@@ -389,7 +398,7 @@ abstract class SimpleHttpExchangeImpl {
             }
 
             @Override
-            public void send(final String response, final int responseCode, final boolean gzip) throws IOException{
+            public final void send(final String response, final int responseCode, final boolean gzip) throws IOException{
                 send(response.getBytes(StandardCharsets.UTF_8),responseCode,gzip);
             }
 
@@ -397,6 +406,9 @@ abstract class SimpleHttpExchangeImpl {
 
             @Override
             public synchronized final void close(){
+                try{
+                    outputStream.close();
+                }catch(final IOException ignored){ }
                 exchange.close();
             }
 

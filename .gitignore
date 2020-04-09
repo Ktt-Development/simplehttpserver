@@ -5,7 +5,7 @@ out
 # Project ignore
 .docs
 src/LICENSE.txt
-src/_ignore
+/src/main/java/com/kttdevelopment/simplehttpserver/_ignore/
 # Gradle
 .gradle
 # Maven
