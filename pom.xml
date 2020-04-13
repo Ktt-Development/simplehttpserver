@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.kttdevelopment</groupId>
+    <groupId>com.kttdevelopment.simplehttpserver</groupId>
     <artifactId>simplehttpserver</artifactId>
     <version>03.01.00</version>
     <packaging>jar</packaging>
