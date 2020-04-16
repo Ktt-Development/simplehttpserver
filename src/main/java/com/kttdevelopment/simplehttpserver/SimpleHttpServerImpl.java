@@ -1,5 +1,6 @@
 package com.kttdevelopment.simplehttpserver;
 
+import com.kttdevelopment.simplehttpserver.handler.RootHandler;
 import com.sun.net.httpserver.*;
 
 import java.io.IOException;
@@ -108,6 +109,8 @@ abstract class SimpleHttpServerImpl {
 
             @Override
             public synchronized final HttpContext createContext(final String path, final HttpHandler handler){
+                if(!getContext(path).equals("/") && handler instanceof RootHandler)
+                    throw new IllegalArgumentException("RootHandler can only be used at the root '/' context");
                 final HttpContext context = server.createContext(getContext(path),handler);
                 contexts.put(context,handler);
                 return context;
