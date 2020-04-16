@@ -1,5 +1,6 @@
 package com.kttdevelopment.simplehttpserver.handler;
 
+import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.kttdevelopment.simplehttpserver.SimpleHttpExchange;
 import com.kttdevelopment.simplehttpserver.SimpleHttpHandler;
@@ -18,10 +19,10 @@ import java.util.function.Predicate;
  * @version 02.00.00
  * @author Ktt Development
  */
-public class PredicateHandler extends SimpleHttpHandler {
+public class PredicateHandler implements HttpHandler {
 
     private final HttpHandler T, F;
-    private final Predicate<SimpleHttpExchange> predicate;
+    private final Predicate<HttpExchange> predicate;
 
     /**
      * Creates a predicate handler.
@@ -37,15 +38,15 @@ public class PredicateHandler extends SimpleHttpHandler {
      * @since 01.00.00
      * @author Ktt Development
      */
-    public PredicateHandler(final HttpHandler trueHandler, final HttpHandler falseHandler, final Predicate<SimpleHttpExchange> predicate){
+    public PredicateHandler(final HttpHandler trueHandler, final HttpHandler falseHandler, final Predicate<HttpExchange> predicate){
         T = trueHandler;
         F = falseHandler;
         this.predicate = predicate;
     }
 
     @Override
-    public final void handle(final SimpleHttpExchange exchange) throws IOException{
-        (predicate.test(exchange) ? T : F).handle(exchange.getHttpExchange());
+    public final void handle(final HttpExchange exchange) throws IOException{
+        (predicate.test(exchange) ? T : F).handle(exchange);
     }
 
 //
