@@ -25,6 +25,7 @@ public class SSEHandler extends SimpleHttpHandler {
             exchange.getResponseHeaders().add("Access-Control-Allow-Origin", exchange.getRequestHeaders().getFirst("origin"));
         exchange.getResponseHeaders().add("Access-Control-Allow-Methods","GET, HEAD, POST, PUT, DELETE");
         exchange.getResponseHeaders().add("Access-Control-Max-Age", String.valueOf(TimeUnit.HOURS.toSeconds(1)));
+        exchange.getResponseHeaders().add("Cache-Control","no-cache");
 
         if(exchange.getRequestMethod() == RequestMethod.OPTIONS){
             exchange.sendResponseHeaders(HttpCode.HTTP_OK,0);
