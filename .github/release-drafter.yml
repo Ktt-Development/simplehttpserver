@@ -18,8 +18,8 @@ categories:
     labels:
       - "bug"
       - "error"
-  - title: '📘 Dependencies"
-    label: 'dependencies"
+  - title: "📘 Dependencies"
+    label: "dependencies"
 no-changes-template: "*No changes*"
 change-template: "- $TITLE #$NUMBER (@$AUTHOR)"
 template: |
