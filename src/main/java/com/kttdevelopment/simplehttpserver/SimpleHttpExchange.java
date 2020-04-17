@@ -18,23 +18,27 @@ import java.util.HashMap;
  * Example:
  * <pre>
  *      {
- *          name : {
- *              headers: {
- *                  Content-Disposition : {
- *                      header-name: "Content-Disposition",
- *                      header-value: "form-data",
- *                      parameters: [
- *                          filename: "file.txt",
- *                          name: "file"
- *                      ]
+ *          "name_of_key" : {
+ *              "headers": { },
+ *              "value": ""
+ *          },
+ *          "name_of_file_key": {
+ *              "headers": {
+ *                  "Content-Disposition": {
+ *                      "header-name": "Content-Disposition",
+ *                      "header-value": "form-data",
+ *                      "parameters": {
+ *                          "filename": "file.txt",
+ *                          "name": "file"
+ *                      }
  *                  },
- *                  Content-Type: {
- *                      header-name: "Content-Type",
- *                      header-value: "text/plain",
- *                      parameters: []
+ *                  "Content-Type": {
+ *                      "header-name": "Content-Type",
+ *                      "header-value": "text/plain",
+ *                      "parameters": {}
  *                  }
  *              },
- *              value: "file content"
+ *              "value": "value in bytes"
  *          }
  *      }
  * </pre>
