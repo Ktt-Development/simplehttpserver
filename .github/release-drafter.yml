@@ -12,7 +12,7 @@ categories:
   - title: "🔧 Optimizations"
     labels:
       - "depreciated"
-      - "optimizations"
+      - "optimization"
       - "refactor"
   - title: "🐞 Bug Fixes"
     labels:
