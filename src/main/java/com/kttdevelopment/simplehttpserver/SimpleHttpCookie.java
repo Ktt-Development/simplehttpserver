@@ -43,8 +43,14 @@ public class SimpleHttpCookie {
      * @author Ktt Development
      */
     public SimpleHttpCookie(final String name, final String value, final String domain, final String path, final String sameSite, final Date expires, final Integer maxAge, final boolean secure, final boolean httpOnly){
-        this.name = name;
-        this.value = value;
+        if(name == null)
+            throw new NullPointerException("Cookie name can not be null");
+        else
+            this.name = name;
+        if(value == null)
+            throw new NullPointerException("Cookie value can not be null");
+        else
+            this.value = value;
         this.domain = domain;
         this.path = path;
         this.sameSite = sameSite;
