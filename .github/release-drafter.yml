@@ -1,29 +1,28 @@
-name-template: '$NEXT_PATCH_VERSION'
-tag-template: '$NEXT_PATCH_VERSION'
+name-template: "$NEXT_PATCH_VERSION"
+tag-template: "$NEXT_PATCH_VERSION"
 categories:
-  - title: '⭐ New Features'
+  - title: "⭐ New Features"
     labels:
-      - 'experimental'
-      - 'feature request'
-  - title: '📄 Documentation'
+      - "experimental"
+      - "feature request"
+  - title: "📄 Documentation"
     labels:
-      - 'documentation'
-      - 'website'
-  - title: '🔧 Optimizations'
+      - "documentation"
+      - "website"
+  - title: "🔧 Optimizations"
     labels:
-      - 'depreciated'
-      - 'optimizations'
-      - 'refactor'
-  - title: '🐞 Bug Fixes'
+      - "depreciated"
+      - "optimizations"
+      - "refactor"
+  - title: "🐞 Bug Fixes"
     labels:
-      - 'bug'
-      - 'error'
-  - title: '📘 Dependencies'
-    label: 'dependencies'
-no-changes-template: '*No changes*'
-change-template: '- $TITLE #$NUMBER (@$AUTHOR)'
+      - "bug"
+      - "error"
+  - title: '📘 Dependencies"
+    label: 'dependencies"
+no-changes-template: "*No changes*"
+change-template: "- $TITLE #$NUMBER (@$AUTHOR)"
 template: |
   ## Changes
   
   $CHANGES
-  
