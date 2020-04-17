@@ -5,15 +5,15 @@ categories:
     labels:
       - "experimental"
       - "feature request"
-  - title: "📄 Documentation"
-    labels:
-      - "documentation"
-      - "website"
   - title: "🔧 Optimizations"
     labels:
       - "depreciated"
       - "optimization"
       - "refactor"
+  - title: "📄 Documentation"
+    labels:
+      - "documentation"
+      - "website"
   - title: "🐞 Bug Fixes"
     labels:
       - "bug"
