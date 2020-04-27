@@ -31,7 +31,7 @@ A simple handler to handle requests based on a predicate.
 ### Root Handler
 A handler to help process homepage and 404  requests.
 ### File Handler
-Host files, set their contexts, control their output, host directories and support for file walking,
+Host files, set their contexts, control their output, host directories and support for file walking.
 
 ## New Features
 ### Constants
