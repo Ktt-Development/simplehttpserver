@@ -7,8 +7,9 @@ import java.util.Date;
  * An HTTP Cookie to be sent in a response header.
  *
  * @see SimpleHttpExchange
+ * @see Builder
  * @since 02.00.00
- * @version 02.00.00
+ * @version 02.03.00
  * @author Ktt Development
  */
 public class SimpleHttpCookie {
@@ -29,7 +30,7 @@ public class SimpleHttpCookie {
     /**
      * Creates an HTTP cookie. All fields except for <code>name</code>, <code>secure</code>, <code>httpOnly</code>, and <code>value</code> can be set to null if unused.
      *
-     * @deprecated Use {@link Builder} class instead.
+     * @deprecated Use {@link Builder} class instead. This method will be removed in the future.
      *
      * @param name name of the cookie
      * @param value value of the cookie
@@ -43,7 +44,6 @@ public class SimpleHttpCookie {
      *
      * @since 02.00.00
      * @author Ktt Development
-     *
      */
     @Deprecated
     public SimpleHttpCookie(final String name, final String value, final String domain, final String path, final String sameSite, final Date expires, final Integer maxAge, final boolean secure, final boolean httpOnly){
@@ -99,12 +99,22 @@ public class SimpleHttpCookie {
        return OUT.toString();
     }
 
+    private final SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss");
+
+    /**
+     * Converts the cookie to a readable string for a response header.
+     *
+     * @return cookie as a header string
+     *
+     * @since 02.03.00
+     * @author Ktt Development
+     */
     public final String toCookieHeaderString(){
         final StringBuilder OUT = new StringBuilder();
 
         OUT.append(name).append("=").append(value);
         if(expires != null)
-            OUT.append("; Expires=").append(new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss").format(expires)).append(" GMT");
+            OUT.append("; Expires=").append(sdf.format(expires)).append(" GMT");
         if(maxAge != null)
             OUT.append("; Max-Age=").append(maxAge);
         if(domain != null)
@@ -121,6 +131,15 @@ public class SimpleHttpCookie {
        return OUT.toString();
     }
 
+    /**
+     * Builder class for {@link SimpleHttpCookie}.
+     *
+     * @see SimpleHttpCookie
+     *
+     * @since 02.03.00
+     * @version 02.03.00
+     * @author Ktt Development
+     */
     public static class Builder {
 
         private final String name;
@@ -134,6 +153,15 @@ public class SimpleHttpCookie {
         private boolean secure      = false;
         private boolean httpOnly    = false;
 
+        /**
+         * Creates an HTTP cookie builder given a key and value.
+         *
+         * @param name Name of the cookie
+         * @param value Value of the cookie
+         *
+         * @since 02.03.00
+         * @author Ktt Development
+         */
         public Builder(final String name, final String value){
             if((this.name = name) == null)
                 throw new NullPointerException("Cookie name can not be null");
@@ -141,70 +169,242 @@ public class SimpleHttpCookie {
                 throw new NullPointerException("Cookie value can not be null");
         }
 
+        /**
+         * Returns the name of the cookie.
+         *
+         * @return cookie name
+         *
+         * @since 02.00.00
+         * @author Ktt Development
+         */
         public final String getName(){
             return name;
         }
 
+        /**
+         * Returns the value of the cookie.
+         *
+         * @return cookie value
+         *
+         * @since 02.03.00
+         * @author Ktt Development
+         */
         public final String getValue(){
             return value;
         }
 
+        /**
+         * Returns the domain to send the cookie to.
+         *
+         * @return domain to send the cookie to
+         *
+         * @see #setDomain(String)
+         *
+         * @since 02.03.00
+         * @author Ktt Development
+         */
         public final String getDomain(){
             return domain;
         }
 
+        /**
+         * Sets the domain of the cookie.
+         *
+         * @param domain what domain to send the cookie to
+         *
+         * @see #getDomain()
+         *
+         * @since 02.03.00
+         * @author Ktt Development
+         */
         public final void setDomain(final String domain){
             this.domain = domain;
         }
 
+        /**
+         * Returns the path to send the cookie to.
+         *
+         * @return what path to send the cookie to
+         *
+         * @see #setPath(String)
+         *
+         * @since 02.03.00
+         * @author Ktt Development
+         */
         public final String getPath(){
             return path;
         }
 
+        /**
+         * Sets the path of the cookie.
+         *
+         * @param path what path to send the cookie to
+         *
+         * @see #getPath()
+         *
+         * @since 02.03.00
+         * @author Ktt Development
+         */
         public final void setPath(final String path){
             this.path = path;
         }
 
-        public final String getSameSite(){
+        /**
+         * Returns if the cookie should be prevented from being sent cross-site.
+         *
+         * @return if the cookie should be prevented from being sent cross-site.
+         *
+         * @see #setSameSite(String)
+         *
+         * @since 02.03.00
+         * @author Ktt Development
+         */
+        public final String isSameSite(){
             return sameSite;
         }
 
+        /**
+         * Sets if the cookie should be prevented from being sent cross-site.
+         *
+         * @param sameSite if the cookie should be prevented from being sent cross-site
+         *
+         * @see #isSameSite()
+         *
+         * @since 02.03.00
+         * @author Ktt Development
+         */
         public final void setSameSite(final String sameSite){
             this.sameSite = sameSite;
         }
 
+        /**
+         * Returns when the cookie should expire.
+         *
+         * @return when the cookie should expire.
+         *
+         * @see #setExpires(Date)
+         * @see #getMaxAge()
+         * @see #setMaxAge(int)
+         *
+         * @since 02.03.00
+         * @author Ktt Development
+         */
         public final Date getExpires(){
             return expires;
         }
 
+        /**
+         * Sets when the cookie should expire.
+         *
+         * @param expires when the cookie should expire
+         *
+         * @see #getExpires()
+         * @see #getMaxAge()
+         * @see #setMaxAge(int)
+         *
+         * @since 02.03.00
+         * @author Ktt Development
+         */
         public final void setExpires(final Date expires){
             this.expires = expires;
         }
 
+        /**
+         * Returns how long the cookie should exist for.
+         *
+         * @return how long the cookie should exist for
+         *
+         * @see #getExpires()
+         * @see #setExpires(Date)
+         * @see #setMaxAge(int)
+         *
+         * @since 02.03.00
+         * @author Ktt Development
+         */
         public final int getMaxAge(){
             return maxAge;
         }
 
+        /**
+         * Sets how long the cookie should exist for.
+         *
+         * @param maxAge how long the cookie should exist for
+         *
+         * @see #getExpires()
+         * @see #setExpires(Date)
+         * @see #getMaxAge()
+         *
+         * @since 02.03.00
+         * @author Ktt Development
+         */
         public final void setMaxAge(final int maxAge){
             this.maxAge = maxAge;
         }
 
+        /**
+         * Returns if the cookie must be sent over a secure/HTTPS protocol.
+         *
+         * @return if the cookie must be sent over a secure/HTTPS protocol
+         *
+         * @see #isSecure()
+         *
+         * @since 02.03.00
+         * @author Ktt Development
+         */
         public final boolean isSecure(){
             return secure;
         }
 
+        /**
+         * Sets if the cookie must be sent over a secure/HTTPS protocol.
+         *
+         * @param secure if the cookie must be sent over a secure/HTTPS protocol.
+         *
+         * @see #setSecure(boolean)
+         *
+         * @since 02.03.00
+         * @author Ktt Development
+         */
         public final void setSecure(final boolean secure){
             this.secure = secure;
         }
 
+        /**
+         * Returns if only the server should have access to the cookies.
+         *
+         * @return if only the server should have access to the cookies.
+         *
+         * @see #setHttpOnly(boolean)
+         *
+         * @since 02.03.00
+         * @author Ktt Development
+         */
         public final boolean isHttpOnly(){
             return httpOnly;
         }
 
+        /**
+         * Sets if only the server should have access to the cookies.
+         *
+         * @param httpOnly if only the server should have access to the cookies
+         *
+         * @see #isHttpOnly()
+         *
+         * @since 02.03.00
+         * @author Ktt Development
+         */
         public final void setHttpOnly(final boolean httpOnly){
             this.httpOnly = httpOnly;
         }
 
+        /**
+         * Returns the completed cookie.
+         *
+         * @return simple http cookie
+         *
+         * @since 02.03.00
+         * @author Ktt Development
+         */
         public final SimpleHttpCookie build(){
             return new SimpleHttpCookie(name,value,domain,path,sameSite,expires,maxAge,secure,httpOnly);
         }
