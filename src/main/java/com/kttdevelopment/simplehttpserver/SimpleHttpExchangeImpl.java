@@ -17,7 +17,7 @@ import java.util.zip.GZIPOutputStream;
  *
  * @see SimpleHttpExchange
  * @since 02.00.00
- * @version 02.00.00
+ * @version 02.03.00
  * @author Ktt Development
  */
 @SuppressWarnings("SpellCheckingInspection")
@@ -311,7 +311,7 @@ abstract class SimpleHttpExchangeImpl {
 
             @Override
             public synchronized final void setCookie(final SimpleHttpCookie cookie){
-                getResponseHeaders().add("Set-Cookie",cookie.toString());
+                getResponseHeaders().add("Set-Cookie",cookie.toCookieHeaderString());
             }
 
         //
@@ -322,7 +322,11 @@ abstract class SimpleHttpExchangeImpl {
                 final HttpSession session;
                 if((sessionId = cookies.get("__session-id")) == null || !HttpSession.sessions.containsKey(sessionId)){
                     session = HttpSession.create();
-                    setCookie(new SimpleHttpCookie("__session-id", session.getSessionID(), null, null, null, null, null, false, true));
+                    setCookie(
+                        new SimpleHttpCookie.Builder("__sesion-id",session.getSessionID())
+                            .setHttpOnly(true)
+                            .build()
+                    );
                 }else{
                     session = HttpSession.sessions.get(sessionId);
                 }

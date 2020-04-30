@@ -304,7 +304,7 @@ public abstract class SimpleHttpExchange {
 //
 
     /**
-     * Returns the client's existing cookies.
+     * Returns the client's existing cookies as a map of keys and values.
      *
      * @return client's cookies
      *

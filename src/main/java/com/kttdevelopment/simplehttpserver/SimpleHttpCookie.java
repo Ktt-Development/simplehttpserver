@@ -211,14 +211,16 @@ public class SimpleHttpCookie {
          * Sets the domain of the cookie.
          *
          * @param domain what domain to send the cookie to
+         * @return cookie builder
          *
          * @see #getDomain()
          *
          * @since 02.03.00
          * @author Ktt Development
          */
-        public final void setDomain(final String domain){
+        public final Builder setDomain(final String domain){
             this.domain = domain;
+            return this;
         }
 
         /**
@@ -239,14 +241,16 @@ public class SimpleHttpCookie {
          * Sets the path of the cookie.
          *
          * @param path what path to send the cookie to
+         * @return cookie builder
          *
          * @see #getPath()
          *
          * @since 02.03.00
          * @author Ktt Development
          */
-        public final void setPath(final String path){
+        public final Builder setPath(final String path){
             this.path = path;
+            return this;
         }
 
         /**
@@ -267,14 +271,16 @@ public class SimpleHttpCookie {
          * Sets if the cookie should be prevented from being sent cross-site.
          *
          * @param sameSite if the cookie should be prevented from being sent cross-site
+         * @return cookie builder
          *
          * @see #isSameSite()
          *
          * @since 02.03.00
          * @author Ktt Development
          */
-        public final void setSameSite(final String sameSite){
+        public final Builder setSameSite(final String sameSite){
             this.sameSite = sameSite;
+            return this;
         }
 
         /**
@@ -297,6 +303,7 @@ public class SimpleHttpCookie {
          * Sets when the cookie should expire.
          *
          * @param expires when the cookie should expire
+         * @return cookie builder
          *
          * @see #getExpires()
          * @see #getMaxAge()
@@ -305,8 +312,9 @@ public class SimpleHttpCookie {
          * @since 02.03.00
          * @author Ktt Development
          */
-        public final void setExpires(final Date expires){
+        public final Builder setExpires(final Date expires){
             this.expires = expires;
+            return this;
         }
 
         /**
@@ -329,6 +337,7 @@ public class SimpleHttpCookie {
          * Sets how long the cookie should exist for.
          *
          * @param maxAge how long the cookie should exist for
+         * @return cookie builder
          *
          * @see #getExpires()
          * @see #setExpires(Date)
@@ -337,8 +346,9 @@ public class SimpleHttpCookie {
          * @since 02.03.00
          * @author Ktt Development
          */
-        public final void setMaxAge(final int maxAge){
+        public final Builder setMaxAge(final int maxAge){
             this.maxAge = maxAge;
+            return this;
         }
 
         /**
@@ -359,14 +369,16 @@ public class SimpleHttpCookie {
          * Sets if the cookie must be sent over a secure/HTTPS protocol.
          *
          * @param secure if the cookie must be sent over a secure/HTTPS protocol.
+         * @return cookie builder
          *
          * @see #setSecure(boolean)
          *
          * @since 02.03.00
          * @author Ktt Development
          */
-        public final void setSecure(final boolean secure){
+        public final Builder setSecure(final boolean secure){
             this.secure = secure;
+            return this;
         }
 
         /**
@@ -387,14 +399,16 @@ public class SimpleHttpCookie {
          * Sets if only the server should have access to the cookies.
          *
          * @param httpOnly if only the server should have access to the cookies
+         * @return cookie builder
          *
          * @see #isHttpOnly()
          *
          * @since 02.03.00
          * @author Ktt Development
          */
-        public final void setHttpOnly(final boolean httpOnly){
+        public final Builder setHttpOnly(final boolean httpOnly){
             this.httpOnly = httpOnly;
+            return this;
         }
 
         /**
