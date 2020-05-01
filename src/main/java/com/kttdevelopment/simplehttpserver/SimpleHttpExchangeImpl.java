@@ -310,6 +310,11 @@ abstract class SimpleHttpExchangeImpl {
             }
 
             @Override
+            public synchronized final void setCookie(final String key, final String value){
+                setCookie(new SimpleHttpCookie.Builder(key,value).build());
+            }
+
+            @Override
             public synchronized final void setCookie(final SimpleHttpCookie cookie){
                 getResponseHeaders().add("Set-Cookie",cookie.toCookieHeaderString());
             }

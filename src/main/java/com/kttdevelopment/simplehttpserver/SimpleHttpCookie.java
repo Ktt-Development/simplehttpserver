@@ -23,7 +23,7 @@ public class SimpleHttpCookie {
 
     private final Date expires;
     private final Integer maxAge;
-    private final boolean
+    private final Boolean
         secure,
         httpOnly;
 
@@ -46,7 +46,7 @@ public class SimpleHttpCookie {
      * @author Ktt Development
      */
     @Deprecated
-    public SimpleHttpCookie(final String name, final String value, final String domain, final String path, final String sameSite, final Date expires, final Integer maxAge, final boolean secure, final boolean httpOnly){
+    public SimpleHttpCookie(final String name, final String value, final String domain, final String path, final String sameSite, final Date expires, final Integer maxAge, final Boolean secure, final Boolean httpOnly){
         if(name == null)
             throw new NullPointerException("Cookie name can not be null");
         else
@@ -78,7 +78,7 @@ public class SimpleHttpCookie {
     @SuppressWarnings({"ConstantConditions", "SpellCheckingInspection"})
     @Override @Deprecated
     public final String toString(){
-        StringBuilder OUT = new StringBuilder();
+        final StringBuilder OUT = new StringBuilder();
 
         OUT.append(name).append("=").append(value);
         if(expires != null)
@@ -89,9 +89,9 @@ public class SimpleHttpCookie {
             OUT.append("; Domain=").append(domain);
         if(path != null)
             OUT.append("; Path=").append(path);
-        if(secure)
+        if(secure != null && secure)
             OUT.append("; Secure=").append(secure);
-        if(httpOnly)
+        if(httpOnly != null && httpOnly)
             OUT.append("; HttpOnly=").append(httpOnly);
        if(sameSite != null)
            OUT.append("; SameSite=").append(sameSite);
@@ -114,16 +114,16 @@ public class SimpleHttpCookie {
 
         OUT.append(name).append("=").append(value);
         if(expires != null)
-            OUT.append("; Expires=").append(sdf.format(expires)).append(" GMT");
+            OUT.append("; Expires=").append(new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss").format(expires)).append(" GMT");
         if(maxAge != null)
             OUT.append("; Max-Age=").append(maxAge);
         if(domain != null)
             OUT.append("; Domain=").append(domain);
         if(path != null)
             OUT.append("; Path=").append(path);
-        if(secure)
+        if(secure != null && secure)
             OUT.append("; Secure=").append(secure);
-        if(httpOnly)
+        if(httpOnly != null && httpOnly)
             OUT.append("; HttpOnly=").append(httpOnly);
        if(sameSite != null)
            OUT.append("; SameSite=").append(sameSite);
@@ -135,7 +135,6 @@ public class SimpleHttpCookie {
      * Builder class for {@link SimpleHttpCookie}.
      *
      * @see SimpleHttpCookie
-     *
      * @since 02.03.00
      * @version 02.03.00
      * @author Ktt Development
@@ -150,8 +149,8 @@ public class SimpleHttpCookie {
         private String sameSite;
         private Date expires;
         private int maxAge;
-        private boolean secure      = false;
-        private boolean httpOnly    = false;
+        private Boolean secure;
+        private Boolean httpOnly;
 
         /**
          * Creates an HTTP cookie builder given a key and value.
@@ -199,7 +198,6 @@ public class SimpleHttpCookie {
          * @return domain to send the cookie to
          *
          * @see #setDomain(String)
-         *
          * @since 02.03.00
          * @author Ktt Development
          */
@@ -214,7 +212,6 @@ public class SimpleHttpCookie {
          * @return cookie builder
          *
          * @see #getDomain()
-         *
          * @since 02.03.00
          * @author Ktt Development
          */
@@ -229,7 +226,6 @@ public class SimpleHttpCookie {
          * @return what path to send the cookie to
          *
          * @see #setPath(String)
-         *
          * @since 02.03.00
          * @author Ktt Development
          */
@@ -244,7 +240,6 @@ public class SimpleHttpCookie {
          * @return cookie builder
          *
          * @see #getPath()
-         *
          * @since 02.03.00
          * @author Ktt Development
          */
@@ -259,7 +254,6 @@ public class SimpleHttpCookie {
          * @return if the cookie should be prevented from being sent cross-site.
          *
          * @see #setSameSite(String)
-         *
          * @since 02.03.00
          * @author Ktt Development
          */
@@ -274,7 +268,6 @@ public class SimpleHttpCookie {
          * @return cookie builder
          *
          * @see #isSameSite()
-         *
          * @since 02.03.00
          * @author Ktt Development
          */
@@ -291,7 +284,6 @@ public class SimpleHttpCookie {
          * @see #setExpires(Date)
          * @see #getMaxAge()
          * @see #setMaxAge(int)
-         *
          * @since 02.03.00
          * @author Ktt Development
          */
@@ -308,7 +300,6 @@ public class SimpleHttpCookie {
          * @see #getExpires()
          * @see #getMaxAge()
          * @see #setMaxAge(int)
-         *
          * @since 02.03.00
          * @author Ktt Development
          */
@@ -325,7 +316,6 @@ public class SimpleHttpCookie {
          * @see #getExpires()
          * @see #setExpires(Date)
          * @see #setMaxAge(int)
-         *
          * @since 02.03.00
          * @author Ktt Development
          */
@@ -342,7 +332,6 @@ public class SimpleHttpCookie {
          * @see #getExpires()
          * @see #setExpires(Date)
          * @see #getMaxAge()
-         *
          * @since 02.03.00
          * @author Ktt Development
          */
@@ -357,7 +346,6 @@ public class SimpleHttpCookie {
          * @return if the cookie must be sent over a secure/HTTPS protocol
          *
          * @see #isSecure()
-         *
          * @since 02.03.00
          * @author Ktt Development
          */
@@ -372,7 +360,6 @@ public class SimpleHttpCookie {
          * @return cookie builder
          *
          * @see #setSecure(boolean)
-         *
          * @since 02.03.00
          * @author Ktt Development
          */
@@ -387,7 +374,6 @@ public class SimpleHttpCookie {
          * @return if only the server should have access to the cookies.
          *
          * @see #setHttpOnly(boolean)
-         *
          * @since 02.03.00
          * @author Ktt Development
          */
@@ -402,7 +388,6 @@ public class SimpleHttpCookie {
          * @return cookie builder
          *
          * @see #isHttpOnly()
-         *
          * @since 02.03.00
          * @author Ktt Development
          */
