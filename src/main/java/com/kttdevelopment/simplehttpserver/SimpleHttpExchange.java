@@ -320,6 +320,7 @@ public abstract class SimpleHttpExchange {
      *
      * @param key name of cookie to set
      * @param value value of cookie
+     * @throws IllegalArgumentException if the cookie name is reserved by the server
      *
      * @see SimpleHttpCookie
      * @see #setCookie(SimpleHttpCookie)
@@ -334,6 +335,7 @@ public abstract class SimpleHttpExchange {
      * Sets a cookie in the response header.
      *
      * @param cookie cookie to set
+     * @throws IllegalArgumentException if the cookie name is reserved by the server
      *
      * @see SimpleHttpCookie
      * @see #setCookie(String, String)

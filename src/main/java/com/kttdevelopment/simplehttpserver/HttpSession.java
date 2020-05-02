@@ -30,7 +30,7 @@ public abstract class HttpSession {
      * @return a {@link HttpSession}
      *
      * @since 02.00.00
-     * @author KTt Development
+     * @author Ktt Development
      */
     synchronized static HttpSession create(){
         return HttpSessionImpl.createHttpSession();
