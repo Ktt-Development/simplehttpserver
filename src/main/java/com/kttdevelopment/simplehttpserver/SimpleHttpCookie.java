@@ -111,7 +111,6 @@ public class SimpleHttpCookie {
      */
     public final String toCookieHeaderString(){
         final StringBuilder OUT = new StringBuilder();
-
         OUT.append(name).append("=").append(value);
         if(expires != null)
             OUT.append("; Expires=").append(new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss").format(expires)).append(" GMT");
@@ -148,7 +147,7 @@ public class SimpleHttpCookie {
         private String path;
         private String sameSite;
         private Date expires;
-        private int maxAge;
+        private Integer maxAge;
         private Boolean secure;
         private Boolean httpOnly;
 

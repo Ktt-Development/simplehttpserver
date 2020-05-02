@@ -328,9 +328,7 @@ abstract class SimpleHttpExchangeImpl {
                 if((sessionId = cookies.get("__session-id")) == null || !HttpSession.sessions.containsKey(sessionId)){
                     session = HttpSession.create();
                     setCookie(
-                        new SimpleHttpCookie.Builder("__sesion-id",session.getSessionID())
-                            .setHttpOnly(true)
-                            .build()
+                        new SimpleHttpCookie.Builder("__session-id",session.getSessionID()).build()
                     );
                 }else{
                     session = HttpSession.sessions.get(sessionId);
