@@ -304,10 +304,12 @@ public abstract class SimpleHttpExchange {
 //
 
     /**
-     * Returns the client's existing cookies.
+     * Returns the client's existing cookies as a map of keys and values.
      *
      * @return client's cookies
      *
+     * @see #setCookie(String, String)
+     * @see #setCookie(SimpleHttpCookie)
      * @since 02.00.00
      * @author Ktt Development
      */
@@ -316,9 +318,26 @@ public abstract class SimpleHttpExchange {
     /**
      * Sets a cookie in the response header.
      *
+     * @param key name of cookie to set
+     * @param value value of cookie
+     *
+     * @see SimpleHttpCookie
+     * @see #setCookie(SimpleHttpCookie)
+     * @see #getCookies()
+     * @see #getResponseHeaders()
+     * @since 02.03.00
+     * @author Ktt Development
+     */
+    public abstract void setCookie(final String key, final String value);
+
+    /**
+     * Sets a cookie in the response header.
+     *
      * @param cookie cookie to set
      *
      * @see SimpleHttpCookie
+     * @see #setCookie(String, String)
+     * @see #getCookies()
      * @see #getResponseHeaders()
      * @since 02.00.00
      * @author Ktt Development
