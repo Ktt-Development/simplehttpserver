@@ -184,12 +184,12 @@ abstract class SimpleHttpServerImpl {
 
             @Override
             public synchronized final HttpContext createTemporaryContext(final String context){
-                return createContext(context, (exchange) -> removeContext(context));
+                return createContext(context, (HttpExchange exchange) -> removeContext(context));
             }
 
             @Override
             public synchronized final HttpContext createTemporaryContext(final String context, final long maxTime){
-                final HttpContext httpContext = createContext(context, (exchange) -> removeContext(context));
+                final HttpContext httpContext = createContext(context, (HttpExchange exchange) -> removeContext(context));
 
                 new Thread(() -> {
                     try{
@@ -203,7 +203,7 @@ abstract class SimpleHttpServerImpl {
 
             @Override
             public synchronized final HttpContext createTemporaryContext(final String context, final HttpHandler handler){
-                return createContext(context, (exchange) -> {
+                return createContext(context, (HttpExchange exchange) -> {
                     handler.handle(exchange);
                     removeContext(context);
                 });
@@ -211,7 +211,7 @@ abstract class SimpleHttpServerImpl {
 
             @Override
             public synchronized final HttpContext createTemporaryContext(final String context, final HttpHandler handler, final long maxTime){
-                final HttpContext httpContext = createContext(context, (exchange) -> {
+                final HttpContext httpContext = createContext(context, (HttpExchange exchange) -> {
                     handler.handle(exchange);
                     removeContext(context);
                 });
