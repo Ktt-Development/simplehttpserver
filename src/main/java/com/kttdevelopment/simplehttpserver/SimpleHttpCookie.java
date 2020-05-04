@@ -30,7 +30,7 @@ public class SimpleHttpCookie {
     /**
      * Creates an HTTP cookie. All fields except for <code>name</code>, <code>secure</code>, <code>httpOnly</code>, and <code>value</code> can be set to null if unused.
      *
-     * @deprecated Use {@link Builder} class instead. This method will be removed in the future.
+     * @deprecated Use {@link Builder} class instead. This method will be removed in the future
      *
      * @param name name of the cookie
      * @param value value of the cookie
@@ -67,7 +67,7 @@ public class SimpleHttpCookie {
     /**
      * Converts the cookie to a readable string for the cookie header.
      *
-     * @deprecated Use {@link #toCookieHeaderString()} instead.
+     * @deprecated Use {@link #toCookieHeaderString()} instead
      *
      * @return cookie header
      *
