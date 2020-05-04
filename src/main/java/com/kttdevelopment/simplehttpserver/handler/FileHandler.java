@@ -24,7 +24,7 @@ import java.util.*;
  * @version 02.00.00
  * @author Ktt Development
  */
-public class FileHandler extends SimpleHttpHandler {
+public class FileHandler implements SimpleHttpHandler {
 
     private final FileHandlerAdapter adapter;
 

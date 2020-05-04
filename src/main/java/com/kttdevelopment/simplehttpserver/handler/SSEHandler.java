@@ -12,7 +12,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class SSEHandler extends SimpleHttpHandler {
+public class SSEHandler implements SimpleHttpHandler {
 
     private final List<OutputStream> listeners = new ArrayList<>();
     private final AtomicInteger      eventId   = new AtomicInteger(-1);

@@ -116,7 +116,40 @@ abstract class SimpleHttpServerImpl {
                 return context;
             }
 
-        //
+            @Override
+            public synchronized final HttpContext createContext(final String path, final SimpleHttpHandler handler){
+                if(!getContext(path).equals("/") && handler instanceof RootHandler)
+                    throw new IllegalArgumentException("RootHandler can only be used at the root '/' context");
+                final HttpContext context = server.createContext(getContext(path),(exchange) -> handler.handle(SimpleHttpExchange.create(exchange)));
+                contexts.put(context,context.getHandler());
+                return context;
+            }
+
+            //
+
+            @Override
+            public synchronized final HttpContext createContext(final String path, final Authenticator authenticator){
+                final HttpContext context = createContext(path);
+                context.setAuthenticator(authenticator);
+                return context;
+            }
+
+            @Override
+            public synchronized final HttpContext createContext(final String path, final HttpHandler handler, final Authenticator authenticator){
+                final HttpContext context = createContext(path,handler);
+                context.setAuthenticator(authenticator);
+                return context;
+            }
+
+            @Override
+            public synchronized final HttpContext createContext(final String path, final SimpleHttpHandler handler, final Authenticator authenticator){
+                final HttpContext context = createContext(path,handler);
+                context.setAuthenticator(authenticator);
+                return context;
+            }
+
+
+            //
 
             private String generateRandomContext(){
                 String targetContext;
@@ -151,12 +184,12 @@ abstract class SimpleHttpServerImpl {
 
             @Override
             public synchronized final HttpContext createTemporaryContext(final String context){
-                return createContext(context, (exchange) -> removeContext(context));
+                return createContext(context, (HttpExchange exchange) -> removeContext(context));
             }
 
             @Override
             public synchronized final HttpContext createTemporaryContext(final String context, final long maxTime){
-                final HttpContext httpContext = createContext(context, (exchange) -> removeContext(context));
+                final HttpContext httpContext = createContext(context, (HttpExchange exchange) -> removeContext(context));
 
                 new Thread(() -> {
                     try{
@@ -170,7 +203,7 @@ abstract class SimpleHttpServerImpl {
 
             @Override
             public synchronized final HttpContext createTemporaryContext(final String context, final HttpHandler handler){
-                return createContext(context, (exchange) -> {
+                return createContext(context, (HttpExchange exchange) -> {
                     handler.handle(exchange);
                     removeContext(context);
                 });
@@ -178,7 +211,7 @@ abstract class SimpleHttpServerImpl {
 
             @Override
             public synchronized final HttpContext createTemporaryContext(final String context, final HttpHandler handler, final long maxTime){
-                final HttpContext httpContext = createContext(context, (exchange) -> {
+                final HttpContext httpContext = createContext(context, (HttpExchange exchange) -> {
                     handler.handle(exchange);
                     removeContext(context);
                 });

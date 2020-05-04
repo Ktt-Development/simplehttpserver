@@ -15,7 +15,7 @@ import java.io.IOException;
  * @version 02.00.00
  * @author Ktt Development
  */
-public class RedirectHandler extends SimpleHttpHandler {
+public class RedirectHandler implements SimpleHttpHandler {
 
     private final String link;
 

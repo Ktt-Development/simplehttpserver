@@ -316,7 +316,10 @@ abstract class SimpleHttpExchangeImpl {
 
             @Override
             public synchronized final void setCookie(final SimpleHttpCookie cookie){
-                getResponseHeaders().add("Set-Cookie",cookie.toCookieHeaderString());
+                final String cstring = cookie.toCookieHeaderString();
+                if(cstring.startsWith("__session-id="))
+                    throw new IllegalArgumentException("The cookie '__session-id' can not be set because it is reserved by the server");
+                getResponseHeaders().add("Set-Cookie",cstring);
             }
 
         //
@@ -325,11 +328,15 @@ abstract class SimpleHttpExchangeImpl {
             public synchronized final HttpSession getHttpSession(){
                 final String sessionId;
                 final HttpSession session;
+
                 if((sessionId = cookies.get("__session-id")) == null || !HttpSession.sessions.containsKey(sessionId)){
                     session = HttpSession.create();
-                    setCookie(
-                        new SimpleHttpCookie.Builder("__session-id",session.getSessionID()).build()
-                    );
+                    final SimpleHttpCookie cookie =
+                        new SimpleHttpCookie.Builder("__session-id",session.getSessionID())
+                            .setPath("/")
+                            .setHttpOnly(true)
+                            .build();
+                    getResponseHeaders().add("Set-Cookie",cookie.toCookieHeaderString()); // bypass implementation
                 }else{
                     session = HttpSession.sessions.get(sessionId);
                 }
