@@ -211,6 +211,12 @@ public abstract class SimpleHttpServer {
 
 //
 
+    public abstract void setHttpSessionHandler(final HttpSessionHandler sessionHandler);
+
+    public abstract HttpSessionHandler getHttpSessionHandler();
+
+//
+
     /**
      * Creates an empty context.
      *
