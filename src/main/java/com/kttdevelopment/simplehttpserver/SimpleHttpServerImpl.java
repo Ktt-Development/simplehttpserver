@@ -125,6 +125,29 @@ abstract class SimpleHttpServerImpl {
                 return context;
             }
 
+            //
+
+            @Override
+            public synchronized final HttpContext createContext(final String path, final Authenticator authenticator){
+                final HttpContext context = createContext(path);
+                context.setAuthenticator(authenticator);
+                return context;
+            }
+
+            @Override
+            public synchronized final HttpContext createContext(final String path, final HttpHandler handler, final Authenticator authenticator){
+                final HttpContext context = createContext(path,handler);
+                context.setAuthenticator(authenticator);
+                return context;
+            }
+
+            @Override
+            public synchronized final HttpContext createContext(final String path, final SimpleHttpHandler handler, final Authenticator authenticator){
+                final HttpContext context = createContext(path,handler);
+                context.setAuthenticator(authenticator);
+                return context;
+            }
+
 
             //
 
