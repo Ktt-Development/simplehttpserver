@@ -13,7 +13,7 @@ import java.util.*;
  */
 public class HttpSessionHandler {
 
-    private Map<String,HttpSession> sessions = new HashMap<>();
+    private final Map<String,HttpSession> sessions = new HashMap<>();
 
     private final String cookie;
 
@@ -56,8 +56,12 @@ public class HttpSessionHandler {
     }
 
     /**
-     * Assigns a session to the client
-     * @param exchange
+     * Assigns a session to the client. Session will only be saved client side if the exchange headers are sent using {@link HttpExchange#sendResponseHeaders(int, long)}.
+     *
+     * @param exchange http exchange
+     *
+     * @since 03.03.00
+     * @author Ktt Development
      */
     public synchronized final void assignSession(final HttpExchange exchange){
         final String sessionId;
@@ -134,6 +138,5 @@ public class HttpSessionHandler {
             exchange.getResponseHeaders().add("Set-Cookie",out.toCookieHeaderString());
         }
     }
-
 
 }
