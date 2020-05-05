@@ -211,10 +211,40 @@ public abstract class SimpleHttpServer {
 
 //
 
+    /**
+     * Sets a session handler for the server.
+     *
+     * @param sessionHandler session handler
+     *
+     * @see HttpSessionHandler
+     * @see #getHttpSessionHandler()
+     * @since 03.03.00
+     * @author Ktt Development
+     */
     public abstract void setHttpSessionHandler(final HttpSessionHandler sessionHandler);
 
+    /**
+     * Returns the session handler for the server or null if none exists.
+     *
+     * @return server session handler
+     *
+     * @see HttpSessionHandler
+     * @see #setHttpSessionHandler(HttpSessionHandler)
+     * @since 03.03.00
+     * @author Ktt Development
+     */
     public abstract HttpSessionHandler getHttpSessionHandler();
 
+    /**
+     * Returns the session associated with an exchange or null if no session handler exists.
+     *
+     * @param exchange http exchange
+     * @return http session
+     *
+     * @see HttpSession
+     * @since 03.03.00
+     * @author Ktt Development
+     */
     public abstract HttpSession getHttpSession(final HttpExchange exchange);
 
 //
