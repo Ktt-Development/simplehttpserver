@@ -9,20 +9,16 @@ import java.util.function.Predicate;
 
 public class ConnectionThrottler {
 
-    private final HttpSession server;
-
     private final Predicate<HttpExchange> contributeToLimit;
     private final AtomicInteger           connections = new AtomicInteger(0);
 
     private int maxConnections = 0;
 
     public ConnectionThrottler(final HttpSession server){
-        this.server = server;
         contributeToLimit = (exchange) -> true;
     }
 
     public ConnectionThrottler(final HttpSession server, final Predicate<HttpExchange> counts){
-        this.server = server;
         this.contributeToLimit = counts;
     }
 
