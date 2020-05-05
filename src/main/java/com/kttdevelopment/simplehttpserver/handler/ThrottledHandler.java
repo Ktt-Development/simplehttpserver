@@ -7,16 +7,16 @@ import java.io.IOException;
 
 public class ThrottledHandler implements HttpHandler {
 
-    private final HttpHandler handler;
-    private final ConnectionThrottler throttler;
+    private final HttpHandler     handler;
+    private final ServerThrottler throttler;
 
-    public ThrottledHandler(final HttpHandler handler, final ConnectionThrottler throttler){
+    public ThrottledHandler(final HttpHandler handler, final ServerThrottler throttler){
         this.handler = handler;
         this.throttler = throttler;
     }
 
     @Override
-    public synchronized final void handle(final HttpExchange exchange) throws IOException{
+    public final void handle(final HttpExchange exchange) throws IOException{
         if(throttler.addConnection(exchange)){
             handler.handle(exchange);
             throttler.deleteConnection(exchange);
