@@ -50,7 +50,7 @@ abstract class SimpleHttpServerImpl {
 
             private void handle(final HttpExchange exchange){
                 if(sessionHandler != null)
-                    sessionHandler.assignSession(exchange);
+                    sessionHandler.getSession(exchange).updateLastAccessTime();
             }
 
         //
@@ -115,9 +115,12 @@ abstract class SimpleHttpServerImpl {
                 return sessionHandler;
             }
 
-            //
+            @Override
+            public HttpSession getHttpSession(final HttpExchange exchange){
+                return sessionHandler.getSession(exchange);
+            }
 
-        //
+            //
 
             @Override
             public synchronized final HttpContext createContext(final String path){

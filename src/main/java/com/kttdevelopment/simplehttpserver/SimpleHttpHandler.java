@@ -1,6 +1,5 @@
 package com.kttdevelopment.simplehttpserver;
 
-import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 import java.io.IOException;
@@ -14,6 +13,7 @@ import java.io.IOException;
  * @version 03.03.00
  * @author Ktt Development
  */
+
 public interface SimpleHttpHandler extends HttpHandler {
 
     /**
