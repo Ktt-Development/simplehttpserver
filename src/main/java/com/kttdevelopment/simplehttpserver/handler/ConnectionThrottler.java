@@ -14,11 +14,11 @@ public class ConnectionThrottler {
 
     private int maxConnections = 0;
 
-    public ConnectionThrottler(final HttpSession server){
+    public ConnectionThrottler(){
         contributeToLimit = (exchange) -> true;
     }
 
-    public ConnectionThrottler(final HttpSession server, final Predicate<HttpExchange> counts){
+    public ConnectionThrottler(final Predicate<HttpExchange> counts){
         this.contributeToLimit = counts;
     }
 
@@ -46,7 +46,6 @@ public class ConnectionThrottler {
         final StringBuilder OUT = new StringBuilder();
 
         OUT.append("ConnectionThrottler")   .append('{');
-        OUT.append("server")                .append('=')    .append(server.toString())  .append(", ");
         OUT.append("connections")           .append('=')    .append(connections)        .append(", ");
         OUT.append("maxConnections")        .append('=')    .append(maxConnections);
         OUT.append('}');
