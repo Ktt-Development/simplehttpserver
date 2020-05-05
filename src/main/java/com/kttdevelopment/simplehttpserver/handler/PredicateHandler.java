@@ -56,11 +56,11 @@ public class PredicateHandler implements HttpHandler {
     @Override
     public String toString(){
         final StringBuilder OUT = new StringBuilder();
-        OUT.append("PredicateHandler")  .append("{");
-        OUT.append("(true) handler")    .append("=")   .append(T.toString())           .append(", ");
-        OUT.append("(false) handler")   .append("=")   .append(F.toString())           .append(", ");
-        OUT.append("predicate")         .append("=")   .append(predicate.toString());
-        OUT.append("}");
+        OUT.append("PredicateHandler")  .append('{');
+        OUT.append("(true) handler")    .append('=')   .append(T.toString())           .append(", ");
+        OUT.append("(false) handler")   .append('=')   .append(F.toString())           .append(", ");
+        OUT.append("predicate")         .append('=')   .append(predicate.toString());
+        OUT.append('}');
         return OUT.toString();
     }
 

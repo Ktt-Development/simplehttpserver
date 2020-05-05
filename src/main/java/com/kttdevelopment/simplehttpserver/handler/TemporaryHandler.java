@@ -63,10 +63,10 @@ public class TemporaryHandler implements HttpHandler {
     public String toString(){
         final StringBuilder OUT = new StringBuilder();
         OUT.append("TemporaryHandler")  .append('{');
-        OUT.append("handler")           .append('=')    .append(handler.toString()) .append(',');
+        OUT.append("handler")           .append('=')    .append(handler.toString()) .append(", ");
         if(hasExpiry){
-            OUT.append("initTime")      .append('=')    .append(initTime)           .append(',');
-            OUT.append("maxTime")       .append('=')    .append(maxTime)            .append(',');
+            OUT.append("initTime")      .append('=')    .append(initTime)           .append(", ");
+            OUT.append("maxTime")       .append('=')    .append(maxTime)            .append(", ");
             OUT.append("expiry")        .append('=')    .append(expiry);
         }
         OUT.append('}');
