@@ -45,9 +45,9 @@ public class RedirectHandler implements SimpleHttpHandler {
     @Override
     public String toString(){
         final StringBuilder OUT = new StringBuilder();
-        OUT.append("RedirectHandler")   .append("{");
-        OUT.append("link")              .append("=")   .append(link);
-        OUT.append("}");
+        OUT.append("RedirectHandler")   .append('{');
+        OUT.append("link")              .append('=')   .append(link);
+        OUT.append('}');
         return OUT.toString();
     }
 

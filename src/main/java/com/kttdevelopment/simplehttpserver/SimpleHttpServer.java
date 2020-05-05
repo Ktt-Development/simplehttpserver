@@ -211,10 +211,40 @@ public abstract class SimpleHttpServer {
 
 //
 
+    /**
+     * Sets a session handler for the server.
+     *
+     * @param sessionHandler session handler
+     *
+     * @see HttpSessionHandler
+     * @see #getHttpSessionHandler()
+     * @since 03.03.00
+     * @author Ktt Development
+     */
     public abstract void setHttpSessionHandler(final HttpSessionHandler sessionHandler);
 
+    /**
+     * Returns the session handler for the server or null if none exists.
+     *
+     * @return server session handler
+     *
+     * @see HttpSessionHandler
+     * @see #setHttpSessionHandler(HttpSessionHandler)
+     * @since 03.03.00
+     * @author Ktt Development
+     */
     public abstract HttpSessionHandler getHttpSessionHandler();
 
+    /**
+     * Returns the session associated with an exchange or null if no session handler exists.
+     *
+     * @param exchange http exchange
+     * @return http session
+     *
+     * @see HttpSession
+     * @since 03.03.00
+     * @author Ktt Development
+     */
     public abstract HttpSession getHttpSession(final HttpExchange exchange);
 
 //
@@ -299,9 +329,13 @@ public abstract class SimpleHttpServer {
 
 //
 
+    // region depreciated - temporary context
+
     /**
      * Creates a temporary context at a random address that will remove itself after the first connection. This type of context is typically used for single use downloads or media file hosting. <br>
      * To get the context use {@link HttpContext#getPath()}.
+     *
+     * @deprecated Use {@link com.kttdevelopment.simplehttpserver.handler.TemporaryHandler} instead
      *
      * @return the http context associated with the context
      *
@@ -318,11 +352,14 @@ public abstract class SimpleHttpServer {
      * @since 02.00.00
      * @author Ktt Development
      */
+    @Deprecated
     public abstract HttpContext createTemporaryContext();
 
     /**
      * Creates a temporary context at a random address that will remove itself after the first connection or after the max time is passed. This type of context is typically used for single use downloads or media file hosting. <br>
      * To get the context use {@link HttpContext#getPath()}.
+     *
+     * @deprecated Use {@link com.kttdevelopment.simplehttpserver.handler.TemporaryHandler} instead
      *
      * @param maxTime the maximum time the context may exist for (in milliseconds)
      * @return the http context associated with the context
@@ -340,6 +377,7 @@ public abstract class SimpleHttpServer {
      * @since 02.00.00
      * @author Ktt Development
      */
+    @Deprecated
     public abstract HttpContext createTemporaryContext(final long maxTime);
 
     /**
@@ -347,6 +385,8 @@ public abstract class SimpleHttpServer {
      * To get the context use {@link HttpContext#getPath()}. <br>
      * This method encapsulates the handler with a temporary one, so {@link HttpContext#getHandler()} will not return the one passed in the parameter, instead it will return the encapsulating handler.
      *
+     * @deprecated Use {@link com.kttdevelopment.simplehttpserver.handler.TemporaryHandler} instead
+     *
      * @param handler handler to use
      * @return the http context associated with the context
      *
@@ -364,6 +404,7 @@ public abstract class SimpleHttpServer {
      * @since 02.00.00
      * @author Ktt Development
      */
+    @Deprecated
     public abstract HttpContext createTemporaryContext(final HttpHandler handler);
 
     /**
@@ -371,6 +412,8 @@ public abstract class SimpleHttpServer {
      * To get the context use {@link HttpContext#getPath()}. <br>
      * This method encapsulates the handler with a temporary one, so {@link HttpContext#getHandler()} will not return the one passed in the parameter, instead it will return the encapsulating handler.
      *
+     * @deprecated Use {@link com.kttdevelopment.simplehttpserver.handler.TemporaryHandler} instead
+     *
      * @param handler handler to use
      * @param maxTime the maximum time the context may exist for (in milliseconds)
      * @return the http context associated with the context
@@ -389,10 +432,13 @@ public abstract class SimpleHttpServer {
      * @since 02.00.00
      * @author Ktt Development
      */
+    @Deprecated
     public abstract HttpContext createTemporaryContext(final HttpHandler handler, final long maxTime);
 
     /**
      * Creates a temporary context at a specified address that will remove itself after the first connection. This type of context is typically used for single use downloads or media file hosting. <br>
+     *
+     * @deprecated Use {@link com.kttdevelopment.simplehttpserver.handler.TemporaryHandler} instead
      *
      * @param context the context
      * @return the http context associated with the context
@@ -412,10 +458,13 @@ public abstract class SimpleHttpServer {
      * @since 02.00.00
      * @author Ktt Development
      */
+    @Deprecated
     public abstract HttpContext createTemporaryContext(final String context);
 
     /**
      * Creates a temporary context at a specified address that will remove itself after the first connection or after the max time is passed. This type of context is typically used for single use downloads or media file hosting. <br>
+     *
+     * @deprecated Use {@link com.kttdevelopment.simplehttpserver.handler.TemporaryHandler} instead
      *
      * @param context the context
      * @param maxTime the maximum time the context may exist for (in milliseconds)
@@ -437,12 +486,15 @@ public abstract class SimpleHttpServer {
      * @since 02.00.00
      * @author Ktt Development
      */
+    @Deprecated
     public abstract HttpContext createTemporaryContext(final String context, final long maxTime);
 
     /**
      * Creates a temporary context at a specified address that will remove itself after the first connection. This type of context is typically used for single use downloads or media file hosting. <br>
      * This method encapsulates the handler with a temporary one, so {@link HttpContext#getHandler()} will not return the one passed in the parameter, instead it will return the encapsulating handler.
      *
+     * @deprecated Use {@link com.kttdevelopment.simplehttpserver.handler.TemporaryHandler} instead
+     *
      * @param context the context
      * @param handler handler to use
      * @return the http context associated with the context
@@ -463,6 +515,7 @@ public abstract class SimpleHttpServer {
      * @since 02.00.00
      * @author Ktt Development
      */
+    @Deprecated
     public abstract HttpContext createTemporaryContext(final String context, final HttpHandler handler);
 
 
@@ -471,6 +524,8 @@ public abstract class SimpleHttpServer {
      * To get the context use {@link HttpContext#getPath()}. <br>
      * This method encapsulates the handler with a temporary one, so {@link HttpContext#getHandler()} will not return the one passed in the parameter, instead it will return the encapsulating handler.
      *
+     * @deprecated Use {@link com.kttdevelopment.simplehttpserver.handler.TemporaryHandler} instead
+     *
      * @param context the context
      * @param handler handler to use
      * @param maxTime the maximum time the context may exist for (in milliseconds)
@@ -492,7 +547,10 @@ public abstract class SimpleHttpServer {
      * @since 02.00.00
      * @author Ktt Development
      */
+    @Deprecated
     public abstract HttpContext createTemporaryContext(final String context, final HttpHandler handler, final long maxTime);
+
+    // endregion
 
 //
 
@@ -549,10 +607,38 @@ public abstract class SimpleHttpServer {
      * Returns a copy of the server's contexts and their respective handlers.
      *
      * @return server's contexts
+     *
      * @since 02.00.00
      * @author Ktt Development
      */
     public abstract Map<HttpContext,HttpHandler> getContexts();
+
+    //
+
+    /**
+     * Generates a random context at the root that can be used on the server.
+     *
+     * @return random safe context
+     *
+     * @see #getRandomContext(String)
+     * @see com.kttdevelopment.simplehttpserver.handler.TemporaryHandler
+     * @since 03.03.00
+     * @author Ktt Development
+     */
+    public abstract String getRandomContext();
+
+    /**
+     * Generates a randome context that can be used on the server.
+     *
+     * @param context where to generate the random context
+     * @return randome safe context
+     *
+     * @see #getRandomContext()
+     * @see com.kttdevelopment.simplehttpserver.handler.TemporaryHandler
+     * @since 03.03.00
+     * @author Ktt Development
+     */
+    public abstract String getRandomContext(final String context);
 
 //
 

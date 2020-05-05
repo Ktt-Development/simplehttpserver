@@ -116,8 +116,8 @@ abstract class SimpleHttpServerImpl {
             }
 
             @Override
-            public HttpSession getHttpSession(final HttpExchange exchange){
-                return sessionHandler.getSession(exchange);
+            public final HttpSession getHttpSession(final HttpExchange exchange){
+                return sessionHandler != null ? sessionHandler.getSession(exchange) : null;
             }
 
             //
@@ -161,6 +161,7 @@ abstract class SimpleHttpServerImpl {
 
             //
 
+            @Deprecated
             private String generateRandomContext(){
                 String targetContext;
 
@@ -172,32 +173,34 @@ abstract class SimpleHttpServerImpl {
 
             //
 
-            @Override
+            // region depreciated - temporary context
+
+            @Override @Deprecated
             public synchronized final HttpContext createTemporaryContext(){
                 return createTemporaryContext(generateRandomContext());
             }
 
-            @Override
+            @Override @Deprecated
             public synchronized final HttpContext createTemporaryContext(final long maxTime){
                 return createTemporaryContext(generateRandomContext(),maxTime);
             }
 
-            @Override
+            @Override @Deprecated
             public synchronized final HttpContext createTemporaryContext(final HttpHandler handler){
                 return createTemporaryContext(generateRandomContext(),handler);
             }
 
-            @Override
+            @Override @Deprecated
             public synchronized final HttpContext createTemporaryContext(final HttpHandler handler, final long maxTime){
                 return createTemporaryContext(generateRandomContext(),handler,maxTime);
             }
 
-            @Override
+            @Override @Deprecated
             public synchronized final HttpContext createTemporaryContext(final String context){
                 return createContext(context, (HttpExchange exchange) -> removeContext(context));
             }
 
-            @Override
+            @Override @Deprecated
             public synchronized final HttpContext createTemporaryContext(final String context, final long maxTime){
                 final HttpContext httpContext = createContext(context, (HttpExchange exchange) -> removeContext(context));
 
@@ -211,7 +214,7 @@ abstract class SimpleHttpServerImpl {
                 return httpContext;
             }
 
-            @Override
+            @Override @Deprecated
             public synchronized final HttpContext createTemporaryContext(final String context, final HttpHandler handler){
                 return createContext(context, (HttpExchange exchange) -> {
                     handler.handle(exchange);
@@ -219,7 +222,7 @@ abstract class SimpleHttpServerImpl {
                 });
             }
 
-            @Override
+            @Override @Deprecated
             public synchronized final HttpContext createTemporaryContext(final String context, final HttpHandler handler, final long maxTime){
                 final HttpContext httpContext = createContext(context, (HttpExchange exchange) -> {
                     handler.handle(exchange);
@@ -235,6 +238,8 @@ abstract class SimpleHttpServerImpl {
 
                 return httpContext;
             }
+
+            // endregion
 
             //
 
@@ -275,7 +280,27 @@ abstract class SimpleHttpServerImpl {
                 return new HashMap<>(contexts);
             }
 
-        //
+            //
+
+            @Override
+            public synchronized final String getRandomContext(){
+                return getRandomContext("/");
+            }
+
+            @Override
+            public synchronized final String getRandomContext(final String context){
+                String targetContext;
+
+                final String head = getContext(context);
+
+                do targetContext = head + '/' + UUID.randomUUID().toString();
+                    while(getContextHandler(targetContext) != null);
+
+                return targetContext;
+            }
+
+
+            //
 
             @Override
             public synchronized final void start(){
@@ -304,18 +329,19 @@ abstract class SimpleHttpServerImpl {
             @Override
             public final String toString(){
                 final StringBuilder OUT = new StringBuilder();
-                OUT.append("SimpleHttpServer")  .append("{");
-                OUT.append("httpServer")        .append("=")   .append(server)          .append(", ");
-                OUT.append("contexts")          .append("=")   .append(contexts)        .append(", ");
-                OUT.append("address")           .append("=")   .append(getAddress())    .append(", ");
-                OUT.append("executor")          .append("=")   .append(getExecutor());
-                OUT.append("}");
+                OUT.append("SimpleHttpServer")  .append('{');
+                OUT.append("httpServer")        .append('=')   .append(server)          .append(", ");
+                OUT.append("contexts")          .append('=')   .append(contexts)        .append(", ");
+                OUT.append("address")           .append('=')   .append(getAddress())    .append(", ");
+                OUT.append("executor")          .append('=')   .append(getExecutor());
+                OUT.append('}');
                 return OUT.toString();
             }
 
         };
     }
 
+    // start slash; no end slash
     private static String getContext(final String path){
         final String linSlash = path.replace("\\","/");
         if(linSlash.equals("/")) return "/";
