@@ -50,7 +50,7 @@ abstract class SimpleHttpServerImpl {
 
             private void handle(final HttpExchange exchange){
                 if(sessionHandler != null)
-                    sessionHandler.assignSession(exchange);
+                    sessionHandler.getSession(exchange).updateLastAccessTime();
             }
 
         //
@@ -115,9 +115,12 @@ abstract class SimpleHttpServerImpl {
                 return sessionHandler;
             }
 
-            //
+            @Override
+            public HttpSession getHttpSession(final HttpExchange exchange){
+                return sessionHandler.getSession(exchange);
+            }
 
-        //
+            //
 
             @Override
             public synchronized final HttpContext createContext(final String path){
@@ -140,22 +143,6 @@ abstract class SimpleHttpServerImpl {
                 return context;
             }
 
-            @Override
-            public synchronized final HttpContext createContext(final String path, final SimpleHttpHandler handler){
-                if(!getContext(path).equals("/") && handler instanceof RootHandler)
-                    throw new IllegalArgumentException("RootHandler can only be used at the root '/' context");
-
-                final HttpHandler wrapper = exchange -> {
-                    handle(exchange);
-                    handler.handle(SimpleHttpExchange.create(exchange));
-                };
-                final HttpContext context = server.createContext(getContext(path),wrapper);
-
-                contexts.put(context,context.getHandler());
-
-                return context;
-            }
-
             //
 
             @Override
@@ -171,14 +158,6 @@ abstract class SimpleHttpServerImpl {
                 context.setAuthenticator(authenticator);
                 return context;
             }
-
-            @Override
-            public synchronized final HttpContext createContext(final String path, final SimpleHttpHandler handler, final Authenticator authenticator){
-                final HttpContext context = createContext(path,handler);
-                context.setAuthenticator(authenticator);
-                return context;
-            }
-
 
             //
 

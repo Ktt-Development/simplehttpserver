@@ -56,14 +56,14 @@ public class HttpSessionHandler {
     }
 
     /**
-     * Assigns a session to the client. Session will only be saved client side if the exchange headers are sent using {@link HttpExchange#sendResponseHeaders(int, long)}.
+     * Returns the session of the client or assigns one if it does not yet have one Session will only be saved client side if the exchange headers are sent using {@link HttpExchange#sendResponseHeaders(int, long)}.
      *
      * @param exchange http exchange
      *
      * @since 03.03.00
      * @author Ktt Development
      */
-    public synchronized final void assignSession(final HttpExchange exchange){
+    public final HttpSession getSession(final HttpExchange exchange){
         final String sessionId;
         final HttpSession session;
 
@@ -136,7 +136,10 @@ public class HttpSessionHandler {
                     .setHttpOnly(true)
                     .build();
             exchange.getResponseHeaders().add("Set-Cookie",out.toCookieHeaderString());
+        }else{
+            session = sessions.get(sessionId);
         }
+        return session;
     }
 
 }
