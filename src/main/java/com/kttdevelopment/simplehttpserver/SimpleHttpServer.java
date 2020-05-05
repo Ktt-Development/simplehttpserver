@@ -227,7 +227,6 @@ public abstract class SimpleHttpServer {
      *
      * @see HttpContext
      * @see #createContext(String, HttpHandler)
-     * @see #createContext(String, SimpleHttpHandler)
      * @see #removeContext(String)
      * @see #removeContext(HttpContext)
      * @since 02.00.00
@@ -247,33 +246,12 @@ public abstract class SimpleHttpServer {
      * @see HttpContext
      * @see HttpHandler
      * @see #createContext(String)
-     * @see #createContext(String, SimpleHttpHandler)
      * @see #removeContext(String)
      * @see #removeContext(HttpContext)
      * @since 02.00.00
      * @author Ktt Development
      */
     public abstract HttpContext createContext(final String context, final HttpHandler handler);
-
-    /**
-     * Creates a context mapped to a specific {@link HttpHandler}.
-     *
-     * @param context the context
-     * @param handler the handler
-     * @return the http context associated with the context
-     * @throws IllegalArgumentException if the context is invalid or taken
-     * @throws NullPointerException if the context is null
-     *
-     * @see HttpContext
-     * @see SimpleHttpHandler
-     * @see #createContext(String)
-     * @see #createContext(String, HttpHandler)
-     * @see #removeContext(String)
-     * @see #removeContext(HttpContext)
-     * @since 03.03.00
-     * @author Ktt Development
-     */
-    public abstract HttpContext createContext(final String context, final SimpleHttpHandler handler);
 
     //
 
@@ -289,7 +267,6 @@ public abstract class SimpleHttpServer {
      * @see HttpContext
      * @see Authenticator
      * @see #createContext(String, HttpHandler, Authenticator)
-     * @see #createContext(String, SimpleHttpHandler, Authenticator)
      * @see #removeContext(String)
      * @see #removeContext(HttpContext)
      * @since 03.03.00
@@ -311,35 +288,12 @@ public abstract class SimpleHttpServer {
      * @see HttpHandler
      * @see Authenticator
      * @see #createContext(String, Authenticator)
-     * @see #createContext(String, SimpleHttpHandler, Authenticator)
      * @see #removeContext(String)
      * @see #removeContext(HttpContext)
      * @since 03.03.00
      * @author Ktt Development
      */
     public abstract HttpContext createContext(final String context, final HttpHandler handler, final Authenticator authenticator);
-
-    /**
-     * Creates a context mapped to a specific {@link HttpContext} with an {@link Authenticator}.
-     *
-     * @param context the context
-     * @param handler the handler
-     * @param authenticator authenticator
-     * @return the http context associated with the context
-     * @throws IllegalArgumentException if the context is invalid or taken
-     * @throws NullPointerException if the context is null
-     *
-     * @see HttpContext
-     * @see SimpleHttpHandler
-     * @see Authenticator
-     * @see #createContext(String, Authenticator)
-     * @see #createContext(String, HttpHandler, Authenticator)
-     * @see #removeContext(String)
-     * @see #removeContext(HttpContext)
-     * @since 03.03.00
-     * @author Ktt Development
-     */
-    public abstract HttpContext createContext(final String context, final SimpleHttpHandler handler, final Authenticator authenticator);
 
 //
 

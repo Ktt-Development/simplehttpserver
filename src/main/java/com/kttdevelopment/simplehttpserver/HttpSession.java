@@ -16,25 +16,10 @@ public abstract class HttpSession {
     /**
      * Creates an empty {@link HttpSession}. Applications don't use this method.
      *
-     * @see HttpSessionImpl#createHttpSession()
      * @since 02.00.00
      * @author Ktt Development
      */
     HttpSession(){ }
-
-//
-
-    /**
-     * Creates a {@link HttpSession}.
-     *
-     * @return a {@link HttpSession}
-     *
-     * @since 02.00.00
-     * @author Ktt Development
-     */
-    synchronized static HttpSession create(){
-        return HttpSessionImpl.createHttpSession();
-    }
 
 //
 
