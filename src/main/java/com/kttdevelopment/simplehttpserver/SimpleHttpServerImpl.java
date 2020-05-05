@@ -37,13 +37,20 @@ abstract class SimpleHttpServerImpl {
 
             private final HttpServer server = HttpServer.create();
 
-            private final HashMap<HttpContext,HttpHandler> contexts = new HashMap<>();
+            private HttpSessionHandler sessionHandler;
+
+            private final Map<HttpContext,HttpHandler> contexts = new HashMap<>();
 
             private boolean running = false;
 
             {
                 if(port != null)
                     server.bind(new InetSocketAddress(port),backlog != null ? backlog : 0);
+            }
+
+            private void handle(final HttpExchange exchange){
+                if(sessionHandler != null)
+                    sessionHandler.getSession(exchange).updateLastAccessTime();
             }
 
         //
@@ -98,30 +105,41 @@ abstract class SimpleHttpServerImpl {
                 return server.getExecutor();
             }
 
-        //
+            @Override
+            public synchronized final void setHttpSessionHandler(final HttpSessionHandler sessionHandler){
+                this.sessionHandler = sessionHandler;
+            }
+
+            @Override
+            public final HttpSessionHandler getHttpSessionHandler(){
+                return sessionHandler;
+            }
+
+            @Override
+            public HttpSession getHttpSession(final HttpExchange exchange){
+                return sessionHandler.getSession(exchange);
+            }
+
+            //
 
             @Override
             public synchronized final HttpContext createContext(final String path){
-                final HttpContext context = server.createContext(getContext(path));
-                contexts.put(context,context.getHandler());
-                return context;
+                return createContext(path,(HttpExchange exchange) -> {});
             }
 
             @Override
             public synchronized final HttpContext createContext(final String path, final HttpHandler handler){
                 if(!getContext(path).equals("/") && handler instanceof RootHandler)
                     throw new IllegalArgumentException("RootHandler can only be used at the root '/' context");
-                final HttpContext context = server.createContext(getContext(path),handler);
-                contexts.put(context,handler);
-                return context;
-            }
 
-            @Override
-            public synchronized final HttpContext createContext(final String path, final SimpleHttpHandler handler){
-                if(!getContext(path).equals("/") && handler instanceof RootHandler)
-                    throw new IllegalArgumentException("RootHandler can only be used at the root '/' context");
-                final HttpContext context = server.createContext(getContext(path),(exchange) -> handler.handle(SimpleHttpExchange.create(exchange)));
-                contexts.put(context,context.getHandler());
+                final HttpHandler wrapper = exchange -> {
+                    handle(exchange);
+                    handler.handle(exchange);
+                };
+                final HttpContext context = server.createContext(getContext(path),wrapper);
+
+                contexts.put(context,handler);
+
                 return context;
             }
 
@@ -140,14 +158,6 @@ abstract class SimpleHttpServerImpl {
                 context.setAuthenticator(authenticator);
                 return context;
             }
-
-            @Override
-            public synchronized final HttpContext createContext(final String path, final SimpleHttpHandler handler, final Authenticator authenticator){
-                final HttpContext context = createContext(path,handler);
-                context.setAuthenticator(authenticator);
-                return context;
-            }
-
 
             //
 
@@ -249,11 +259,9 @@ abstract class SimpleHttpServerImpl {
 
             @Override
             public final HttpHandler getContextHandler(final String path){
-                for(final HttpContext context : contexts.keySet()){
-                    if(context.getPath().equals(getContext(path))){
+                for(final HttpContext context : contexts.keySet())
+                    if(context.getPath().equals(getContext(path)))
                         return context.getHandler();
-                    }
-                }
                 return null;
             }
 
