@@ -215,6 +215,8 @@ public abstract class SimpleHttpServer {
 
     public abstract HttpSessionHandler getHttpSessionHandler();
 
+    public abstract HttpSession getHttpSession(final HttpExchange exchange);
+
 //
 
     /**
