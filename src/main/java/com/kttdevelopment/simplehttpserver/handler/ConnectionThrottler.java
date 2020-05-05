@@ -1,5 +1,6 @@
 package com.kttdevelopment.simplehttpserver.handler;
 
+import com.kttdevelopment.simplehttpserver.HttpSession;
 import com.kttdevelopment.simplehttpserver.SimpleHttpServer;
 import com.sun.net.httpserver.HttpExchange;
 
@@ -8,19 +9,19 @@ import java.util.function.Predicate;
 
 public class ConnectionThrottler {
 
-    private final SimpleHttpServer server;
+    private final HttpSession server;
 
     private final Predicate<HttpExchange> contributeToLimit;
     private final AtomicInteger           connections = new AtomicInteger(0);
 
     private int maxConnections = 0;
 
-    public ConnectionThrottler(final SimpleHttpServer server){
+    public ConnectionThrottler(final HttpSession server){
         this.server = server;
         contributeToLimit = (exchange) -> true;
     }
 
-    public ConnectionThrottler(final SimpleHttpServer server, final Predicate<HttpExchange> counts){
+    public ConnectionThrottler(final HttpSession server, final Predicate<HttpExchange> counts){
         this.server = server;
         this.contributeToLimit = counts;
     }
