@@ -1,5 +1,6 @@
 package com.kttdevelopment.simplehttpserver.handler;
 
+import com.kttdevelopment.simplehttpserver.SimpleHttpServer;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
@@ -9,6 +10,8 @@ import java.io.IOException;
  * A temporary handler handles a single request and then removes itself from the server. This can be used for single use downloads, or media file hosting.
  *
  * @see HttpHandler
+ * @see SimpleHttpServer#getRandomContext()
+ * @see SimpleHttpServer#getRandomContext(String)
  * @since 03.03.00
  * @version 03.03.00
  * @author Ktt Development
