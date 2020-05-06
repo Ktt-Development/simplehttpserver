@@ -120,6 +120,11 @@ abstract class SimpleHttpServerImpl {
                 return sessionHandler != null ? sessionHandler.getSession(exchange) : null;
             }
 
+            @Override
+            public final HttpSession getHttpSession(final SimpleHttpExchange exchange){
+                return getHttpSession(exchange.getHttpExchange());
+            }
+
             //
 
             @Override
