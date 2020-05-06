@@ -12,6 +12,14 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * A SSE handler allows server to client events by using an <code>text/event-stream</code>. Events are sent using {@link #push(String)} or {@link #push(String, int, String)}.
+ *
+ * @see SimpleHttpHandler
+ * @since 03.01.00
+ * @version 03.03.00
+ * @author Ktt Development
+ */
 public class SSEHandler implements SimpleHttpHandler {
 
     private final List<OutputStream> listeners = new ArrayList<>();
@@ -48,10 +56,30 @@ public class SSEHandler implements SimpleHttpHandler {
         listeners.add(exchange.getOutputStream());
     }
 
+    /**
+     * Pushes an event to the stream.
+     *
+     * @param data data to send
+     *
+     * @see #push(String, int, String)
+     * @since 03.01.00
+     * @author Ktt Development
+     */
     public synchronized final void push(final String data){
         push(data,0,"");
     }
 
+    /**
+     * Pushes an event to the stream.
+     *
+     * @param data data to send
+     * @param retry how long to retry for
+     * @param event event type
+     *
+     * @see #push(String)
+     * @since 03.01.00
+     * @author Ktt Development
+     */
     public synchronized final void push(final String data, final int retry, final String event){
         eventId.addAndGet(1);
         final EventStreamRecord record = new EventStreamRecord(retry,event,data);

@@ -5,12 +5,33 @@ import com.sun.net.httpserver.HttpHandler;
 
 import java.io.IOException;
 
+/**
+ * This handler limits the amount of active connections to a handler. This can be used to limit the amount of simultaneous downloads, or prevent duplicate connections by users.
+ *
+ * @see ServerThrottler
+ * @see SessionThrottler
+ * @since 03.03.00
+ * @version 03.03.00
+ * @author Ktt Development
+ */
 public class ThrottledHandler implements HttpHandler {
 
     private final HttpHandler     handler;
-    private final ServerThrottler throttler;
+    private final ConnectionThrottler throttler;
 
-    public ThrottledHandler(final HttpHandler handler, final ServerThrottler throttler){
+    /**
+     * Creates a throttled handler using a throttler.
+     *
+     * @param handler handler to use
+     * @param throttler how to throttle connections
+     *
+     * @see HttpHandler
+     * @see ServerThrottler
+     * @see SessionThrottler
+     * @since 03.03.00
+     * @author Ktt Development
+     */
+    public ThrottledHandler(final HttpHandler handler, final ConnectionThrottler throttler){
         this.handler = handler;
         this.throttler = throttler;
     }

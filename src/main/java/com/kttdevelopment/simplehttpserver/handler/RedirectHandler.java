@@ -40,7 +40,6 @@ public class RedirectHandler implements SimpleHttpHandler {
 
 //
 
-
     @SuppressWarnings("StringBufferReplaceableByString")
     @Override
     public String toString(){
