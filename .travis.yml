@@ -1,6 +1,3 @@
 language: java
 jdk:
  - openjdk11
-deploy:
-  provider: releases
-  skip_cleanup: true
