@@ -3,6 +3,7 @@ package com.kttdevelopment.simplehttpserver.handler;
 import com.kttdevelopment.simplehttpserver.var.HttpCode;
 import com.kttdevelopment.simplehttpserver.SimpleHttpExchange;
 import com.kttdevelopment.simplehttpserver.SimpleHttpHandler;
+import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
 
@@ -29,6 +30,11 @@ public class RedirectHandler implements SimpleHttpHandler {
      */
     public RedirectHandler(final String link){
         this.link = link;
+    }
+
+    @Override
+    public final void handle(final HttpExchange exchange) throws IOException{
+        SimpleHttpHandler.super.handle(exchange);
     }
 
     @Override

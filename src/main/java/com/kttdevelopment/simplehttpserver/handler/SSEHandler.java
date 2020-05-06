@@ -4,6 +4,7 @@ import com.kttdevelopment.simplehttpserver.SimpleHttpExchange;
 import com.kttdevelopment.simplehttpserver.SimpleHttpHandler;
 import com.kttdevelopment.simplehttpserver.var.HttpCode;
 import com.kttdevelopment.simplehttpserver.var.RequestMethod;
+import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -25,6 +26,11 @@ public class SSEHandler implements SimpleHttpHandler {
     private final List<OutputStream> listeners = new ArrayList<>();
     private final AtomicInteger      eventId   = new AtomicInteger(-1);
     private final LinkedList<EventStreamRecord> queue = new LinkedList<>();
+
+    @Override
+    public final void handle(final HttpExchange exchange) throws IOException{
+        SimpleHttpHandler.super.handle(exchange);
+    }
 
     @Override
     public final void handle(final SimpleHttpExchange exchange) throws IOException{
