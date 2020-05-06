@@ -289,16 +289,16 @@ abstract class SimpleHttpServerImpl {
 
             @Override
             public synchronized final String getRandomContext(){
-                return getRandomContext("/");
+                return getRandomContext("");
             }
 
             @Override
             public synchronized final String getRandomContext(final String context){
                 String targetContext;
 
-                final String head = getContext(context);
+                final String head = context.isEmpty() ? "" : getContext(context);
 
-                do targetContext = head + '/' + UUID.randomUUID().toString();
+                do targetContext = head + getContext(UUID.randomUUID().toString());
                     while(getContextHandler(targetContext) != null);
 
                 return targetContext;

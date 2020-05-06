@@ -1,8 +1,10 @@
 package com.kttdevelopment.simplehttpserver;
 
+import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * This class assigns {@link HttpSession} to every client.
@@ -13,7 +15,7 @@ import java.util.*;
  */
 public class HttpSessionHandler {
 
-    private final Map<String,HttpSession> sessions = new HashMap<>();
+    private final Map<String,HttpSession> sessions = Collections.synchronizedMap(new HashMap<>());
 
     private final String cookie;
 
@@ -55,6 +57,25 @@ public class HttpSessionHandler {
         return id;
     }
 
+    private final Predicate<Headers> hasSetHeader = new Predicate<>() {
+        @Override
+        public boolean test(final Headers headers){
+            if(headers.containsKey("Set-Cookie"))
+                for(final String value : headers.get("Set-Cookie"))
+                    if(value.startsWith(cookie + "="))
+                        return true;
+            return false;
+        }
+    };
+
+    private String getSetSession(final Headers headers){
+        if(headers.containsKey("Set-Cookie"))
+           for(final String value : headers.get("Set-Cookie"))
+               if(value.startsWith(cookie + "=")){
+                   return value.substring(value.indexOf(cookie + '=') + 1,value.indexOf(";"));
+       return null;
+    }
+
     /**
      * Returns the session of the client or assigns one if it does not yet have one Session will only be saved client side if the exchange headers are sent using {@link HttpExchange#sendResponseHeaders(int, long)}.
      *
@@ -79,68 +100,75 @@ public class HttpSessionHandler {
             }
         }
 
-        if((sessionId = cookies.get(cookie)) == null || !sessions.containsKey(sessionId)){
-            session = new HttpSession() {
+        final String cookieSessionId, setCookieSessionId;
 
-                private final String sessionID;
-                private final long creationTime;
-                private long lastAccessTime;
+        synchronized(this){
+            if(
+                ((cookieSessionId = cookies.get(cookie)) == null || !sessions.containsKey(sessionId) ) &&  (setCookieSessionId = getSetSession(exchange.getResponseHeaders())) == null
+            ){
+                session = new HttpSession() {
 
-                {
-                    sessionID = assignSessionID(exchange);
-                    creationTime = System.currentTimeMillis();
-                    lastAccessTime = creationTime;
-                    sessions.put(sessionID,this);
-                }
+                    private final String sessionID;
+                    private final long creationTime;
+                    private long lastAccessTime;
 
-                @Override
-                public final String getSessionID(){
-                    return sessionID;
-                }
+                    {
+                        sessionID = assignSessionID(exchange);
+                        creationTime = System.currentTimeMillis();
+                        lastAccessTime = creationTime;
+                        sessions.put(sessionID, this);
+                    }
 
-            //
+                    @Override
+                    public final String getSessionID(){
+                        return sessionID;
+                    }
 
-                @Override
-                public final long getCreationTime(){
-                    return creationTime;
-                }
+                    //
 
-                @Override
-                public final long getLastAccessTime(){
-                    return lastAccessTime;
-                }
+                    @Override
+                    public final long getCreationTime(){
+                        return creationTime;
+                    }
 
-                @Override
-                public synchronized final void updateLastAccessTime(){
-                    lastAccessTime = System.currentTimeMillis();
-                }
+                    @Override
+                    public final long getLastAccessTime(){
+                        return lastAccessTime;
+                    }
 
-            //
+                    @Override
+                    public synchronized final void updateLastAccessTime(){
+                        lastAccessTime = System.currentTimeMillis();
+                    }
 
-                @SuppressWarnings("StringBufferReplaceableByString")
-                @Override
-                public final String toString(){
-                    final StringBuilder OUT = new StringBuilder();
-                    OUT.append("HttpSession")   .append('{');
-                    OUT.append("sessionID")     .append('=')   .append(sessionID)          .append(", ");
-                    OUT.append("creationTime")  .append('=')   .append(creationTime)       .append(", ");
-                    OUT.append("lastAccessTime").append('=')   .append(lastAccessTime);
-                    OUT.append('}');
-                    return OUT.toString();
-                }
+                    //
 
-            };
+                    @SuppressWarnings("StringBufferReplaceableByString")
+                    @Override
+                    public final String toString(){
+                        final StringBuilder OUT = new StringBuilder();
+                        OUT.append("HttpSession").append('{');
+                        OUT.append("sessionID").append('=').append(sessionID).append(", ");
+                        OUT.append("creationTime").append('=').append(creationTime).append(", ");
+                        OUT.append("lastAccessTime").append('=').append(lastAccessTime);
+                        OUT.append('}');
+                        return OUT.toString();
+                    }
 
-            final SimpleHttpCookie out =
-                new SimpleHttpCookie.Builder(cookie,session.getSessionID())
-                    .setPath("/")
-                    .setHttpOnly(true)
-                    .build();
-            exchange.getResponseHeaders().add("Set-Cookie",out.toCookieHeaderString());
-            sessions.put(sessionId,session);
-        }else{
-            session = sessions.get(sessionId);
+                };
+
+                final SimpleHttpCookie out =
+                    new SimpleHttpCookie.Builder(cookie, session.getSessionID())
+                        .setPath("/")
+                        .setHttpOnly(true)
+                        .build();
+                exchange.getResponseHeaders().add("Set-Cookie", out.toCookieHeaderString());
+                sessions.put(session.getSessionID(), session);
+            }else{
+                session = sessions.get(sessionId);
+            }
         }
+        System.out.println(sessions);
         return session;
     }
 
