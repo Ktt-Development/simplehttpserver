@@ -113,7 +113,7 @@ public class SimpleHttpCookie {
         final StringBuilder OUT = new StringBuilder();
         OUT.append(name).append("=").append(value);
         if(expires != null)
-            OUT.append("; Expires=").append(new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss").format(expires)).append(" GMT");
+            OUT.append("; Expires=").append(sdf.format(expires)).append(" GMT");
         if(maxAge != null)
             OUT.append("; Max-Age=").append(maxAge);
         if(domain != null)
@@ -121,9 +121,9 @@ public class SimpleHttpCookie {
         if(path != null)
             OUT.append("; Path=").append(path);
         if(secure != null && secure)
-            OUT.append("; Secure=").append(secure);
+            OUT.append("; Secure=").append(true);
         if(httpOnly != null && httpOnly)
-            OUT.append("; HttpOnly=").append(httpOnly);
+            OUT.append("; HttpOnly=").append(true);
        if(sameSite != null)
            OUT.append("; SameSite=").append(sameSite);
 
