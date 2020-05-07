@@ -3,6 +3,7 @@ package com.kttdevelopment.simplehttpserver.handler;
 import com.kttdevelopment.simplehttpserver.var.HttpCode;
 import com.kttdevelopment.simplehttpserver.SimpleHttpExchange;
 import com.kttdevelopment.simplehttpserver.SimpleHttpHandler;
+import com.sun.net.httpserver.HttpExchange;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -677,6 +678,11 @@ public class FileHandler implements SimpleHttpHandler {
             handle(exchange,null,null); // not found
         }
         exchange.close();
+    }
+
+    @Override
+    public final void handle(final HttpExchange exchange) throws IOException{
+        SimpleHttpHandler.super.handle(exchange);
     }
 
     /**

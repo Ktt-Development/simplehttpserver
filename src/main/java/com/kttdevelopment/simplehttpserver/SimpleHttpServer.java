@@ -247,6 +247,18 @@ public abstract class SimpleHttpServer {
      */
     public abstract HttpSession getHttpSession(final HttpExchange exchange);
 
+    /**
+     * Returns the session associated with an exchange or null it no session handler exists.
+     *
+     * @param exchange http exchange
+     * @return http session
+     *
+     * @see HttpSession
+     * @since 03.03.00
+     * @author Ktt Development
+     */
+    public abstract HttpSession getHttpSession(final SimpleHttpExchange exchange);
+
 //
 
     /**
