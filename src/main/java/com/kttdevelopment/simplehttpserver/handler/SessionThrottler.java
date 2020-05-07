@@ -118,7 +118,11 @@ public class SessionThrottler extends ConnectionThrottler {
             return true;
         }else{
             synchronized(this){
-                final AtomicInteger conn = sessions.get(session);
+                final AtomicInteger conn;
+                if(!sessions.containsKey(session))
+                    sessions.put(session,conn = new AtomicInteger(0));
+                else
+                    conn = sessions.get(session);
                 if(conn.get() + 1 <= maxConnections.get()){
                     conn.incrementAndGet();
                     return true;

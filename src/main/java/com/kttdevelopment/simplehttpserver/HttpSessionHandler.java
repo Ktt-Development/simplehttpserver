@@ -57,22 +57,11 @@ public class HttpSessionHandler {
         return id;
     }
 
-    private final Predicate<Headers> hasSetHeader = new Predicate<>() {
-        @Override
-        public boolean test(final Headers headers){
-            if(headers.containsKey("Set-Cookie"))
-                for(final String value : headers.get("Set-Cookie"))
-                    if(value.startsWith(cookie + "="))
-                        return true;
-            return false;
-        }
-    };
-
     private String getSetSession(final Headers headers){
         if(headers.containsKey("Set-Cookie"))
            for(final String value : headers.get("Set-Cookie"))
-               if(value.startsWith(cookie + "=")){
-                   return value.substring(value.indexOf(cookie + '=') + 1,value.indexOf(";"));
+               if(value.startsWith(cookie + "="))
+                   return value.substring(cookie.length() + 1,value.indexOf(";"));
        return null;
     }
 
@@ -100,14 +89,12 @@ public class HttpSessionHandler {
             }
         }
 
-        final String cookieSessionId, setCookieSessionId;
+        final String setSession = getSetSession(exchange.getResponseHeaders());
+        sessionId = setSession != null ? setSession : cookies.get(cookie);
 
         synchronized(this){
-            if(
-                ((cookieSessionId = cookies.get(cookie)) == null || !sessions.containsKey(sessionId) ) &&  (setCookieSessionId = getSetSession(exchange.getResponseHeaders())) == null
-            ){
+            if(!sessions.containsKey(sessionId)){
                 session = new HttpSession() {
-
                     private final String sessionID;
                     private final long creationTime;
                     private long lastAccessTime;
@@ -168,7 +155,6 @@ public class HttpSessionHandler {
                 session = sessions.get(sessionId);
             }
         }
-        System.out.println(sessions);
         return session;
     }
 
