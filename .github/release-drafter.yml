@@ -14,6 +14,8 @@ categories:
     labels:
       - "documentation"
       - "website"
+  - title: "❌ Removed"
+      - "depreciated"
   - title: "🐞 Bug Fixes"
     labels:
       - "bug"

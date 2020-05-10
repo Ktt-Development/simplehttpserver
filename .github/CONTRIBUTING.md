@@ -1,1 +1,1 @@
-[Contributing](https://www.kttdevelopment.com/git/contributing)
+[Contributing](https://www.kttdevelopment.com/github/contributing)

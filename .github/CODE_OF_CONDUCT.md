@@ -1,1 +1,1 @@
-[Code of Conduct](https://www.kttdevelopment.com/git/codeofconduct)
+[Code of Conduct](https://www.kttdevelopment.com/github/codeofconduct)
