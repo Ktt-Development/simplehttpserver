@@ -14,6 +14,7 @@ import java.util.concurrent.Executor;
  *
  * @see HttpServer
  * @see HttpHandler
+ * @see SimpleHttpsServer
  * @see SimpleHttpHandler
  * @since 02.00.00
  * @version 03.04.00
