@@ -21,7 +21,7 @@ import java.util.zip.GZIPOutputStream;
  * @author Ktt Development
  */
 @SuppressWarnings("SpellCheckingInspection")
-class SimpleHttpExchangeImpl extends SimpleHttpExchange {
+final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
 
     private final HttpServer httpServer;
     private final HttpExchange httpExchange;
