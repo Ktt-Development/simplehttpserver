@@ -46,7 +46,7 @@ import java.util.HashMap;
  *
  * @see HttpExchange
  * @since 02.00.00
- * @version 02.00.00
+ * @version 03.04.00
  * @author Ktt Development
  */
 @SuppressWarnings("SpellCheckingInspection")
@@ -55,7 +55,7 @@ public abstract class SimpleHttpExchange {
     /**
      * Create an empty {@link SimpleHttpExchange}. Applications don't use this method.
      *
-     * @see SimpleHttpExchangeImpl#createSimpleHttpExchange(HttpExchange)
+     * @see SimpleHttpExchangeImpl#create(HttpExchange)
      * @since 02.00.00
      * @author Ktt Development
      */
@@ -74,7 +74,7 @@ public abstract class SimpleHttpExchange {
      * @author Ktt Development
      */
     static SimpleHttpExchange create(final HttpExchange exchange){
-        return SimpleHttpExchangeImpl.createSimpleHttpExchange(exchange);
+        return SimpleHttpExchangeImpl.create(exchange);
     }
 
 //
