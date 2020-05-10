@@ -40,7 +40,7 @@ final class SimpleHttpServerImpl extends SimpleHttpServer {
      * @since 03.04.00
      * @author Ktt Development
      */
-    static SimpleHttpServer create(final Integer port, final Integer backlog) throws IOException{
+    static SimpleHttpServer createHttpServer(final Integer port, final Integer backlog) throws IOException{
         return new SimpleHttpServerImpl(port,backlog);
     }
 

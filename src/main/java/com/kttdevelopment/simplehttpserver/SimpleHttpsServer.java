@@ -22,7 +22,7 @@ public abstract class SimpleHttpsServer extends SimpleHttpServer {
     /**
     * Create an empty {@link SimpleHttpsServer}. Applications don't use this method.
     *
-    * @see SimpleHttpsServerImpl#create(Integer, Integer)
+    * @see SimpleHttpsServerImpl#createSimpleHttpsServer(Integer, Integer)
     * @since 02.00.00
     * @author Ktt Development
     */
@@ -40,7 +40,7 @@ public abstract class SimpleHttpsServer extends SimpleHttpServer {
     * @author Ktt Development
     */
    public static SimpleHttpsServer create() throws IOException {
-       return SimpleHttpsServerImpl.create(null,null);
+       return SimpleHttpsServerImpl.createSimpleHttpsServer(null, null);
    }
 
    /**
@@ -57,7 +57,7 @@ public abstract class SimpleHttpsServer extends SimpleHttpServer {
     * @author Ktt Development
     */
    public static SimpleHttpsServer create(final int port) throws IOException {
-       return SimpleHttpsServerImpl.create(port,null);
+       return SimpleHttpsServerImpl.createSimpleHttpsServer(port, null);
    }
 
    /**
@@ -75,7 +75,7 @@ public abstract class SimpleHttpsServer extends SimpleHttpServer {
     * @author Ktt Development
     */
    public static SimpleHttpsServer create(final int port, final int backlog) throws IOException {
-       return SimpleHttpsServerImpl.create(port,backlog);
+       return SimpleHttpsServerImpl.createSimpleHttpsServer(port,backlog);
    }
 
 //

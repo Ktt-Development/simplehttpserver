@@ -417,7 +417,7 @@ final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
 
     @SuppressWarnings("StringBufferReplaceableByString")
     @Override
-    public final String toString(){
+    public String toString(){
         final StringBuilder OUT = new StringBuilder();
         OUT.append("SimpleHttpExchange").append('{');
         OUT.append("httpServer")        .append('=')   .append(httpServer)              .append(", ");

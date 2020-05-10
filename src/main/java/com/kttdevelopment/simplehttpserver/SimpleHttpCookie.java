@@ -30,8 +30,6 @@ public class SimpleHttpCookie {
     /**
      * Creates an HTTP cookie. All fields except for <code>name</code>, <code>secure</code>, <code>httpOnly</code>, and <code>value</code> can be set to null if unused.
      *
-     * @deprecated Use {@link Builder} class instead. This method will be removed in the future
-     *
      * @param name name of the cookie
      * @param value value of the cookie
      * @param domain what domain to send the cookie to
@@ -45,8 +43,7 @@ public class SimpleHttpCookie {
      * @since 02.00.00
      * @author Ktt Development
      */
-    @Deprecated
-    public SimpleHttpCookie(final String name, final String value, final String domain, final String path, final String sameSite, final Date expires, final Integer maxAge, final Boolean secure, final Boolean httpOnly){
+    private SimpleHttpCookie(final String name, final String value, final String domain, final String path, final String sameSite, final Date expires, final Integer maxAge, final Boolean secure, final Boolean httpOnly){
         if(name == null)
             throw new NullPointerException("Cookie name can not be null");
         else
@@ -64,41 +61,7 @@ public class SimpleHttpCookie {
         this.httpOnly = httpOnly;
     }
 
-    /**
-     * Converts the cookie to a readable string for the cookie header.
-     *
-     * @deprecated Use {@link #toCookieHeaderString()} instead
-     *
-     * @return cookie header
-     *
-     * @see SimpleHttpExchange#setCookie(SimpleHttpCookie)
-     * @since 02.00.00
-     * @author Ktt Development
-     */
-    @SuppressWarnings({"ConstantConditions", "SpellCheckingInspection"})
-    @Override @Deprecated
-    public final String toString(){
-        final StringBuilder OUT = new StringBuilder();
-
-        OUT.append(name).append("=").append(value);
-        if(expires != null)
-            OUT.append("; Expires=").append(new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss").format(expires)).append(" GMT");
-        if(maxAge != null)
-            OUT.append("; Max-Age=").append(maxAge);
-        if(domain != null)
-            OUT.append("; Domain=").append(domain);
-        if(path != null)
-            OUT.append("; Path=").append(path);
-        if(secure != null && secure)
-            OUT.append("; Secure=").append(secure);
-        if(httpOnly != null && httpOnly)
-            OUT.append("; HttpOnly=").append(httpOnly);
-       if(sameSite != null)
-           OUT.append("; SameSite=").append(sameSite);
-
-       return OUT.toString();
-    }
-
+    @SuppressWarnings("SpellCheckingInspection")
     private final SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss");
 
     /**
@@ -126,6 +89,25 @@ public class SimpleHttpCookie {
             OUT.append("; HttpOnly=").append(true);
        if(sameSite != null)
            OUT.append("; SameSite=").append(sameSite);
+
+       return OUT.toString();
+    }
+
+    @SuppressWarnings("StringBufferReplaceableByString")
+    public String toString(){
+        final StringBuilder OUT = new StringBuilder();
+
+        OUT.append("SimpleHttpCookie")      .append('{');
+        OUT.append("name")                  .append('=')    .append(name)       .append(", ");
+        OUT.append("value")                 .append('=')    .append(value)      .append(", ");
+        OUT.append("expires")               .append('=')    .append(expires)    .append(", ");
+        OUT.append("maxAge")                .append('=')    .append(maxAge)     .append(", ");
+        OUT.append("domain")                .append('=')    .append(domain)     .append(", ");
+        OUT.append("path")                  .append('=')    .append(path)       .append(", ");
+        OUT.append("secure")                .append('=')    .append(secure)     .append(", ");
+        OUT.append("httpOnly")              .append('=')    .append(httpOnly)   .append(", ");
+        OUT.append("sameSite")              .append('=')    .append(sameSite);
+        OUT.append('}');
 
        return OUT.toString();
     }

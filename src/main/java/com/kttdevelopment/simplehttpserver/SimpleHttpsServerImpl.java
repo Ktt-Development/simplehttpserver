@@ -39,7 +39,7 @@ final public class SimpleHttpsServerImpl extends SimpleHttpsServer {
      * @since 03.04.00
      * @author Ktt Development
      */
-    static SimpleHttpsServer create(final Integer port, final Integer backlog) throws IOException{
+    static SimpleHttpsServer createSimpleHttpsServer(final Integer port, final Integer backlog) throws IOException{
         return new SimpleHttpsServerImpl(port,backlog);
     }
 
@@ -74,6 +74,7 @@ final public class SimpleHttpsServerImpl extends SimpleHttpsServer {
 
     // region copySimpleHttpServerImpl
 
+    @SuppressWarnings("SpellCheckingInspection")
     @Override
     public synchronized final InetSocketAddress bind(final int port) throws IOException{
         final InetSocketAddress addr = new InetSocketAddress(port);
