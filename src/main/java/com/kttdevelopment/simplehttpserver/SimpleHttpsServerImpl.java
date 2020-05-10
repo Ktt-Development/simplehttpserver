@@ -82,6 +82,7 @@ final public class SimpleHttpsServerImpl extends SimpleHttpsServer {
         return addr;
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     @Override
     public synchronized final InetSocketAddress bind(final int port, final int backlog) throws IOException{
         final InetSocketAddress addr = new InetSocketAddress(port);
@@ -89,11 +90,13 @@ final public class SimpleHttpsServerImpl extends SimpleHttpsServer {
         return addr;
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     @Override
     public synchronized final void bind(final InetSocketAddress addr) throws IOException{
         server.bind(addr,0);
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     @Override
     public synchronized final void bind(final InetSocketAddress addr, final int backlog) throws IOException{
         server.bind(addr,backlog);
