@@ -74,7 +74,7 @@ final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
      *
      * @see SimpleHttpExchange
      * @see HttpExchange
-     * @since 02.00.00
+     * @since 03.04.00
      * @author Ktt Development
      */
     static SimpleHttpExchange create(final HttpExchange exchange){
