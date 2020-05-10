@@ -81,6 +81,21 @@ public abstract class SimpleHttpsServer extends SimpleHttpServer {
 //
 
     /**
+     * Returns the native https server.
+     *
+     * @return https server
+     *
+     * @see HttpsServer
+     * @since 03.04.00
+     * @author Ktt Development
+     */
+    @Override
+    public abstract HttpsServer getHttpServer();
+
+
+//
+
+    /**
      * Sets a https configurator for the server
      *
      * @param config the https configurator
