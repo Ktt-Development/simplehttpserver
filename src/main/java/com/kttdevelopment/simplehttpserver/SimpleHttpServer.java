@@ -14,6 +14,7 @@ import java.util.concurrent.Executor;
  *
  * @see HttpServer
  * @see HttpHandler
+ * @see SimpleHttpsServer
  * @see SimpleHttpHandler
  * @since 02.00.00
  * @version 03.04.00
@@ -25,7 +26,7 @@ public abstract class SimpleHttpServer {
     /**
      * Create an empty {@link SimpleHttpServer}. Applications don't use this method.
      *
-     * @see SimpleHttpServerImpl#create(Integer, Integer)
+     * @see SimpleHttpServerImpl#createHttpServer(Integer, Integer)
      * @since 02.00.00
      * @author Ktt Development
      */
@@ -43,7 +44,7 @@ public abstract class SimpleHttpServer {
      * @author Ktt Development
      */
     public static SimpleHttpServer create() throws IOException {
-        return SimpleHttpServerImpl.create(null,null);
+        return SimpleHttpServerImpl.createHttpServer(null, null);
     }
 
     /**
@@ -60,7 +61,7 @@ public abstract class SimpleHttpServer {
      * @author Ktt Development
      */
     public static SimpleHttpServer create(final int port) throws IOException {
-        return SimpleHttpServerImpl.create(port,null);
+        return SimpleHttpServerImpl.createHttpServer(port, null);
     }
 
     /**
@@ -78,7 +79,7 @@ public abstract class SimpleHttpServer {
      * @author Ktt Development
      */
     public static SimpleHttpServer create(final int port, final int backlog) throws IOException {
-        return SimpleHttpServerImpl.create(port,backlog);
+        return SimpleHttpServerImpl.createHttpServer(port,backlog);
     }
 
 //

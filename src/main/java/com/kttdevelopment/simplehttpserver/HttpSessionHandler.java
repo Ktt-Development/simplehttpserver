@@ -4,7 +4,6 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.util.*;
-import java.util.function.Predicate;
 
 /**
  * This class assigns {@link HttpSession} to every client.
@@ -132,12 +131,12 @@ public class HttpSessionHandler {
 
                     @SuppressWarnings("StringBufferReplaceableByString")
                     @Override
-                    public final String toString(){
+                    public String toString(){
                         final StringBuilder OUT = new StringBuilder();
-                        OUT.append("HttpSession").append('{');
-                        OUT.append("sessionID").append('=').append(sessionID).append(", ");
-                        OUT.append("creationTime").append('=').append(creationTime).append(", ");
-                        OUT.append("lastAccessTime").append('=').append(lastAccessTime);
+                        OUT.append("HttpSession")       .append('{');
+                        OUT.append("sessionID")         .append('=')    .append(sessionID)      .append(", ");
+                        OUT.append("creationTime")      .append('=')    .append(creationTime)   .append(", ");
+                        OUT.append("lastAccessTime")    .append('=')    .append(lastAccessTime);
                         OUT.append('}');
                         return OUT.toString();
                     }

@@ -9,21 +9,20 @@ import java.util.*;
 import java.util.concurrent.Executor;
 
 /**
- * Implementation for {@link SimpleHttpServer}. Applications do not use this class.
+ * Implementation for {@link SimpleHttpsServer}. Applications do not use this class.
  *
- * @see SimpleHttpServer
- * @since 02.00.00
+ * @see SimpleHttpsServer
+ * @since 03.04.00
  * @version 03.04.00
  * @author Ktt Development
  */
-@SuppressWarnings("SpellCheckingInspection")
-final class SimpleHttpServerImpl extends SimpleHttpServer {
+final public class SimpleHttpsServerImpl extends SimpleHttpsServer {
 
-    private final HttpServer server = HttpServer.create();
+    private final HttpsServer server = HttpsServer.create();
 
     private HttpSessionHandler sessionHandler;
 
-    private final Map<HttpContext,HttpHandler> contexts = new HashMap<>();
+    private final Map<HttpContext, HttpHandler> contexts = new HashMap<>();
 
     private boolean running = false;
 
@@ -40,13 +39,13 @@ final class SimpleHttpServerImpl extends SimpleHttpServer {
      * @since 03.04.00
      * @author Ktt Development
      */
-    static SimpleHttpServer createHttpServer(final Integer port, final Integer backlog) throws IOException{
-        return new SimpleHttpServerImpl(port,backlog);
+    static SimpleHttpsServer createSimpleHttpsServer(final Integer port, final Integer backlog) throws IOException{
+        return new SimpleHttpsServerImpl(port,backlog);
     }
 
-    SimpleHttpServerImpl(final Integer port, final Integer backlog) throws IOException{
+    SimpleHttpsServerImpl(final Integer port, final Integer backlog) throws IOException{
         if(port != null)
-            server.bind(new InetSocketAddress(port),backlog != null ? backlog : 0);
+            server.bind(new InetSocketAddress(port), backlog != null ? backlog : 0);
     }
 
     private void handle(final HttpExchange exchange){
@@ -57,12 +56,25 @@ final class SimpleHttpServerImpl extends SimpleHttpServer {
 //
 
     @Override
-    public final HttpServer getHttpServer(){
+    public final HttpsServer getHttpServer(){
         return server;
     }
 
 //
 
+    @Override
+    public final void setHttpsConfigurator(final HttpsConfigurator config){
+        server.setHttpsConfigurator(config);
+    }
+
+    @Override
+    public final HttpsConfigurator getHttpsConfigurator(){
+        return server.getHttpsConfigurator();
+    }
+
+    // region copySimpleHttpServerImpl
+
+    @SuppressWarnings("SpellCheckingInspection")
     @Override
     public synchronized final InetSocketAddress bind(final int port) throws IOException{
         final InetSocketAddress addr = new InetSocketAddress(port);
@@ -70,6 +82,7 @@ final class SimpleHttpServerImpl extends SimpleHttpServer {
         return addr;
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     @Override
     public synchronized final InetSocketAddress bind(final int port, final int backlog) throws IOException{
         final InetSocketAddress addr = new InetSocketAddress(port);
@@ -77,11 +90,13 @@ final class SimpleHttpServerImpl extends SimpleHttpServer {
         return addr;
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     @Override
     public synchronized final void bind(final InetSocketAddress addr) throws IOException{
         server.bind(addr,0);
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     @Override
     public synchronized final void bind(final InetSocketAddress addr, final int backlog) throws IOException{
         server.bind(addr,backlog);
@@ -247,16 +262,17 @@ final class SimpleHttpServerImpl extends SimpleHttpServer {
         }
     }
 
-//
+    // endregion
 
     @SuppressWarnings("StringBufferReplaceableByString")
     @Override
     public String toString(){
         final StringBuilder OUT = new StringBuilder();
-        OUT.append("SimpleHttpServer")  .append('{');
-        OUT.append("httpServer")        .append('=')   .append(server)          .append(", ");
-        OUT.append("contexts")          .append('=')   .append(contexts)        .append(", ");
-        OUT.append("address")           .append('=')   .append(getAddress())    .append(", ");
+        OUT.append("SimpleHttpsServer")  .append('{');
+        OUT.append("httpServer")        .append('=')   .append(server)                  .append(", ");
+        OUT.append("httpsConfigurator") .append('=')    .append(getHttpsConfigurator()) .append(", ");
+        OUT.append("contexts")          .append('=')   .append(contexts)                .append(", ");
+        OUT.append("address")           .append('=')   .append(getAddress())            .append(", ");
         OUT.append("executor")          .append('=')   .append(getExecutor());
         OUT.append('}');
         return OUT.toString();
@@ -269,4 +285,5 @@ final class SimpleHttpServerImpl extends SimpleHttpServer {
         final String seSlash = (!linSlash.startsWith("/") ? "/" : "") + linSlash + (!linSlash.endsWith("/") ? "/" : "");
         return seSlash.substring(0,seSlash.length()-1);
     }
+
 }
