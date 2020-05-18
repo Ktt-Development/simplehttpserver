@@ -7,7 +7,6 @@ categories:
       - "feature request"
   - title: "🔧 Optimizations"
     labels:
-      - "depreciated"
       - "optimization"
       - "refactor"
   - title: "📄 Documentation"
