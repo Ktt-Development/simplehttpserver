@@ -5,7 +5,8 @@ import com.sun.net.httpserver.*;
 import java.io.IOException;
 
 /**
- * <i>This class is a simplified implementation of {@link HttpsServer}.</i><br>
+ * <i>This class is a simplified implementation of {@link HttpsServer}.</i>
+ * The server must have a {@link HttpsConfigurator} set using {@link #setHttpsConfigurator(HttpsConfigurator)}.<br>
  * At least one {@link HttpHandler} must be created in order to process requests. When handling requests the server will use the most specific context. If no handler can be found it is rejected with a 404 response. <br>
  * <b>Contexts are case-sensitive.</b>
  *
@@ -31,7 +32,7 @@ public abstract class SimpleHttpsServer extends SimpleHttpServer {
 //
 
    /**
-    * Creates a {@link SimpleHttpsServer}.
+    * Creates a {@link SimpleHttpsServer}. The server must have a {@link HttpsConfigurator} set using {@link #setHttpsConfigurator(HttpsConfigurator)}.
     *
     * @return a {@link SimpleHttpsServer}
     * @throws IOException uncaught exception
@@ -44,7 +45,7 @@ public abstract class SimpleHttpsServer extends SimpleHttpServer {
    }
 
    /**
-    * Creates a {@link SimpleHttpsServer} bounded to a port.
+    * Creates a {@link SimpleHttpsServer} bounded to a port. The server must have a {@link HttpsConfigurator} set using {@link #setHttpsConfigurator(HttpsConfigurator)}.
     *
     * @param port port to bind to
     * @return a {@link SimpleHttpsServer}
@@ -61,7 +62,7 @@ public abstract class SimpleHttpsServer extends SimpleHttpServer {
    }
 
    /**
-    * Creates a {@link SimpleHttpsServer} bounded to a port.
+    * Creates a {@link SimpleHttpsServer} bounded to a port. The server must have a {@link HttpsConfigurator} set using {@link #setHttpsConfigurator(HttpsConfigurator)}.
     *
     * @param port port to bind to
     * @param backlog request backlog
