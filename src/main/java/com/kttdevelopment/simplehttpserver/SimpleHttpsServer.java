@@ -65,7 +65,7 @@ public abstract class SimpleHttpsServer extends SimpleHttpServer {
     * Creates a {@link SimpleHttpsServer} bounded to a port. The server must have a {@link HttpsConfigurator} set using {@link #setHttpsConfigurator(HttpsConfigurator)}.
     *
     * @param port port to bind to
-    * @param backlog request backlog
+    * @param backlog maximum amount of inbound connections allowed
     * @return a {@link SimpleHttpsServer}
     * @throws java.net.BindException if server can not bind to port
     * @throws NullPointerException if address is <code>null</code>

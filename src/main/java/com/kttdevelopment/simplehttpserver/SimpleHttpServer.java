@@ -68,7 +68,7 @@ public abstract class SimpleHttpServer {
      * Creates a {@link SimpleHttpServer} bounded to a port.
      *
      * @param port port to bind to
-     * @param backlog request backlog
+     * @param backlog maximum amount of inbound connections allowed
      * @return a {@link SimpleHttpServer}
      * @throws java.net.BindException if server can not bind to port
      * @throws NullPointerException if address is <code>null</code>
@@ -119,7 +119,7 @@ public abstract class SimpleHttpServer {
      * Binds the server to a port.
      *
      * @param port port to bind the server to
-     * @param backlog request backlog
+     * @param backlog maximum amount of inbound connections allowed
      * @return address the server is binded to
      * @throws java.net.BindException if server could not be bound to port, or if it's already bound
      * @throws IllegalArgumentException if port is out of range
@@ -156,7 +156,7 @@ public abstract class SimpleHttpServer {
      * Binds the server to a port.
      *
      * @param addr address to bind the server to
-     * @param backlog request backlog
+     * @param backlog maximum amount of inbound connections allowed
      * @throws java.net.BindException if server could not be bound to port, or if it's already bound
      * @throws NullPointerException if address is <code>null</code>
      * @throws IOException uncaught exception
