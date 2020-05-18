@@ -31,7 +31,7 @@ final class SimpleHttpServerImpl extends SimpleHttpServer {
      * Creates a {@link SimpleHttpServer}.
      *
      * @param port port to run the server on
-     * @param backlog how many requests to backlog
+     * @param backlog maximum amount of inbound connections allowed
      * @return a {@link SimpleHttpServer}
      * @throws java.net.BindException if server can not bind to port
      * @throws IOException uncaught exception
