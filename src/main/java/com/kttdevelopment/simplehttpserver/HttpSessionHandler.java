@@ -77,6 +77,7 @@ public class HttpSessionHandler {
         final String sessionId;
         final HttpSession session;
 
+        @SuppressWarnings("SpellCheckingInspection")
         final String rcookies = exchange.getRequestHeaders().getFirst("Cookie");
         final Map<String,String> cookies = new HashMap<>();
 

@@ -59,7 +59,7 @@ public abstract class SimpleHttpExchange {
      * @since 02.00.00
      * @author Ktt Development
      */
-    SimpleHttpExchange() { }
+    protected SimpleHttpExchange() { }
 
 //
 

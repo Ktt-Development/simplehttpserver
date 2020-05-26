@@ -1,12 +1,14 @@
 package com.kttdevelopment.simplehttpserver;
 
+import com.sun.net.httpserver.HttpExchange;
+
 import java.util.HashMap;
 
 /**
  * A session keeps track of a single client across multiple exchanges. This is typically used for login persistence.
  *
  * @since 02.00.00
- * @version 02.00.00
+ * @version 03.04.01
  * @author Ktt Development
  */
 public abstract class HttpSession {
@@ -14,12 +16,12 @@ public abstract class HttpSession {
     static final HashMap<String,HttpSession> sessions = new HashMap<>();
 
     /**
-     * Creates an empty {@link HttpSession}. Applications don't use this method.
+     * Creates an empty {@link HttpSession}. Sessions are usually created by {@link HttpSessionHandler#getSession(HttpExchange)}.
      *
      * @since 02.00.00
      * @author Ktt Development
      */
-    HttpSession(){ }
+    protected HttpSession(){ }
 
 //
 
