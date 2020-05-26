@@ -13,7 +13,7 @@ import java.util.concurrent.Executor;
  *
  * @see SimpleHttpsServer
  * @since 03.04.00
- * @version 03.04.00
+ * @version 03.04.02
  * @author Ktt Development
  */
 final class SimpleHttpsServerImpl extends SimpleHttpsServer {
