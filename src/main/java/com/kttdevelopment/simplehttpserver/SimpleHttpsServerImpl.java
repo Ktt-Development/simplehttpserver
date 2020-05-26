@@ -16,7 +16,7 @@ import java.util.concurrent.Executor;
  * @version 03.04.00
  * @author Ktt Development
  */
-final public class SimpleHttpsServerImpl extends SimpleHttpsServer {
+final class SimpleHttpsServerImpl extends SimpleHttpsServer {
 
     private final HttpsServer server = HttpsServer.create();
 
