@@ -21,15 +21,15 @@ import java.io.IOException;
 public abstract class SimpleHttpsServer extends SimpleHttpServer {
 
     /**
-     * Creates an empty {@link SimpleHttpsServer}. Server is created using {@link #create()}, {@link #create(int)}, or {@link #create(int, int)}.
-     *
-     * @see #create()
-     * @see #create(int)
-     * @see #create(int, int)
-     * @see SimpleHttpsServerImpl#createSimpleHttpsServer(Integer, Integer)
-     * @since 02.00.00
-     * @author Ktt Development
-     */
+    * Creates an empty {@link SimpleHttpsServer}. Server is created using {@link #create()}, {@link #create(int)}, or {@link #create(int, int)}.
+    *
+    * @see #create()
+    * @see #create(int)
+    * @see #create(int, int)
+    * @see SimpleHttpsServerImpl#createSimpleHttpsServer(Integer, Integer)
+    * @since 02.00.00
+    * @author Ktt Development
+    */
    protected SimpleHttpsServer(){ }
 
 //
