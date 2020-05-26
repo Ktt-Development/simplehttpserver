@@ -17,15 +17,18 @@ import java.util.concurrent.Executor;
  * @see SimpleHttpsServer
  * @see SimpleHttpHandler
  * @since 02.00.00
- * @version 03.04.00
+ * @version 03.04.01
  * @author Ktt Development
  */
 @SuppressWarnings("SpellCheckingInspection")
 public abstract class SimpleHttpServer {
 
     /**
-     * Create an empty {@link SimpleHttpServer}. Applications don't use this method.
+     * Creates an empty {@link SimpleHttpServer}. Server is created using {@link #create()}, {@link #create(int)}, or {@link #create(int, int)}.
      *
+     * @see #create()
+     * @see #create(int)
+     * @see #create(int, int)
      * @see SimpleHttpServerImpl#createHttpServer(Integer, Integer)
      * @since 02.00.00
      * @author Ktt Development
