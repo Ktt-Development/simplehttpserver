@@ -130,11 +130,23 @@ final class SimpleHttpServerImpl extends SimpleHttpServer {
 
     @Override
     public synchronized final HttpContext createContext(final String path){
-        return createContext(path,(HttpExchange exchange) -> {});
+        return createContext(path,HttpExchange::close,null);
     }
 
     @Override
     public synchronized final HttpContext createContext(final String path, final HttpHandler handler){
+        return createContext(path,handler,null);
+    }
+
+    //
+
+    @Override
+    public synchronized final HttpContext createContext(final String path, final Authenticator authenticator){
+        return createContext(path,HttpExchange::close,authenticator);
+    }
+
+    @Override
+    public synchronized final HttpContext createContext(final String path, final HttpHandler handler, final Authenticator authenticator){
         if(!getContext(path).equals("/") && handler instanceof RootHandler)
             throw new IllegalArgumentException("RootHandler can only be used at the root '/' context");
 
@@ -142,26 +154,13 @@ final class SimpleHttpServerImpl extends SimpleHttpServer {
             handle(exchange);
             handler.handle(exchange);
         };
-        final HttpContext context = server.createContext(getContext(path),wrapper);
 
+        final HttpContext context = server.createContext(getContext(path),wrapper);
         contexts.put(context,handler);
 
-        return context;
-    }
+        if(authenticator != null)
+            context.setAuthenticator(authenticator);
 
-    //
-
-    @Override
-    public synchronized final HttpContext createContext(final String path, final Authenticator authenticator){
-        final HttpContext context = createContext(path);
-        context.setAuthenticator(authenticator);
-        return context;
-    }
-
-    @Override
-    public synchronized final HttpContext createContext(final String path, final HttpHandler handler, final Authenticator authenticator){
-        final HttpContext context = createContext(path,handler);
-        context.setAuthenticator(authenticator);
         return context;
     }
 
