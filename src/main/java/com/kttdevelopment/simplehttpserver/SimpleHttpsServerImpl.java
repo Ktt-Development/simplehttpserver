@@ -13,7 +13,7 @@ import java.util.concurrent.Executor;
  *
  * @see SimpleHttpsServer
  * @since 03.04.00
- * @version 03.04.02
+ * @version 03.04.03
  * @author Ktt Development
  */
 final class SimpleHttpsServerImpl extends SimpleHttpsServer {
@@ -203,9 +203,9 @@ final class SimpleHttpsServerImpl extends SimpleHttpsServer {
 
     @Override
     public final HttpHandler getContextHandler(final String path){
-        for(final HttpContext context : contexts.keySet())
-            if(context.getPath().equals(getContext(path)))
-                return context.getHandler();
+        for(final Map.Entry<HttpContext, HttpHandler> entry : contexts.entrySet())
+            if(entry.getKey().getPath().equals(getContext(path)))
+                return entry.getValue();
         return null;
     }
 
