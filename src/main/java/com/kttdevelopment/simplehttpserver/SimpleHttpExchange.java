@@ -1,14 +1,14 @@
 package com.kttdevelopment.simplehttpserver;
 
-import com.sun.net.httpserver.*;
 import com.kttdevelopment.simplehttpserver.var.HttpCode;
 import com.kttdevelopment.simplehttpserver.var.RequestMethod;
+import com.sun.net.httpserver.*;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.URI;
-import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <i>This class is a simplified implementation of {@link HttpExchange}</i>. <br>
@@ -46,7 +46,7 @@ import java.util.HashMap;
  *
  * @see HttpExchange
  * @since 02.00.00
- * @version 03.04.00
+ * @version 03.04.03
  * @author Ktt Development
  */
 @SuppressWarnings("SpellCheckingInspection")
@@ -221,7 +221,7 @@ public abstract class SimpleHttpExchange {
      * @since 02.00.00
      * @author Ktt Development
      */
-    public abstract HashMap<String,String> getGetMap();
+    public abstract Map<String,String> getGetMap();
 
     /**
      * Returns if there is a GET request.
@@ -261,7 +261,7 @@ public abstract class SimpleHttpExchange {
      * @author Ktt Development
      */
     @SuppressWarnings("rawtypes")
-    public abstract HashMap getPostMap();
+    public abstract Map getPostMap();
 
     /**
      * Returns if there is a POST request.
@@ -313,7 +313,7 @@ public abstract class SimpleHttpExchange {
      * @since 02.00.00
      * @author Ktt Development
      */
-    public abstract HashMap<String,String> getCookies();
+    public abstract Map<String,String> getCookies();
 
     /**
      * Sets a cookie in the response header.
