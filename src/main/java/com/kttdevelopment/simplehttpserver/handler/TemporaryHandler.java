@@ -67,9 +67,10 @@ public class TemporaryHandler implements HttpHandler {
     public String toString(){
         return
             "TemporaryHandler"  + '{' +
-            "handler"           + '=' +     handler.toString()  + ", " +
+            "handler"           + '=' +     handler.toString() +
             (hasExpiry
-             ?  "initTime"      + '=' +     initTime    + ", " +
+             ?  ", " +
+                "initTime"      + '=' +     initTime    + ", " +
                 "maxTime"       + '=' +     maxTime     + ", " +
                 "expiry"        + '=' +     expiry
              : ""
