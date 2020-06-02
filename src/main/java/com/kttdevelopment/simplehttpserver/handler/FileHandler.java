@@ -22,7 +22,7 @@ import java.util.*;
  * @see SimpleHttpHandler
  * @see com.sun.net.httpserver.HttpHandler
  * @since 02.00.00
- * @version 02.00.00
+ * @version 03.05.00
  * @author Ktt Development
  */
 public class FileHandler implements SimpleHttpHandler {
