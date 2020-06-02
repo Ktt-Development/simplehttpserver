@@ -178,18 +178,16 @@ public class SessionThrottler extends ConnectionThrottler {
 
     //
 
-    @SuppressWarnings("StringBufferReplaceableByString")
     @Override
     public String toString(){
-        final StringBuilder OUT = new StringBuilder();
-
-        OUT.append("SessionThrottler")  .append('{');
-        OUT.append("condition")         .append('=')    .append(countsTowardsLimit)     .append(", ");
-        OUT.append("sessions@depreciated")          .append('=')    .append(connections.toString()).append(", ");
-        OUT.append("maxConnections@depreciated")    .append('=')    .append(maxConnections.get());
-        OUT.append('}');
-
-        return OUT.toString();
+        return
+            "SessionThrottler"              + '{' +
+            "condition@depreciated"         + '=' +     countsTowardsLimit      + ", " +
+            "sessions@depreciated"          + '=' +     connections.toString()  + ", " +
+            "maxConnections@depreciated"    + '=' +     maxConnections.get()    + ", " +
+            "sessionHandler"                + '=' +     sessionHandler          + ", " +
+            "connections"                   + '=' +     connections.toString()  + ", " +
+            '}';
     }
 
 }

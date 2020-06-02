@@ -50,17 +50,13 @@ public class ThrottledHandler implements HttpHandler {
         }
     }
 
-    @SuppressWarnings("StringBufferReplaceableByString")
     @Override
     public String toString(){
-        final StringBuilder OUT = new StringBuilder();
-
-        OUT.append("ThrottledHandler")      .append('{');
-        OUT.append("handler")               .append('=')        .append(handler)    .append(", ");
-        OUT.append("throttler")             .append('=')        .append(throttler);
-        OUT.append('}');
-
-        return OUT.toString();
+        return
+            "ThrottledHandler"  + '{' +
+            "handler"           + '=' +     handler     + ", " +
+            "throttler"         + '=' +     throttler   +
+            '}';
     }
 
 }

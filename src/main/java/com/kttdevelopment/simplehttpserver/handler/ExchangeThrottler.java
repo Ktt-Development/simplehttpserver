@@ -60,13 +60,10 @@ public class ExchangeThrottler extends ConnectionThrottler {
 
     @Override
     public String toString(){
-        final StringBuilder OUT = new StringBuilder();
-
-        OUT.append("ExchangeThrottler") .append('{');
-        OUT.append("connections")       .append('=')    .append(connections.toString());
-        OUT.append('}');
-
-        return OUT.toString();
+        return
+            "Exchange Throttler"    + '{' +
+            "connections"           + '=' +     connections.toString() +
+            '}';
     }
 
 }

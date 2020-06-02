@@ -128,4 +128,14 @@ public class ServerExchangeThrottler extends ConnectionThrottler {
         return uConnMax.get();
     }
 
+    @Override
+    public String toString(){
+        return
+            "ServerExchangeThrottler"   + '{' +
+            "connections"               + '=' +     connections.toString()  + ", " +
+            "userConnections"           + '=' +     uConn                   + ", " +
+            "userConnectionsMax"        + '=' +     uConnMax +
+            '}';
+    }
+
 }

@@ -149,4 +149,15 @@ public class ServerSessionThrottler extends ConnectionThrottler{
         return uConnMax.get();
     }
 
+    @Override
+    public String toString(){
+        return
+            "ServerSessionThrottler"    + '{' +
+            "sessionHandler"            + '=' +     sessionHandler          + ", " +
+            "connections"               + '=' +     connections.toString()  + ", " +
+            "userConnections"           + '=' +     uConn                   + ", " +
+            "userConnectionsMax"        + '=' +     uConnMax +
+            '}';
+    }
+
 }
