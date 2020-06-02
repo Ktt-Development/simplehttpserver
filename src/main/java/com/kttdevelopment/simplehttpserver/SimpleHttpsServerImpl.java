@@ -13,7 +13,7 @@ import java.util.concurrent.Executor;
  *
  * @see SimpleHttpsServer
  * @since 03.04.00
- * @version 03.04.03
+ * @version 03.05.00
  * @author Ktt Development
  */
 final class SimpleHttpsServerImpl extends SimpleHttpsServer {
@@ -263,18 +263,16 @@ final class SimpleHttpsServerImpl extends SimpleHttpsServer {
 
     // endregion
 
-    @SuppressWarnings("StringBufferReplaceableByString")
     @Override
     public String toString(){
-        final StringBuilder OUT = new StringBuilder();
-        OUT.append("SimpleHttpsServer")  .append('{');
-        OUT.append("httpServer")        .append('=')   .append(server)                  .append(", ");
-        OUT.append("httpsConfigurator") .append('=')    .append(getHttpsConfigurator()) .append(", ");
-        OUT.append("contexts")          .append('=')   .append(contexts)                .append(", ");
-        OUT.append("address")           .append('=')   .append(getAddress())            .append(", ");
-        OUT.append("executor")          .append('=')   .append(getExecutor());
-        OUT.append('}');
-        return OUT.toString();
+        return
+            "SimpleHttpsServer" + '{' +
+            "httpServer"        + '=' +     server                  + ", " +
+            "httpsConfigurator" + '=' +     getHttpsConfigurator()  + ", " +
+            "contexts"          + '=' +     contexts                + ", " +
+            "address"           + '=' +     getAddress()            + ", " +
+            "executor"          + '=' +     getExecutor()           +
+            '}';
     }
 
     // start slash; no end slash

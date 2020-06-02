@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @see SimpleHttpHandler
  * @since 03.01.00
- * @version 03.03.00
+ * @version 03.05.00
  * @author Ktt Development
  */
 public class SSEHandler implements SimpleHttpHandler {
@@ -100,25 +100,35 @@ public class SSEHandler implements SimpleHttpHandler {
 
     private static class EventStreamRecord {
 
-            private final int retry;
-            private final String event;
-            private final String data;
+        private final int retry;
+        private final String event;
+        private final String data;
 
-            public EventStreamRecord(final int retry, final String event, final String data){
-                this.retry = retry;
-                this.event = event;
-                this.data = data;
-            }
-
-            public final String toString(final int id){
-                return
-                    "id: " + id + '\n' +
-                    (retry > 0 ? "retry: " + retry + '\n' : "") +
-                    (!event.isBlank() ? "event: " + event + '\n' : "") +
-                    (!data.isBlank() ? "data: " + data + '\n' : "") +
-                    '\n';
-            }
-
+        public EventStreamRecord(final int retry, final String event, final String data){
+            this.retry = retry;
+            this.event = event;
+            this.data = data;
         }
+
+        public final String toString(final int id){
+            return
+                "id: " + id + '\n' +
+                (retry > 0 ? "retry: " + retry + '\n' : "") +
+                (!event.isBlank() ? "event: " + event + '\n' : "") +
+                (!data.isBlank() ? "data: " + data + '\n' : "") +
+                '\n';
+        }
+
+    }
+
+    @Override
+    public String toString(){
+        return
+            "SSEHandler"    + '{' +
+            "listeners"     + '=' +     listeners   + ", " +
+            "eventId"       + '=' +     eventId     + ", " +
+            "queue"         + '=' +     queue       +
+            '}';
+    }
 
 }

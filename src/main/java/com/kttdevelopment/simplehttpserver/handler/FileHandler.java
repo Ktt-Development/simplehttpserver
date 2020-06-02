@@ -22,7 +22,7 @@ import java.util.*;
  * @see SimpleHttpHandler
  * @see com.sun.net.httpserver.HttpHandler
  * @since 02.00.00
- * @version 02.00.00
+ * @version 03.05.00
  * @author Ktt Development
  */
 public class FileHandler implements SimpleHttpHandler {
@@ -711,17 +711,14 @@ public class FileHandler implements SimpleHttpHandler {
 
 //
 
-
-    @SuppressWarnings("StringBufferReplaceableByString")
     @Override
     public String toString(){
-        final StringBuilder OUT = new StringBuilder();
-        OUT.append("FileHandler")           .append('{');
-        OUT.append("adapter")               .append('=')   .append(adapter.toString()) .append(", ");
-        OUT.append("(loaded) files")        .append('=')   .append(files)              .append(", ");
-        OUT.append("(loaded) directories")  .append('=')   .append(directories);
-        OUT.append('}');
-        return OUT.toString();
+        return
+            "FileHandler"           + '{' +
+            "adapter"               + '=' +     adapter.toString()  + ", " +
+            "(loaded) files"        + '=' +     files               + ", " +
+            "(loaded) directories"  + '=' +     directories         +
+            '}';
     }
 
 }

@@ -13,7 +13,7 @@ import java.util.concurrent.Executor;
  *
  * @see SimpleHttpServer
  * @since 02.00.00
- * @version 03.04.03
+ * @version 03.05.00
  * @author Ktt Development
  */
 @SuppressWarnings("SpellCheckingInspection")
@@ -248,17 +248,15 @@ final class SimpleHttpServerImpl extends SimpleHttpServer {
 
 //
 
-    @SuppressWarnings("StringBufferReplaceableByString")
     @Override
     public String toString(){
-        final StringBuilder OUT = new StringBuilder();
-        OUT.append("SimpleHttpServer")  .append('{');
-        OUT.append("httpServer")        .append('=')   .append(server)          .append(", ");
-        OUT.append("contexts")          .append('=')   .append(contexts)        .append(", ");
-        OUT.append("address")           .append('=')   .append(getAddress())    .append(", ");
-        OUT.append("executor")          .append('=')   .append(getExecutor());
-        OUT.append('}');
-        return OUT.toString();
+        return
+            "SimpleHttpServer"  + '{' +
+            "httpServer"        + '=' +     server          + ", " +
+            "contexts"          + '=' +     contexts        + ", " +
+            "address"           + '=' +     getAddress()    + ", " +
+            "executor"          + '=' +     getExecutor()   +
+            '}';
     }
 
     // start slash; no end slash

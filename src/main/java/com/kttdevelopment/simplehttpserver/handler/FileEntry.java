@@ -9,7 +9,7 @@ import java.util.Arrays;
  *
  * @see FileHandler
  * @since 02.00.00
- * @version 02.00.00
+ * @version 03.05.00
  * @author Ktt Development
  */
 class FileEntry {
@@ -96,17 +96,14 @@ class FileEntry {
 
 //
 
-
-    @SuppressWarnings("StringBufferReplaceableByString")
     @Override
     public String toString(){
-        final StringBuilder OUT = new StringBuilder();
-        OUT.append("FileEntry")         .append("{");
-        OUT.append("isPreloaded")       .append("=")   .append(isPreloaded)                        .append(", ");
-        OUT.append("file")              .append("=")   .append(file.toString())                    .append(", ");
-        OUT.append("(preloaded) bytes") .append("=")   .append(Arrays.toString(preloadedBytes)) .append(", ");
-        OUT.append("}");
-        return OUT.toString();
+        return
+            "FileEntry"         + '{' +
+            "isPreloaded"       + '=' +     isPreloaded                         + ", " +
+            "file"              + '=' +     file.toString()                     + ", " +
+            "(preloaded) bytes" + '=' +     Arrays.toString(preloadedBytes) +
+            '}';
     }
 
 }
