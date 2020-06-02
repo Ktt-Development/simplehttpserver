@@ -4,27 +4,33 @@ import com.kttdevelopment.simplehttpserver.*;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 
 /**
  * Limits connections per http session. This can be used to limit simultaneous downloads.
  *
- * @see ThrottledHandler
- * @see ServerThrottler
  * @see HttpSession
+ * @see ThrottledHandler
+ * @see ExchangeThrottler
+ * @see ServerThrottler
  * @since 03.03.00
- * @version 03.03.00
+ * @version 03.05.00
  * @author Ktt Development
  */
 public class SessionThrottler extends ConnectionThrottler {
 
-    private final HttpSessionHandler sessionHandler;
-
+    @Deprecated
     private final Predicate<HttpSession> countsTowardsLimit;
-    private final Map<HttpSession, AtomicInteger> sessions = Collections.synchronizedMap(new HashMap<>());
-
+    @Deprecated
     private final AtomicInteger maxConnections = new AtomicInteger(0);
+
+
+    private final HttpSessionHandler sessionHandler;
+    private final Map<HttpSession,AtomicInteger> connections = new ConcurrentHashMap<>();
+
 
     /**
      * Creates a throttler that allows no connections.
@@ -43,6 +49,7 @@ public class SessionThrottler extends ConnectionThrottler {
     /**
      * Creates a throttler that limits the amount of simultaneous connections a user can have.
      *
+     * @deprecated Override {@link #getMaxConnections(HttpSession, HttpExchange)} for max connections
      * @param sessionHandler session handler
      * @param maxConnections maximum simultaneous connections (per user)
      *
@@ -50,6 +57,7 @@ public class SessionThrottler extends ConnectionThrottler {
      * @since 03.03.00
      * @author Ktt Development
      */
+    @Deprecated
     public SessionThrottler(final HttpSessionHandler sessionHandler, final int maxConnections){
         this.sessionHandler = sessionHandler;
         countsTowardsLimit = (exchange) -> true;
@@ -59,6 +67,7 @@ public class SessionThrottler extends ConnectionThrottler {
     /**
      * Creates a throttler that limits the amount of simultaneous connections a user can have and exempt connections.
      *
+     * @deprecated Override {@link #getMaxConnections(HttpSession, HttpExchange)} for connection limit
      * @param sessionHandler session handler
      * @param countsTowardsLimit determines which users are subject to the limit
      *
@@ -66,6 +75,7 @@ public class SessionThrottler extends ConnectionThrottler {
      * @since 03.03.00
      * @author Ktt Development
      */
+    @Deprecated
     public SessionThrottler(final HttpSessionHandler sessionHandler, final Predicate<HttpSession> countsTowardsLimit){
         this.sessionHandler = sessionHandler;
         this.countsTowardsLimit = countsTowardsLimit;
@@ -74,10 +84,12 @@ public class SessionThrottler extends ConnectionThrottler {
     /**
      * Creates a throttler that limits the amount of simultaneous connections a user can have and exempt connections.
      *
+     * @deprecated Override {{@link #getMaxConnections(HttpSession, HttpExchange)} for connection limit and max connections
      * @param sessionHandler session handler
      * @param countsTowardsLimit determines which users are subject to the limit
      * @param maxConnections maximum simultaneous connections (per user)
      */
+    @Deprecated
     public SessionThrottler(final HttpSessionHandler sessionHandler, final Predicate<HttpSession> countsTowardsLimit, final int maxConnections){
         this.sessionHandler = sessionHandler;
         this.countsTowardsLimit = countsTowardsLimit;
@@ -87,12 +99,14 @@ public class SessionThrottler extends ConnectionThrottler {
     /**
      * Returns the maximum allowed connections.
      *
+     * @deprecated Use {@link #getMaxConnections(HttpSession, HttpExchange)} instead
      * @return maximum allowed connections (per user)
      *
      * @see #setMaxConnections(int)
      * @since 03.03.00
      * @author Ktt Development
      */
+    @Deprecated
     public final int getMaxConnections(){
         return maxConnections.get();
     }
@@ -100,12 +114,14 @@ public class SessionThrottler extends ConnectionThrottler {
     /**
      * Sets the maximum allowed connections. Must be a positive number.
      *
+     * @deprecated Override {@link #getMaxConnections(HttpSession, HttpExchange)} instead
      * @param maxConnections maximum allowed connections (per user)
      *
      * @see #getMaxConnections()
      * @since 03.03.00
      * @author Ktt Development
      */
+    @Deprecated
     public synchronized final void setMaxConnections(final int maxConnections){
         if(maxConnections >= 0)
             this.maxConnections.set(maxConnections);
@@ -114,31 +130,50 @@ public class SessionThrottler extends ConnectionThrottler {
     @Override
     final boolean addConnection(final HttpExchange exchange){
         final HttpSession session = sessionHandler.getSession(exchange);
-        if(!countsTowardsLimit.test(session)){
+        final int maxConn = getMaxConnections(session,exchange);
+
+        if(!connections.containsKey(session))
+            connections.put(session,new AtomicInteger(0));
+
+        final AtomicInteger conn = connections.get(session);
+
+        if(maxConn < 0){
+            conn.incrementAndGet();
             return true;
         }else{
-            synchronized(this){
-                final AtomicInteger conn;
-                if(!sessions.containsKey(session))
-                    sessions.put(session,conn = new AtomicInteger(0));
-                else
-                    conn = sessions.get(session);
-                if(conn.get() + 1 <= maxConnections.get()){
-                    conn.incrementAndGet();
-                    return true;
-                }
-            }
+            final AtomicBoolean added = new AtomicBoolean(false);
+            conn.updateAndGet(operand -> {
+                if(operand < maxConn) added.set(true);
+                return operand < maxConn ? operand + 1 : operand;
+            });
+            return added.get();
         }
-        return false;
     }
 
     @Override
     final void deleteConnection(final HttpExchange exchange){
         final HttpSession session = sessionHandler.getSession(exchange);
-        if(countsTowardsLimit.test(session))
-            synchronized(this){
-                sessions.get(session).decrementAndGet();
-            }
+        if(connections.containsKey(session))
+            connections.get(session).decrementAndGet();
+    }
+
+    @Override
+    final int getMaxConnections(final HttpExchange exchange){
+        return getMaxConnections(sessionHandler.getSession(exchange),exchange);
+    }
+
+    /**
+     * Returns the maximum number of connections for a session. A value of <code>-1</code> means unlimited connections.
+     *
+     * @param session session to process
+     * @param exchange exchange to process
+     * @return maximum number of connections allowed
+     *
+     * @since 03.05.00
+     * @author Ktt Development
+     */
+    int getMaxConnections(final HttpSession session, final HttpExchange exchange){
+        return countsTowardsLimit.test(session) ? getMaxConnections() : -1;
     }
 
     //
@@ -150,8 +185,8 @@ public class SessionThrottler extends ConnectionThrottler {
 
         OUT.append("SessionThrottler")  .append('{');
         OUT.append("condition")         .append('=')    .append(countsTowardsLimit)     .append(", ");
-        OUT.append("sessions")          .append('=')    .append(sessions.toString())    .append(", ");
-        OUT.append("maxConnections")    .append('=')    .append(maxConnections.get());
+        OUT.append("sessions@depreciated")          .append('=')    .append(connections.toString()).append(", ");
+        OUT.append("maxConnections@depreciated")    .append('=')    .append(maxConnections.get());
         OUT.append('}');
 
         return OUT.toString();

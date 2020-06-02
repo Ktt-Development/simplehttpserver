@@ -8,12 +8,15 @@ import java.util.function.Predicate;
 /**
  * Limits connections for the server.
  *
+ * @deprecated Use {@link ServerExchangeThrottler} instead
+ *
  * @see ThrottledHandler
  * @see SessionThrottler
  * @since 03.03.00
- * @version 03.03.00
+ * @version 03.05.00
  * @author Ktt Development
  */
+@Deprecated
 public class ServerThrottler extends ConnectionThrottler {
 
     private final Predicate<HttpExchange> countsTowardsLimit;
@@ -97,6 +100,7 @@ public class ServerThrottler extends ConnectionThrottler {
             this.maxConnections.set(maxConnections);
     }
 
+    @Override
     final boolean addConnection(final HttpExchange exchange){
         if(!countsTowardsLimit.test(exchange)){
             return true;
@@ -111,11 +115,17 @@ public class ServerThrottler extends ConnectionThrottler {
         return false;
     }
 
+    @Override
     final void deleteConnection(final HttpExchange exchange){
         if(countsTowardsLimit.test(exchange))
             synchronized(this){
                 connections.decrementAndGet();
             }
+    }
+
+    @Override
+    int getMaxConnections(final HttpExchange exchange){
+        return getMaxConnections();
     }
 
     //

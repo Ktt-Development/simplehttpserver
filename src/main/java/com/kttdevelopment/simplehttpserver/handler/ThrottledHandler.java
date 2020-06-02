@@ -8,10 +8,12 @@ import java.io.IOException;
 /**
  * This handler limits the amount of active connections to a handler. This can be used to limit the amount of simultaneous downloads, or prevent duplicate connections by users.
  *
- * @see ServerThrottler
+ * @see ExchangeThrottler
+ * @see ServerExchangeThrottler
  * @see SessionThrottler
+ * @see ServerSessionThrottler
  * @since 03.03.00
- * @version 03.03.00
+ * @version 03.05.00
  * @author Ktt Development
  */
 public class ThrottledHandler implements HttpHandler {
@@ -26,8 +28,10 @@ public class ThrottledHandler implements HttpHandler {
      * @param throttler how to throttle connections
      *
      * @see HttpHandler
-     * @see ServerThrottler
+     * @see ExchangeThrottler
+     * @see ServerExchangeThrottler
      * @see SessionThrottler
+     * @see ServerSessionThrottler
      * @since 03.03.00
      * @author Ktt Development
      */

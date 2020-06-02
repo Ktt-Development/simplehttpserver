@@ -1,0 +1,131 @@
+package com.kttdevelopment.simplehttpserver.handler;
+
+import com.sun.net.httpserver.HttpExchange;
+
+import java.net.InetAddress;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+
+/**
+ * Limits connections per address to the server and total server connections.
+ *
+ * @see HttpExchange
+ * @see ThrottledHandler
+ * @see ExchangeThrottler
+ * @since 03.05.00
+ * @version 03.05.00
+ * @author Ktt Development
+ */
+public class ServerExchangeThrottler extends ConnectionThrottler {
+
+    private final Map<InetAddress, AtomicInteger> connections = new ConcurrentHashMap<>();
+
+    private final AtomicInteger uConn = new AtomicInteger(0);
+    private final AtomicInteger uConnMax = new AtomicInteger(0);
+
+    @Override
+    final boolean addConnection(final HttpExchange exchange){
+        final InetAddress address = exchange.getRemoteAddress().getAddress();
+        final int maxConn = getMaxConnections(exchange);
+
+        if(!connections.containsKey(address))
+            connections.put(address,new AtomicInteger(0));
+
+        final AtomicInteger conn = connections.get(address);
+        final boolean exempt = canIgnoreConnectionLimit(exchange);
+
+        if(maxConn < 0){
+            if(!exempt){
+                synchronized(this){
+                    final int umax = uConnMax.get();
+                    if(umax < 0 || uConn.get() < umax){
+                        conn.incrementAndGet();
+                        uConn.incrementAndGet();
+                        return true;
+                    }
+                    return false;
+                }
+            }else{
+                conn.incrementAndGet();
+                return true;
+            }
+        }else{
+            if(!exempt){
+                synchronized(this){
+                    final int umax = uConnMax.get();
+                    if(conn.get() < maxConn && (umax < 0 || uConn.get() < umax)){
+                        conn.incrementAndGet();
+                        uConn.incrementAndGet();
+                        return true;
+                    }
+                    return false;
+                }
+            }else{
+                final AtomicBoolean added = new AtomicBoolean(false);
+                conn.updateAndGet(operand -> {
+                   if(operand < maxConn) added.set(true);
+                   return operand < maxConn ? operand + 1 : operand;
+                });
+                return added.get();
+            }
+        }
+    }
+
+    @Override
+    final void deleteConnection(final HttpExchange exchange){
+        final InetAddress address = exchange.getRemoteAddress().getAddress();
+        if(connections.containsKey(address)){
+            connections.get(address).decrementAndGet();
+            if(!canIgnoreConnectionLimit(exchange))
+                uConn.decrementAndGet();
+        }
+    }
+
+    @Override
+    int getMaxConnections(final HttpExchange exchange){
+        return -1;
+    }
+
+    /**
+     * Returns if an exchange is exempt from the server connection limit only.
+     *
+     * @param exchange exchange to process
+     * @return if exchange ignores server connection limit
+     *
+     * @see HttpExchange
+     * @since 03.05.00
+     * @author Ktt Development
+     */
+    boolean canIgnoreConnectionLimit(final HttpExchange exchange){
+        return false;
+    }
+
+    /**
+     * Sets the maximum number of connections the server can have. A value of <code>-1</code> means unlimited connections.
+     *
+     * @param connections maximum number of connections allowed on the server
+     *
+     * @see #getMaxConnections(HttpExchange)
+     * @since 03.05.00
+     * @author Ktt Development
+     */
+    public synchronized final void setMaxServerConnections(final int connections){
+        uConnMax.set(connections);
+    }
+
+    /**
+     * Returns the maximum number of connections the server can have.
+     *
+     * @return maximum number of connections allowed on th server
+     *
+     * @see #setMaxServerConnections(int)
+     * @since 03.05.00
+     * @author Ktt Development
+     */
+    public synchronized final int getMaxServerConnections(){
+        return uConnMax.get();
+    }
+
+}
