@@ -13,7 +13,7 @@ import java.io.IOException;
  * @see SimpleHttpHandler
  * @see com.sun.net.httpserver.HttpHandler
  * @since 01.00.00
- * @version 02.00.00
+ * @version 03.05.00
  * @author Ktt Development
  */
 public class RedirectHandler implements SimpleHttpHandler {
@@ -46,14 +46,12 @@ public class RedirectHandler implements SimpleHttpHandler {
 
 //
 
-    @SuppressWarnings("StringBufferReplaceableByString")
     @Override
     public String toString(){
-        final StringBuilder OUT = new StringBuilder();
-        OUT.append("RedirectHandler")   .append('{');
-        OUT.append("link")              .append('=')   .append(link);
-        OUT.append('}');
-        return OUT.toString();
+        return
+            "RedirectHandler"   + '{' +
+            "link"              + '=' +     link +
+            '}';
     }
 
 }

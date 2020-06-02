@@ -12,7 +12,7 @@ import java.util.Objects;
  * @see FileHandler
  * @see FileEntry
  * @since 02.00.00
- * @version 02.00.00
+ * @version 03.05.00
  * @author Ktt Development
  */
 class DirectoryEntry {
@@ -219,19 +219,16 @@ class DirectoryEntry {
 
 //
 
-
-    @SuppressWarnings("StringBufferReplaceableByString")
     @Override
     public String toString(){
-        final StringBuilder OUT = new StringBuilder();
-        OUT.append("DirectoryEntry")    .append("{");
-        OUT.append("isWalkthrough")     .append("=")   .append(isWalkthrough)      .append(", ");
-        OUT.append("isFilePreloaded")   .append("=")   .append(isFilesPreloaded)   .append(", ");
-        OUT.append("directory")         .append("=")   .append(directory)          .append(", ");
-        OUT.append("(preloaded) files") .append("=")   .append(files)              .append(", ");
-        OUT.append("adapter")           .append("=")   .append(adapter);
-        OUT.append("}");
-        return OUT.toString();
+        return
+            "DirectoryEntry"    + "{" +
+            "isWalkthrough"     + "=" +     isWalkthrough       + ", " +
+            "isFilePreloaded"   + "=" +     isFilesPreloaded    + ", " +
+            "directory"         + "=" +     directory           + ", " +
+            "(preloaded) files" + "=" +     files               + ", " +
+            "adapter"           + "=" +     adapter             +
+            "}";
     }
 
 }

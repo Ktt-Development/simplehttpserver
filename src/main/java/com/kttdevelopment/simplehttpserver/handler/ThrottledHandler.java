@@ -11,7 +11,7 @@ import java.io.IOException;
  * @see ServerThrottler
  * @see SessionThrottler
  * @since 03.03.00
- * @version 03.03.00
+ * @version 03.05.00
  * @author Ktt Development
  */
 public class ThrottledHandler implements HttpHandler {
@@ -46,17 +46,15 @@ public class ThrottledHandler implements HttpHandler {
         }
     }
 
-    @SuppressWarnings("StringBufferReplaceableByString")
+    //
+
     @Override
     public String toString(){
-        final StringBuilder OUT = new StringBuilder();
-
-        OUT.append("ThrottledHandler")      .append('{');
-        OUT.append("handler")               .append('=')        .append(handler)    .append(", ");
-        OUT.append("throttler")             .append('=')        .append(throttler);
-        OUT.append('}');
-
-        return OUT.toString();
+        return
+            "ThrottledHandler"   + '{' +
+            "handler"            + '=' +     handler     + ", " +
+            "throttler"          + '=' +     throttler   +
+            '}';
     }
 
 }

@@ -14,7 +14,7 @@ import java.util.function.Predicate;
  * @see ServerThrottler
  * @see HttpSession
  * @since 03.03.00
- * @version 03.03.00
+ * @version 03.05.00
  * @author Ktt Development
  */
 public class SessionThrottler extends ConnectionThrottler {
@@ -143,18 +143,14 @@ public class SessionThrottler extends ConnectionThrottler {
 
     //
 
-    @SuppressWarnings("StringBufferReplaceableByString")
     @Override
     public String toString(){
-        final StringBuilder OUT = new StringBuilder();
-
-        OUT.append("SessionThrottler")  .append('{');
-        OUT.append("condition")         .append('=')    .append(countsTowardsLimit)     .append(", ");
-        OUT.append("sessions")          .append('=')    .append(sessions.toString())    .append(", ");
-        OUT.append("maxConnections")    .append('=')    .append(maxConnections.get());
-        OUT.append('}');
-
-        return OUT.toString();
+        return
+            "SessionThrottler"  + '{' +
+            "condition"         + '=' +     countsTowardsLimit      + ", " +
+            "sessions"          + '=' +     sessions.toString()     + ", " +
+            "maxConnections"    + '=' +     maxConnections.get()    +
+            '}';
     }
 
 }
