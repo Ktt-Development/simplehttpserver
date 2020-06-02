@@ -671,11 +671,14 @@ public class FileHandler implements SimpleHttpHandler {
                         }
                     }else{
                         final File file = new File(entry.getDirectory().getAbsolutePath() + "\\" + rel2);
-                        handle(exchange,file,adapter.getBytes(file, Files.readAllBytes(file.toPath()))); // use adapted now
+                        byte[] bytes = null;
+                        try{ bytes = Files.readAllBytes(file.toPath());
+                        }catch(final Exception ignored){ }
+                        handle(exchange,file,adapter.getBytes(file, bytes)); // use adapted now
                     }
                 }catch(final IndexOutOfBoundsException ignored){ }
             }
-            handle(exchange,null,null); // not found
+            handle(exchange,null,null); // not added to handler
         }
         exchange.close();
     }
