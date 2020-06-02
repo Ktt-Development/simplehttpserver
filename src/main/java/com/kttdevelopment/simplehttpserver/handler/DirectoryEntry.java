@@ -1,10 +1,12 @@
 package com.kttdevelopment.simplehttpserver.handler;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static java.nio.file.StandardWatchEventKinds.*;
 
 /**
  * Represents a directory in the {@link FileHandler}. Applications do not use this class.
@@ -22,69 +24,166 @@ class DirectoryEntry {
     private final ByteLoadingOption loadingOption;
     private final boolean isWalkthrough;
 
-    private final Map<String,FileEntry> files = new ConcurrentHashMap<>(); // preload/watchload only
+    private final Map<String,FileEntry> preloadedFiles = new ConcurrentHashMap<>(); // preload/watchload only
 
-
-    DirectoryEntry(final File directory, final FileHandlerAdapter adapter, final ByteLoadingOption loadingOption, final boolean isWalkthrough) throws IOException{
+    /**
+     * Create a directory entry.
+     *
+     * @param directory directory to represent
+     * @param adapter how to process the bytes in {@link #getBytes(String)}
+     * @param loadingOption how to handle the initial file loading
+     * @param isWalkthrough whether to use sub-directories or not
+     * @throws RuntimeException failure to walk through directory or failure to start watch service
+     *
+     * @see FileBytesAdapter
+     * @see ByteLoadingOption
+     * @since 03.05.00
+     * @author Ktt Development
+     */
+    DirectoryEntry(final File directory, final FileHandlerAdapter adapter, final ByteLoadingOption loadingOption, final boolean isWalkthrough){
         this.directory = directory;
         this.adapter = adapter;
         this.loadingOption = loadingOption;
         this.isWalkthrough = isWalkthrough;
 
         if(loadingOption == ByteLoadingOption.WATCHLOAD){
-
-        }else if(loadingOption == ByteLoadingOption.PRELOAD){
-                if(!isWalkthrough){
-                    final File[] listFiles = Objects.requireNonNullElse(directory.listFiles(),new File[0]);
-                    for(final File file : listFiles)
-                        if(!file.isDirectory())
-                            files.put(
+            {
+                final File[] listFiles = Objects.requireNonNullElse(directory.listFiles(),new File[0]);
+                for(final File file : listFiles)
+                    if(!file.isDirectory())
+                        try{
+                            preloadedFiles.put(
                                 getContext(adapter.getName(file)),
-                                new FileEntry(file,adapter,ByteLoadingOption.PRELOAD)
+                                new FileEntry(file, adapter, ByteLoadingOption.WATCHLOAD, true)
                             );
-                }else{
-                    final Path dirPath = directory.toPath();
+                        }catch(final RuntimeException ignored){ }
+                try{
+                    final WatchService service = FileSystems.getDefault().newWatchService();
+                    final Path path = directory.toPath();
+                    path.register(service, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
 
+                    new Thread(() -> {
+                        WatchKey key;
+                        try{
+                            while((key = service.take()) != null){
+                                for(WatchEvent<?> event : key.pollEvents()){
+                                    try{
+                                        final Path target = (Path) event.context();
+                                        final File file = target.toFile();
+                                        final WatchEvent.Kind<?> type = event.kind();
+
+                                        final String context = getContext(adapter.getName(file));
+
+                                        if(type == ENTRY_CREATE)
+                                            preloadedFiles.put(
+                                                context,
+                                                new FileEntry(file, adapter, loadingOption,true)
+                                            );
+                                        else if(type == ENTRY_DELETE)
+                                            preloadedFiles.remove(context);
+                                        else if(type == ENTRY_MODIFY)
+                                            preloadedFiles.get(context).reloadBytes();
+                                    }catch(final ClassCastException ignored){ }
+                                }
+                            }
+                        }catch(final InterruptedException ignored){ }
+                    }).start();
+
+                }catch(final IOException e){
+                    throw new RuntimeException(e);
+                }
+            }
+            if(isWalkthrough){
+                final Path dirPath = directory.toPath();
+                try{
+                    Files.walk(dirPath).filter(path -> path.toFile().isDirectory()).forEach(path -> {
+                        final File p2f = path.toFile();
+                        final String rel = dirPath.relativize(path).toString();
+
+                        final File[] listFile = Objects.requireNonNullElse(p2f.listFiles(),new File[0]);
+                        for(final File file : listFile){
+                            try{
+                                preloadedFiles.put(
+                                    (rel.isEmpty() || rel.equals("/") || rel.equals("\\") ? "" : getContext(rel)) + getContext(adapter.getName(file)),
+                                    new FileEntry(file,adapter,loadingOption,true)
+                                );
+                            }catch(final RuntimeException ignored){ }
+
+                            // watch service
+                            try{
+                                final WatchService service = FileSystems.getDefault().newWatchService();
+                                final Path dpath = file.toPath();
+                                dpath.register(service, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
+
+                                new Thread(() -> {
+                                    WatchKey key;
+                                    try{
+                                        while((key = service.take()) != null){
+                                            for(WatchEvent<?> event : key.pollEvents()){
+                                                try{
+                                                    final Path target = (Path) event.context();
+                                                    final File targFile = target.toFile();
+                                                    final WatchEvent.Kind<?> type = event.kind();
+
+                                                    final String context = getContext(adapter.getName(targFile));
+
+                                                    if(type == ENTRY_CREATE)
+                                                        preloadedFiles.put(
+                                                            context,
+                                                            new FileEntry(targFile,adapter,loadingOption,true)
+                                                        );
+                                                    else if(type == ENTRY_DELETE)
+                                                        preloadedFiles.remove(context);
+                                                    else if(type == ENTRY_MODIFY)
+                                                        preloadedFiles.get(context).reloadBytes();
+                                                }catch(final ClassCastException ignored){ }
+                                            }
+                                        }
+                                    }catch(final InterruptedException ignored){ }
+                                }).start();
+                            }catch(final IOException e){
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    });
+                }catch(final IOException e){
+                    throw new RuntimeException(e);
+                }
+            }
+        }else if(loadingOption == ByteLoadingOption.PRELOAD){
+            {
+                final File[] listFiles = Objects.requireNonNullElse(directory.listFiles(),new File[0]);
+                for(final File file : listFiles)
+                    if(!file.isDirectory())
+                        try{
+                            preloadedFiles.put(
+                                getContext(adapter.getName(file)),
+                                new FileEntry(file, adapter, ByteLoadingOption.PRELOAD)
+                            );
+                        }catch(final RuntimeException ignored){ }
+            }
+            if(isWalkthrough){
+                final Path dirPath = directory.toPath();
+
+                try{
                     Files.walk(dirPath).filter(path -> path.toFile().isDirectory()).forEach(path -> {
                         final File p2f = path.toFile();
                         final String rel = dirPath.relativize(path).toString();
 
                         final File[] listFiles = Objects.requireNonNullElse(p2f.listFiles(), new File[0]);
                         for(final File file : listFiles)
-                            files.put(
-                                (rel.isEmpty() || rel.equals("/") || rel.equals("\\") ? "" : getContext(rel)) + getContext(adapter.getName(file)),
-                                new FileEntry(file,adapter,loadingOption)
-                            );
+                            try{
+                                preloadedFiles.put(
+                                    (rel.isEmpty() || rel.equals("/") || rel.equals("\\") ? "" : getContext(rel)) + getContext(adapter.getName(file)),
+                                    new FileEntry(file, adapter, loadingOption)
+                                );
+                            }catch(final RuntimeException ignored){ }
                     });
+                }catch(final IOException e){
+                    throw new RuntimeException(e);
                 }
+            }
         }
-    }
-
-//
-
-    /**
-     * Returns if the directory uses inner folders and files
-     *
-     * @return if directory uses inner folders and files
-     *
-     * @since 02.00.00
-     * @author Ktt Development
-     */
-    public final boolean isWalkthrough(){
-        return isWalkthrough;
-    }
-
-    /**
-     * Returns if the files were preloaded.
-     *
-     * @return if the files were preloaded
-     *
-     * @since 02.00.00
-     * @author Ktt Development
-     */
-    @Deprecated
-    public final boolean isFilesPreloaded(){
-        return loadingOption != ByteLoadingOption.LIVELOAD;
     }
 
 //
@@ -94,7 +193,7 @@ class DirectoryEntry {
      *
      * @return referenced directory
      *
-     * @see #getFiles()
+     * @see #getPreloadedFiles()
      * @see #getFile(String)
      * @since 02.00.00
      * @author Ktt Development
@@ -113,8 +212,8 @@ class DirectoryEntry {
      * @since 02.00.00
      * @author Ktt Development
      */
-    public Map<String, FileEntry> getFiles(){
-        return files;
+    public Map<String, FileEntry> getPreloadedFiles(){
+        return Collections.unmodifiableMap(preloadedFiles);
     }
 
     /**
@@ -124,7 +223,7 @@ class DirectoryEntry {
      * @return file associated with that context
      *
      * @see #getDirectory()
-     * @see #getFiles()
+     * @see #getPreloadedFiles()
      * @since 02.00.00
      * @author Ktt Development
      */
@@ -132,10 +231,10 @@ class DirectoryEntry {
         final String rel = getContext(path);
         if(loadingOption != ByteLoadingOption.LIVELOAD){
             String match = "";
-            for(final String key : files.keySet())
+            for(final String key : preloadedFiles.keySet())
                 if(rel.startsWith(key) && key.startsWith(match))
                     match = key;
-            return !match.isEmpty() ? files.get(match).getFile() : null;
+            return !match.isEmpty() ? preloadedFiles.get(match).getFile() : null;
         }else{
             if(isWalkthrough){
                 final File parent = new File(directory.getAbsolutePath() + path).getParentFile();
@@ -171,11 +270,11 @@ class DirectoryEntry {
         final String rel = getContext(path);
         if(loadingOption != ByteLoadingOption.LIVELOAD){
             String match = "";
-            for(final String key : files.keySet())
+            for(final String key : preloadedFiles.keySet())
                 if(rel.startsWith(key) && key.startsWith(match))
                     match = key;
             if(!match.isEmpty()){
-                return files.get(match).getBytes();
+                return preloadedFiles.get(match).getBytes();
             }else{
                 return null;
             }
@@ -199,8 +298,20 @@ class DirectoryEntry {
      * @author Ktt Development
      */
     public final ByteLoadingOption getLoadingOption(){
-            return loadingOption;
-        }
+        return loadingOption;
+    }
+
+    /**
+     * Returns if the directory uses inner folders and files
+     *
+     * @return if directory uses inner folders and files
+     *
+     * @since 02.00.00
+     * @author Ktt Development
+     */
+    public final boolean isWalkthrough(){
+        return isWalkthrough;
+    }
 
 //
 
@@ -217,13 +328,13 @@ class DirectoryEntry {
     @Override
     public String toString(){
         return
-            "DirectoryEntry"    + '{' +
-            "directory"         + '=' +     directory       + ", " +
-            "adapter"           + '=' +     adapter         + ", " +
-            "loadingOption"     + '=' +     loadingOption   + ", " +
-            "isWalkthrough"     + '=' +     isWalkthrough   + ", " +
-            "files"             + '=' +     files +
-            '}';
+                "DirectoryEntry" + '{' +
+                "directory" + '=' + directory + ", " +
+                "adapter" + '=' + adapter + ", " +
+                "loadingOption" + '=' + loadingOption + ", " +
+                "isWalkthrough" + '=' + isWalkthrough + ", " +
+                "files" + '=' + preloadedFiles +
+                '}';
     }
 
 }

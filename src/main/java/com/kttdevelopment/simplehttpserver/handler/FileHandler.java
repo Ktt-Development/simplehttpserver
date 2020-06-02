@@ -663,7 +663,7 @@ public class FileHandler implements SimpleHttpHandler {
                 try{
                     rel2 = rel.substring(match.length());
 
-                    if(entry.isFilesPreloaded()){
+                    if(entry.getLoadingOption() != ByteLoadingOption.LIVELOAD){
                         final File file;
                         if((file = entry.getFile(rel2)) != null){
                             handle(exchange, file, entry.getBytes(rel2)); // use adapted preload

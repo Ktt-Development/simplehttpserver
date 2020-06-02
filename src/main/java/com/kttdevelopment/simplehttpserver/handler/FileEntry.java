@@ -28,14 +28,13 @@ class FileEntry {
      * @param file file to represent
      * @param bytesAdapter how to process the bytes in {@link #getBytes()}
      * @param loadingOption how to handle the initial file loading
-     * @throws IOException failure to start watch service ({@link ByteLoadingOption#WATCHLOAD} only).
+     * @throws RuntimeException I/O failure to start watch service ({@link ByteLoadingOption#WATCHLOAD} only).
      *
      * @see FileBytesAdapter
      * @see ByteLoadingOption
      * @since 03.05.00
      * @author Ktt Development
      */
-    @SuppressWarnings("JavaDoc")
     FileEntry(final File file, final FileBytesAdapter bytesAdapter, final ByteLoadingOption loadingOption){
         this(file,bytesAdapter,loadingOption,true);
     }
@@ -47,14 +46,13 @@ class FileEntry {
      * @param bytesAdapter how to process the bytes in {@link #getBytes()}
      * @param loadingOption how to handle the initial file loading
      * @param skipWatchService skip creating a watch service ({@link ByteLoadingOption#WATCHLOAD} only).
-     * @throws IOException failure to start watch service ({@link ByteLoadingOption#WATCHLOAD} only).
+     * @throws RuntimeException I/O failure to start watch service ({@link ByteLoadingOption#WATCHLOAD} only).
      *
      * @see FileBytesAdapter
      * @see ByteLoadingOption
      * @since 03.05.00
      * @author Ktt Development
      */
-    @SuppressWarnings("JavaDoc")
     FileEntry(final File file, final FileBytesAdapter bytesAdapter, final ByteLoadingOption loadingOption, final boolean skipWatchService){
         this.file = file;
         this.loadingOption = loadingOption;
@@ -71,8 +69,8 @@ class FileEntry {
                         new Thread(() -> {
                             WatchKey key;
                             try{
-                                while ((key = service.take()) != null) {
-                                    for (WatchEvent<?> event : key.pollEvents()) {
+                                while((key = service.take()) != null){
+                                    for(WatchEvent<?> event : key.pollEvents()){
                                         try{
                                             final Path target = (Path) event.context();
                                             try{
@@ -85,7 +83,7 @@ class FileEntry {
                                 }
                             }catch(final InterruptedException ignored){ }
                         }).start();
-                    }catch(IOException e){
+                    }catch(final IOException e){
                         throw new RuntimeException(e);
                     }
             case PRELOAD:
@@ -110,6 +108,19 @@ class FileEntry {
      */
     public final File getFile(){
         return file;
+    }
+
+    /**
+     * Reloads the file's preloaded bytes using the {@link FileBytesAdapter}.
+     *
+     * @since 03.05.00
+     * @author Ktt Development
+     */
+    public final void reloadBytes(){
+        if(loadingOption != ByteLoadingOption.LIVELOAD)
+            try{
+                preloadedBytes = adapter.getBytes(file,Files.readAllBytes(file.toPath()));
+            }catch(final IOException ignored){ }
     }
 
     /**
