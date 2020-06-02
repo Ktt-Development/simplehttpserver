@@ -3,8 +3,8 @@ package com.kttdevelopment.simplehttpserver.handler;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Objects;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Represents a directory in the {@link FileHandler}. Applications do not use this class.
@@ -12,71 +12,51 @@ import java.util.Objects;
  * @see FileHandler
  * @see FileEntry
  * @since 02.00.00
- * @version 02.00.00
+ * @version 03.05.00
  * @author Ktt Development
  */
 class DirectoryEntry {
 
-    private final boolean isWalkthrough;
-    private final boolean isFilesPreloaded;
-
     private final File directory;
-    private final HashMap<String,FileEntry> files = new HashMap<>(); // preload only
-
     private final FileHandlerAdapter adapter;
+    private final ByteLoadingOption loadingOption;
+    private final boolean isWalkthrough;
 
-    /**
-     * Creates a directory entry.
-     *
-     * @param directory directory to represent
-     * @param isFilesPreloaded whether to read bytes now or at runtime
-     * @param adapter how to process the file name for context and bytes for {@link #getBytes(String)}
-     * @param isWalkthrough if directory should contain inner folders
-     * @throws FileNotFoundException if file was not found or is not a directory
-     * @throws IOException if file walk failed for initial directory
-     *
-     * @see FileHandlerAdapter
-     * @since 02.00.00
-     * @author Ktt Development
-     */
-    DirectoryEntry(final File directory, final boolean isFilesPreloaded, final FileHandlerAdapter adapter, final boolean isWalkthrough) throws IOException{
-        if(!directory.exists() || !directory.isDirectory())
-            throw new FileNotFoundException("Directory at " + directory.getAbsolutePath() + " was not found");
+    private final Map<String,FileEntry> files = new ConcurrentHashMap<>(); // preload/watchload only
 
+
+    DirectoryEntry(final File directory, final FileHandlerAdapter adapter, final ByteLoadingOption loadingOption, final boolean isWalkthrough) throws IOException{
         this.directory = directory;
-        this.isFilesPreloaded = isFilesPreloaded;
-        this.isWalkthrough = isWalkthrough;
         this.adapter = adapter;
+        this.loadingOption = loadingOption;
+        this.isWalkthrough = isWalkthrough;
 
-        if(isFilesPreloaded){
-            if(!isWalkthrough){
-                final File[] listFiles = directory.listFiles();
-                for(final File file : (listFiles == null) ? new File[0] : listFiles)
-                    if(!file.isDirectory())
-                        files.put(
-                            getContext(adapter.getName(file)),
-                            new FileEntry(file, true, adapter)
-                        );
-            }else{
-                final Path dirPath = directory.toPath();
+        if(loadingOption == ByteLoadingOption.WATCHLOAD){
 
-                Files.walk(dirPath).filter(path -> path.toFile().isDirectory()).forEach(path -> {
-                    final File pathFile = path.toFile();
-                    final String rel = dirPath.relativize(path).toString();
+        }else if(loadingOption == ByteLoadingOption.PRELOAD){
+                if(!isWalkthrough){
+                    final File[] listFiles = Objects.requireNonNullElse(directory.listFiles(),new File[0]);
+                    for(final File file : listFiles)
+                        if(!file.isDirectory())
+                            files.put(
+                                getContext(adapter.getName(file)),
+                                new FileEntry(file,adapter,ByteLoadingOption.PRELOAD)
+                            );
+                }else{
+                    final Path dirPath = directory.toPath();
 
-                    final File[] listFiles = pathFile.listFiles();
-                    for(final File file : (listFiles == null) ? new File[0] : listFiles){
-                        try{
+                    Files.walk(dirPath).filter(path -> path.toFile().isDirectory()).forEach(path -> {
+                        final File p2f = path.toFile();
+                        final String rel = dirPath.relativize(path).toString();
+
+                        final File[] listFiles = Objects.requireNonNullElse(p2f.listFiles(), new File[0]);
+                        for(final File file : listFiles)
                             files.put(
                                 (rel.isEmpty() || rel.equals("/") || rel.equals("\\") ? "" : getContext(rel)) + getContext(adapter.getName(file)),
-                                new FileEntry(file, true, adapter)
+                                new FileEntry(file,adapter,loadingOption)
                             );
-                        }catch(final FileNotFoundException ignored){
-                            // #listFiles assume that all files exist, so this exception should never occur unless the user modified the directory mid-read.
-                        }
-                    }
-                });
-            }
+                    });
+                }
         }
     }
 
@@ -102,8 +82,9 @@ class DirectoryEntry {
      * @since 02.00.00
      * @author Ktt Development
      */
+    @Deprecated
     public final boolean isFilesPreloaded(){
-        return isFilesPreloaded;
+        return loadingOption != ByteLoadingOption.LIVELOAD;
     }
 
 //
@@ -132,7 +113,7 @@ class DirectoryEntry {
      * @since 02.00.00
      * @author Ktt Development
      */
-    public HashMap<String, FileEntry> getFiles(){
+    public Map<String, FileEntry> getFiles(){
         return files;
     }
 
@@ -149,7 +130,7 @@ class DirectoryEntry {
      */
     public final File getFile(final String path){
         final String rel = getContext(path);
-        if(isFilesPreloaded){
+        if(loadingOption != ByteLoadingOption.LIVELOAD){
             String match = "";
             for(final String key : files.keySet())
                 if(rel.startsWith(key) && key.startsWith(match))
@@ -188,7 +169,7 @@ class DirectoryEntry {
      */
     public final byte[] getBytes(final String path){
         final String rel = getContext(path);
-        if(isFilesPreloaded){
+        if(loadingOption != ByteLoadingOption.LIVELOAD){
             String match = "";
             for(final String key : files.keySet())
                 if(rel.startsWith(key) && key.startsWith(match))
@@ -208,6 +189,19 @@ class DirectoryEntry {
         }
     }
 
+    /**
+     * Returns the file's byte loading option.
+     *
+     * @return file loading option
+     *
+     * @see ByteLoadingOption
+     * @since 03.05.00
+     * @author Ktt Development
+     */
+    public final ByteLoadingOption getLoadingOption(){
+            return loadingOption;
+        }
+
 //
 
     private static String getContext(final String path){
@@ -220,18 +214,16 @@ class DirectoryEntry {
 //
 
 
-    @SuppressWarnings("StringBufferReplaceableByString")
     @Override
     public String toString(){
-        final StringBuilder OUT = new StringBuilder();
-        OUT.append("DirectoryEntry")    .append("{");
-        OUT.append("isWalkthrough")     .append("=")   .append(isWalkthrough)      .append(", ");
-        OUT.append("isFilePreloaded")   .append("=")   .append(isFilesPreloaded)   .append(", ");
-        OUT.append("directory")         .append("=")   .append(directory)          .append(", ");
-        OUT.append("(preloaded) files") .append("=")   .append(files)              .append(", ");
-        OUT.append("adapter")           .append("=")   .append(adapter);
-        OUT.append("}");
-        return OUT.toString();
+        return
+            "DirectoryEntry"    + '{' +
+            "directory"         + '=' +     directory       + ", " +
+            "adapter"           + '=' +     adapter         + ", " +
+            "loadingOption"     + '=' +     loadingOption   + ", " +
+            "isWalkthrough"     + '=' +     isWalkthrough   + ", " +
+            "files"             + '=' +     files +
+            '}';
     }
 
 }

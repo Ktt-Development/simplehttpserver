@@ -236,12 +236,10 @@ public class FileHandler implements SimpleHttpHandler {
      * @author Ktt Development
      */
     public final void addFile(final String context, final File file, final String fileName, final boolean preload){
-        try{
-            files.put(
-                (context.isEmpty() || context.equals("/") || context.equals("\\") ? "" : getContext(context)) + getContext(fileName),
-                new FileEntry(file,preload,adapter)
-            );
-        }catch(final FileNotFoundException ignored){ }
+        files.put(
+            (context.isEmpty() || context.equals("/") || context.equals("\\") ? "" : getContext(context)) + getContext(fileName),
+            new FileEntry(file,adapter, preload ? ByteLoadingOption.PRELOAD : ByteLoadingOption.LIVELOAD)
+        );
     }
 
     //
@@ -628,12 +626,13 @@ public class FileHandler implements SimpleHttpHandler {
      * @since 02.00.00
      * @author Ktt Development
      */
+    @Deprecated
     public final void addDirectory(final String context, final File directory, final String directoryName, final boolean preload, final boolean walk){
         try{
             final String target = (context.isEmpty() || context.equals("/") || context.equals("\\") ? "" : getContext(context)) + (directoryName.isEmpty() ? "" : getContext(directoryName));
             directories.put(
                 target.isEmpty() ? "/" : target,
-                new DirectoryEntry(directory, preload, adapter, walk)
+                new DirectoryEntry(directory, adapter,ByteLoadingOption.PRELOAD,walk)
             );
         }catch(final Exception ignored){ }
     }
@@ -651,7 +650,7 @@ public class FileHandler implements SimpleHttpHandler {
 
         if(!match.isEmpty() && files.containsKey(match)){ // exact match
             final FileEntry entry = files.get(match); // preloaded ? use preloaded bytes : adapt bytes now
-            handle(exchange,entry.getFile(),entry.isPreloaded() ? entry.getBytes() : adapter.getBytes(entry.getFile(),entry.getBytes()));
+            handle(exchange,entry.getFile(),entry.getLoadingOption() != ByteLoadingOption.LIVELOAD ? entry.getBytes() : adapter.getBytes(entry.getFile(),entry.getBytes()));
         }else{ // beginning match
             match = "";
             for(final String key : directories.keySet())
