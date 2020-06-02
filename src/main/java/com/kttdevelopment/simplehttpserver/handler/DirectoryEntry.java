@@ -240,15 +240,12 @@ class DirectoryEntry {
                 final File parent = new File(directory.getAbsolutePath() + path).getParentFile();
                 if(!parent.getAbsolutePath().startsWith(directory.getAbsolutePath())) return null;
                 final String name = path.substring(path.lastIndexOf('/'));
-                final File[] listFiles = parent.listFiles(pathname -> !pathname.isDirectory());
 
-                for(final File file : (listFiles == null) ? new File[0] : listFiles)
+                for(final File file : Objects.requireNonNullElse(directory.listFiles(p -> !p.isDirectory()),new File[0]))
                     if(adapter.getName(file).equals(name))
                         return file;
             }else{
-                final File[] listFiles = directory.listFiles(pathname -> !pathname.isDirectory());
-
-                for(final File file : (listFiles == null) ? new File[0] : listFiles)
+                for(final File file : Objects.requireNonNullElse(directory.listFiles(p -> !p.isDirectory()),new File[0]))
                     if(adapter.getName(file).equals(path))
                         return file;
             }
@@ -273,16 +270,12 @@ class DirectoryEntry {
             for(final String key : preloadedFiles.keySet())
                 if(rel.startsWith(key) && key.startsWith(match))
                     match = key;
-            if(!match.isEmpty()){
-                return preloadedFiles.get(match).getBytes();
-            }else{
-                return null;
-            }
+            return !match.isEmpty() ? preloadedFiles.get(match).getBytes() : null;
         }else{
             final File file = getFile(path);
             try{
                 return adapter.getBytes(file,Files.readAllBytes(Objects.requireNonNull(file).toPath()));
-            }catch(NullPointerException | IOException ignored){
+            }catch(final Exception ignored){
                 return null;
             }
         }
@@ -328,13 +321,13 @@ class DirectoryEntry {
     @Override
     public String toString(){
         return
-                "DirectoryEntry" + '{' +
-                "directory" + '=' + directory + ", " +
-                "adapter" + '=' + adapter + ", " +
-                "loadingOption" + '=' + loadingOption + ", " +
-                "isWalkthrough" + '=' + isWalkthrough + ", " +
-                "files" + '=' + preloadedFiles +
-                '}';
+            "DirectoryEntry" + '{' +
+            "directory" + '=' + directory + ", " +
+            "adapter" + '=' + adapter + ", " +
+            "loadingOption" + '=' + loadingOption + ", " +
+            "isWalkthrough" + '=' + isWalkthrough + ", " +
+            "files" + '=' + preloadedFiles +
+            '}';
     }
 
 }
