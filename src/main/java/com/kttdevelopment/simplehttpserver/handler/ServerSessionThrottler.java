@@ -138,6 +138,7 @@ public class ServerSessionThrottler extends ConnectionThrottler{
     /**
      * Returns if a session is exempt from the server connection limit only.
      *
+     * @param session session to process
      * @param exchange exchange to process
      * @return if exchange ignores server connection limit
      *
