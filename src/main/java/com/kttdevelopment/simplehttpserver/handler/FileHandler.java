@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * The <code>directoryName</code> parameter determines the directory's name. Add the files at the top level by keeping this field empty. <br>
  * The <code>loadingOption</code> parameter determines how files should be loaded (see {@link ByteLoadingOption}). <br>
  * The <code>walk</code> parameter determines if all the inner directories should be used.
- * The handler will not add any null files and will always use the latest file added for a particular context.
+ * The handler will returns data given by the {@link FileHandlerAdapter} unless overridden.
  *
  * @see FileHandlerAdapter
  * @see ByteLoadingOption
