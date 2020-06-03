@@ -124,7 +124,7 @@ public class ServerThrottler extends ConnectionThrottler {
     }
 
     @Override
-    int getMaxConnections(final HttpExchange exchange){
+    public int getMaxConnections(final HttpExchange exchange){
         return getMaxConnections();
     }
 

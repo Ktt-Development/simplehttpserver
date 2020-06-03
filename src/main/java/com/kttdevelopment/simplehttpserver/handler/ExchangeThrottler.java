@@ -13,8 +13,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @see HttpExchange
  * @see ThrottledHandler
- * @see ServerThrottler
+ * @see ServerExchangeThrottler
  * @see SessionThrottler
+ * @see ServerSessionThrottler
  * @since 03.05.00
  * @version 03.05.00
  * @author Ktt Development
@@ -22,6 +23,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ExchangeThrottler extends ConnectionThrottler {
 
     private final Map<InetAddress,AtomicInteger> connections = new ConcurrentHashMap<>();
+
+    /**
+     * Creates a throttler with limits on each exchange.
+     *
+     * @since 03.05.00
+     * @author Ktt Development
+     */
+    public ExchangeThrottler(){ }
 
     @Override
     final boolean addConnection(final HttpExchange exchange){
@@ -54,7 +63,7 @@ public class ExchangeThrottler extends ConnectionThrottler {
     }
 
     @Override
-    int getMaxConnections(final HttpExchange exchange){
+    public int getMaxConnections(final HttpExchange exchange){
         return -1;
     }
 

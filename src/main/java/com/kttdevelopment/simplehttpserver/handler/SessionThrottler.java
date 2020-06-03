@@ -15,7 +15,8 @@ import java.util.function.Predicate;
  * @see HttpSession
  * @see ThrottledHandler
  * @see ExchangeThrottler
- * @see ServerThrottler
+ * @see ServerExchangeThrottler
+ * @see ServerSessionThrottler
  * @since 03.03.00
  * @version 03.05.00
  * @author Ktt Development
@@ -43,7 +44,7 @@ public class SessionThrottler extends ConnectionThrottler {
      */
     public SessionThrottler(final HttpSessionHandler sessionHandler){
         this.sessionHandler = sessionHandler;
-        countsTowardsLimit = (exchange) -> true;
+        countsTowardsLimit = (exchange) -> true; // @depreciated
     }
 
     /**
@@ -158,7 +159,7 @@ public class SessionThrottler extends ConnectionThrottler {
     }
 
     @Override
-    final int getMaxConnections(final HttpExchange exchange){
+    public final int getMaxConnections(final HttpExchange exchange){
         return getMaxConnections(sessionHandler.getSession(exchange),exchange);
     }
 
@@ -172,7 +173,7 @@ public class SessionThrottler extends ConnectionThrottler {
      * @since 03.05.00
      * @author Ktt Development
      */
-    int getMaxConnections(final HttpSession session, final HttpExchange exchange){
+    public int getMaxConnections(final HttpSession session, final HttpExchange exchange){
         return countsTowardsLimit.test(session) ? getMaxConnections() : -1;
     }
 
@@ -186,7 +187,7 @@ public class SessionThrottler extends ConnectionThrottler {
             "sessions@depreciated"          + '=' +     connections.toString()  + ", " +
             "maxConnections@depreciated"    + '=' +     maxConnections.get()    + ", " +
             "sessionHandler"                + '=' +     sessionHandler          + ", " +
-            "connections"                   + '=' +     connections.toString()  + ", " +
+            "connections"                   + '=' +     connections.toString()  +
             '}';
     }
 

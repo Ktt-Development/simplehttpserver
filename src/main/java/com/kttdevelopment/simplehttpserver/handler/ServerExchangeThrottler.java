@@ -14,6 +14,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @see HttpExchange
  * @see ThrottledHandler
  * @see ExchangeThrottler
+ * @see SessionThrottler
+ * @see ServerSessionThrottler
  * @since 03.05.00
  * @version 03.05.00
  * @author Ktt Development
@@ -23,7 +25,27 @@ public class ServerExchangeThrottler extends ConnectionThrottler {
     private final Map<InetAddress, AtomicInteger> connections = new ConcurrentHashMap<>();
 
     private final AtomicInteger uConn = new AtomicInteger(0);
-    private final AtomicInteger uConnMax = new AtomicInteger(0);
+    private final AtomicInteger uConnMax = new AtomicInteger(-1);
+
+    /**
+     * Creates a throttler with connection limits on user and total connections.
+     *
+     * @since 03.05.00
+     * @author Ktt Development
+     */
+    public ServerExchangeThrottler(){ }
+
+    /**
+     * Creates a throttler with connection limits on user and total connections.
+     *
+     * @param maxConnections maximum allowed server connections
+     *
+     * @since 03.05.00
+     * @author Ktt Development
+     */
+    public ServerExchangeThrottler(final int maxConnections){
+        uConnMax.set(maxConnections);
+    }
 
     @Override
     final boolean addConnection(final HttpExchange exchange){
@@ -84,7 +106,7 @@ public class ServerExchangeThrottler extends ConnectionThrottler {
     }
 
     @Override
-    int getMaxConnections(final HttpExchange exchange){
+    public int getMaxConnections(final HttpExchange exchange){
         return -1;
     }
 
@@ -98,7 +120,7 @@ public class ServerExchangeThrottler extends ConnectionThrottler {
      * @since 03.05.00
      * @author Ktt Development
      */
-    boolean canIgnoreConnectionLimit(final HttpExchange exchange){
+    public boolean canIgnoreConnectionLimit(final HttpExchange exchange){
         return false;
     }
 

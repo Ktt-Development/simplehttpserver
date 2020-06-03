@@ -55,6 +55,6 @@ abstract class ConnectionThrottler {
      * @since 03.05.00
      * @author Ktt Development
      */
-    abstract int getMaxConnections(final HttpExchange exchange);
+    public abstract int getMaxConnections(final HttpExchange exchange);
 
 }

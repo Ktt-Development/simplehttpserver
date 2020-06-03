@@ -13,7 +13,10 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Limits connections per session to the server and total server sessions.
  *
  * @see HttpSession
+ * @see HttpSessionHandler
  * @see ThrottledHandler
+ * @see ExchangeThrottler
+ * @see ServerExchangeThrottler
  * @see SessionThrottler
  * @since 03.05.00
  * @version 03.05.00
@@ -25,10 +28,34 @@ public class ServerSessionThrottler extends ConnectionThrottler{
     private final Map<HttpSession,AtomicInteger> connections = new ConcurrentHashMap<>();
 
     private final AtomicInteger uConn = new AtomicInteger(0);
-    private final AtomicInteger uConnMax = new AtomicInteger(0);
+    private final AtomicInteger uConnMax = new AtomicInteger(-1);
 
+    /**
+     * Creates a throttler with limits on session and total connections.
+     *
+     * @param sessionHandler http session handler
+     *
+     * @see HttpSessionHandler
+     * @since 03.05.00
+     * @author Ktt Development
+     */
     public ServerSessionThrottler(final HttpSessionHandler sessionHandler){
         this.sessionHandler = sessionHandler;
+    }
+
+    /**
+     * Creates a throttler with limits on session and total connections.
+     *
+     * @param sessionHandler http session handler
+     * @param maxConnections maximum allowed server connections
+     *
+     * @see HttpSessionHandler
+     * @since 03.05.00
+     * @author Ktt Development
+     */
+    public ServerSessionThrottler(final HttpSessionHandler sessionHandler, final int maxConnections){
+        this.sessionHandler = sessionHandler;
+        uConnMax.set(maxConnections);
     }
 
     @Override
@@ -90,7 +117,7 @@ public class ServerSessionThrottler extends ConnectionThrottler{
     }
 
     @Override
-    final int getMaxConnections(final HttpExchange exchange){
+    public final int getMaxConnections(final HttpExchange exchange){
         return getMaxConnections(sessionHandler.getSession(exchange),exchange);
     }
 
@@ -104,7 +131,7 @@ public class ServerSessionThrottler extends ConnectionThrottler{
      * @since 03.05.00
      * @author Ktt Development
      */
-    int getMaxConnections(final HttpSession session, final HttpExchange exchange){
+    public int getMaxConnections(final HttpSession session, final HttpExchange exchange){
         return -1;
     }
 
@@ -119,7 +146,7 @@ public class ServerSessionThrottler extends ConnectionThrottler{
      * @since 03.05.00
      * @author Ktt Development
      */
-    boolean canIgnoreConnectionLimit(final HttpSession session, final HttpExchange exchange){
+    public boolean canIgnoreConnectionLimit(final HttpSession session, final HttpExchange exchange){
         return false;
     }
 
