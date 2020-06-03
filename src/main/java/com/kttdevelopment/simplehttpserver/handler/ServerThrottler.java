@@ -8,12 +8,15 @@ import java.util.function.Predicate;
 /**
  * Limits connections for the server.
  *
+ * @deprecated Use {@link ServerExchangeThrottler} instead
+ *
  * @see ThrottledHandler
  * @see SessionThrottler
  * @since 03.03.00
- * @version 03.03.00
+ * @version 03.05.00
  * @author Ktt Development
  */
+@Deprecated
 public class ServerThrottler extends ConnectionThrottler {
 
     private final Predicate<HttpExchange> countsTowardsLimit;
@@ -97,6 +100,7 @@ public class ServerThrottler extends ConnectionThrottler {
             this.maxConnections.set(maxConnections);
     }
 
+    @Override
     final boolean addConnection(final HttpExchange exchange){
         if(!countsTowardsLimit.test(exchange)){
             return true;
@@ -111,6 +115,7 @@ public class ServerThrottler extends ConnectionThrottler {
         return false;
     }
 
+    @Override
     final void deleteConnection(final HttpExchange exchange){
         if(countsTowardsLimit.test(exchange))
             synchronized(this){
@@ -118,20 +123,21 @@ public class ServerThrottler extends ConnectionThrottler {
             }
     }
 
+    @Override
+    public int getMaxConnections(final HttpExchange exchange){
+        return getMaxConnections();
+    }
+
     //
 
-    @SuppressWarnings("StringBufferReplaceableByString")
     @Override
     public String toString(){
-        final StringBuilder OUT = new StringBuilder();
-
-        OUT.append("ConnectionThrottler")   .append('{');
-        OUT.append("condition")             .append('=')    .append(countsTowardsLimit)     .append(", ");
-        OUT.append("connections")           .append('=')    .append(connections.get())      .append(", ");
-        OUT.append("maxConnections")        .append('=')    .append(maxConnections.get());
-        OUT.append('}');
-
-        return OUT.toString();
+        return
+            "ConnectionThrottler"   + '{' +
+            "condition"             + '=' +     countsTowardsLimit      + ", " +
+            "connections"           + '=' +     connections.get()       + ", " +
+            "maxConnections"        + '=' +     maxConnections.get()    +
+            '}';
     }
 
 }

@@ -16,7 +16,7 @@ import java.util.function.Predicate;
  * @see SimpleHttpExchange
  * @see Predicate
  * @since 01.00.00
- * @version 02.00.00
+ * @version 03.05.00
  * @author Ktt Development
  */
 public class PredicateHandler implements HttpHandler {
@@ -51,17 +51,14 @@ public class PredicateHandler implements HttpHandler {
 
 //
 
-
-    @SuppressWarnings("StringBufferReplaceableByString")
     @Override
     public String toString(){
-        final StringBuilder OUT = new StringBuilder();
-        OUT.append("PredicateHandler")  .append('{');
-        OUT.append("(true) handler")    .append('=')   .append(T.toString())           .append(", ");
-        OUT.append("(false) handler")   .append('=')   .append(F.toString())           .append(", ");
-        OUT.append("predicate")         .append('=')   .append(predicate.toString());
-        OUT.append('}');
-        return OUT.toString();
+        return
+            "PredicateHandler"  + '{' +
+            "(true) handler"    + '=' +     T.toString()            + ", " +
+            "(false) handler"   + '=' +     F.toString()            + ", " +
+            "predicate"         + '=' +     predicate.toString()    +
+            '}';
     }
 
 }

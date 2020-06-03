@@ -9,7 +9,7 @@ import java.util.*;
  * This class assigns {@link HttpSession} to every client.
  *
  * @since 03.03.00
- * @version 03.03.00
+ * @version 03.05.00
  * @author Ktt Development
  */
 public class HttpSessionHandler {
@@ -130,16 +130,14 @@ public class HttpSessionHandler {
 
                     //
 
-                    @SuppressWarnings("StringBufferReplaceableByString")
                     @Override
                     public String toString(){
-                        final StringBuilder OUT = new StringBuilder();
-                        OUT.append("HttpSession")       .append('{');
-                        OUT.append("sessionID")         .append('=')    .append(sessionID)      .append(", ");
-                        OUT.append("creationTime")      .append('=')    .append(creationTime)   .append(", ");
-                        OUT.append("lastAccessTime")    .append('=')    .append(lastAccessTime);
-                        OUT.append('}');
-                        return OUT.toString();
+                        return
+                            "HttpSession"       + '{' +
+                            "sessionID"         + '=' +     sessionID       + ", " +
+                            "creationTime"      + '=' +     creationTime    + ", " +
+                            "lastAccessTime"    + '=' +     lastAccessTime  +
+                            '}';
                     }
 
                 };
@@ -156,6 +154,15 @@ public class HttpSessionHandler {
             }
         }
         return session;
+    }
+
+    @Override
+    public String toString(){
+        return
+            "HttpSessionHandler"    + '{' +
+            "sessions"              + '=' +     sessions    + ", " +
+            "cookie"                + '=' +     cookie      + ", " +
+            '}';
     }
 
 }

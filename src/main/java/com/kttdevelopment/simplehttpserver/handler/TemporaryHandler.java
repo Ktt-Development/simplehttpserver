@@ -13,7 +13,7 @@ import java.io.IOException;
  * @see SimpleHttpServer#getRandomContext()
  * @see SimpleHttpServer#getRandomContext(String)
  * @since 03.03.00
- * @version 03.03.00
+ * @version 03.05.00
  * @author Ktt Development
  */
 public class TemporaryHandler implements HttpHandler {
@@ -65,16 +65,17 @@ public class TemporaryHandler implements HttpHandler {
 
     @Override
     public String toString(){
-        final StringBuilder OUT = new StringBuilder();
-        OUT.append("TemporaryHandler")  .append('{');
-        OUT.append("handler")           .append('=')    .append(handler.toString()) .append(", ");
-        if(hasExpiry){
-            OUT.append("initTime")      .append('=')    .append(initTime)           .append(", ");
-            OUT.append("maxTime")       .append('=')    .append(maxTime)            .append(", ");
-            OUT.append("expiry")        .append('=')    .append(expiry);
-        }
-        OUT.append('}');
-       return OUT.toString();
+        return
+            "TemporaryHandler"  + '{' +
+            "handler"           + '=' +     handler.toString() +
+            (hasExpiry
+             ?  ", " +
+                "initTime"      + '=' +     initTime    + ", " +
+                "maxTime"       + '=' +     maxTime     + ", " +
+                "expiry"        + '=' +     expiry
+             : ""
+            ) +
+            '}';
     }
 
 }
