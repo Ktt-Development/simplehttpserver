@@ -317,16 +317,17 @@ class DirectoryEntry {
 
 //
 
+
     @Override
     public String toString(){
         return
-            "DirectoryEntry"    + "{" +
-            "isWalkthrough"     + "=" +     isWalkthrough       + ", " +
-            "isFilePreloaded"   + "=" +     isFilesPreloaded    + ", " +
-            "directory"         + "=" +     directory           + ", " +
-            "(preloaded) files" + "=" +     files               + ", " +
-            "adapter"           + "=" +     adapter             +
-            "}";
+            "DirectoryEntry"    + '{' +
+            "directory"         + '=' +     directory       + ", " +
+            "adapter"           + '=' +     adapter         + ", " +
+            "loadingOption"     + '=' +     loadingOption   + ", " +
+            "isWalkthrough"     + '=' +     isWalkthrough   + ", " +
+            "preloadedFiles"    + '=' +     preloadedFiles  +
+            '}';
     }
 
 }
