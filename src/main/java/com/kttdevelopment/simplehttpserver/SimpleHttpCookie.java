@@ -9,7 +9,7 @@ import java.util.Date;
  * @see SimpleHttpExchange
  * @see Builder
  * @since 02.00.00
- * @version 02.03.00
+ * @version 03.05.00
  * @author Ktt Development
  */
 public class SimpleHttpCookie {
@@ -93,23 +93,21 @@ public class SimpleHttpCookie {
        return OUT.toString();
     }
 
-    @SuppressWarnings("StringBufferReplaceableByString")
+    //
+
     public String toString(){
-        final StringBuilder OUT = new StringBuilder();
-
-        OUT.append("SimpleHttpCookie")      .append('{');
-        OUT.append("name")                  .append('=')    .append(name)       .append(", ");
-        OUT.append("value")                 .append('=')    .append(value)      .append(", ");
-        OUT.append("expires")               .append('=')    .append(expires)    .append(", ");
-        OUT.append("maxAge")                .append('=')    .append(maxAge)     .append(", ");
-        OUT.append("domain")                .append('=')    .append(domain)     .append(", ");
-        OUT.append("path")                  .append('=')    .append(path)       .append(", ");
-        OUT.append("secure")                .append('=')    .append(secure)     .append(", ");
-        OUT.append("httpOnly")              .append('=')    .append(httpOnly)   .append(", ");
-        OUT.append("sameSite")              .append('=')    .append(sameSite);
-        OUT.append('}');
-
-       return OUT.toString();
+        return
+            "SimpleHttpCookie"  + '{' +
+            "name"              + '=' +     name        + ", " +
+            "value"             + '=' +     value       + ", " +
+            "expires"           + '=' +     expires     + ", " +
+            "maxAge"            + '=' +     maxAge      + ", " +
+            "domain"            + '=' +     domain      + ", " +
+            "path"              + '=' +     path        + ", " +
+            "secure"            + '=' +     secure      + ", " +
+            "httpOnly"          + '=' +     httpOnly    + ", " +
+            "sameSite"          + '=' +     sameSite    +
+            '}';
     }
 
     /**

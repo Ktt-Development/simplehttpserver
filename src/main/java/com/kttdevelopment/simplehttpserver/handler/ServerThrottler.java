@@ -130,18 +130,14 @@ public class ServerThrottler extends ConnectionThrottler {
 
     //
 
-    @SuppressWarnings("StringBufferReplaceableByString")
     @Override
     public String toString(){
-        final StringBuilder OUT = new StringBuilder();
-
-        OUT.append("ConnectionThrottler")   .append('{');
-        OUT.append("condition")             .append('=')    .append(countsTowardsLimit)     .append(", ");
-        OUT.append("connections")           .append('=')    .append(connections.get())      .append(", ");
-        OUT.append("maxConnections")        .append('=')    .append(maxConnections.get());
-        OUT.append('}');
-
-        return OUT.toString();
+        return
+            "ConnectionThrottler"   + '{' +
+            "condition"             + '=' +     countsTowardsLimit      + ", " +
+            "connections"           + '=' +     connections.get()       + ", " +
+            "maxConnections"        + '=' +     maxConnections.get()    +
+            '}';
     }
 
 }
