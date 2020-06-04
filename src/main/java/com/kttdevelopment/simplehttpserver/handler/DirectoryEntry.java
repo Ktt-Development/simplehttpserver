@@ -101,7 +101,7 @@ class DirectoryEntry {
                         final String rel = dirPath.relativize(path).toString();
 
                         final File[] listFile = Objects.requireNonNullElse(p2f.listFiles(),new File[0]);
-                        for(final File file : listFile){
+                        for(final File file : listFile)
                             try{
                                 preloadedFiles.put(
                                     (rel.isEmpty() || rel.equals("/") || rel.equals("\\") ? "" : getContext(rel)) + getContext(adapter.getName(file)),
@@ -109,41 +109,41 @@ class DirectoryEntry {
                                 );
                             }catch(final RuntimeException ignored){ }
 
-                            // watch service
-                            try{
-                                final WatchService service = FileSystems.getDefault().newWatchService();
-                                final Path dpath = file.toPath();
-                                dpath.register(service, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
+                        // watch service
+                        try{
+                            final WatchService service = FileSystems.getDefault().newWatchService();
+                            path.register(service, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
+                            final String relative = getContext(dirPath.relativize(path).toString());
 
-                                new Thread(() -> {
-                                    WatchKey key;
-                                    try{
-                                        while((key = service.take()) != null){
-                                            for(WatchEvent<?> event : key.pollEvents()){
-                                                try{
-                                                    final Path target = (Path) event.context();
-                                                    final File targFile = target.toFile();
-                                                    final WatchEvent.Kind<?> type = event.kind();
+                            new Thread(() -> {
+                                WatchKey key;
+                                try{
+                                    while((key = service.take()) != null){
+                                        for(WatchEvent<?> event : key.pollEvents()){
+                                            try{
+                                                final Path target = dirPath.resolve((Path) event.context());
+                                                final File targFile = target.toFile();
+                                                final WatchEvent.Kind<?> type = event.kind();
 
-                                                    final String context = getContext(adapter.getName(targFile));
+                                                final String context = relative + getContext(adapter.getName(targFile));
 
-                                                    if(type == ENTRY_CREATE)
-                                                        preloadedFiles.put(
-                                                            context,
-                                                            new FileEntry(targFile,adapter,loadingOption,true)
-                                                        );
-                                                    else if(type == ENTRY_DELETE)
-                                                        preloadedFiles.remove(context);
-                                                    else if(type == ENTRY_MODIFY)
-                                                        preloadedFiles.get(context).reloadBytes();
-                                                }catch(final ClassCastException ignored){ }
-                                            }
+                                                if(type == ENTRY_CREATE)
+                                                    preloadedFiles.put(
+                                                        context,
+                                                        new FileEntry(targFile,adapter,loadingOption,true)
+                                                    );
+                                                else if(type == ENTRY_DELETE)
+                                                    preloadedFiles.remove(context);
+                                                else if(type == ENTRY_MODIFY)
+                                                    preloadedFiles.get(context).reloadBytes();
+                                            }catch(final ClassCastException ignored){ }
                                         }
-                                    }catch(final InterruptedException ignored){ }
-                                }).start();
-                            }catch(final IOException e){
-                                throw new RuntimeException(e);
-                            }
+                                        key.reset();
+                                    }
+                                }catch(final InterruptedException ignored){ }
+                            }).start();
+                        }catch(final IOException e){
+                            throw new RuntimeException(e);
                         }
                     });
                 }catch(final IOException e){
@@ -242,11 +242,11 @@ class DirectoryEntry {
                 final String name = path.substring(path.lastIndexOf('/'));
 
                 for(final File file : Objects.requireNonNullElse(directory.listFiles(p -> !p.isDirectory()),new File[0]))
-                    if(adapter.getName(file).equals(name))
+                    if(getContext(adapter.getName(file)).equals(name))
                         return file;
             }else{
                 for(final File file : Objects.requireNonNullElse(directory.listFiles(p -> !p.isDirectory()),new File[0]))
-                    if(adapter.getName(file).equals(path))
+                    if(getContext(adapter.getName(file)).equals(path))
                         return file;
             }
             return null;

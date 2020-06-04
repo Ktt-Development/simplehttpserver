@@ -43,7 +43,7 @@ class FileEntry {
      * Creates a file entry.
      *
      * @param file file to represent
-     * @param bytesAdapter how to process the bytes in {@link #getBytes()}
+     * @param adapter how to process the bytes in {@link #getBytes()}
      * @param loadingOption how to handle the initial file loading
      * @param skipWatchService skip creating a watch service ({@link ByteLoadingOption#WATCHLOAD} only).
      * @throws RuntimeException I/O failure to start watch service ({@link ByteLoadingOption#WATCHLOAD} only).
@@ -53,10 +53,10 @@ class FileEntry {
      * @since 03.05.00
      * @author Ktt Development
      */
-    FileEntry(final File file, final FileBytesAdapter bytesAdapter, final ByteLoadingOption loadingOption, final boolean skipWatchService){
+    FileEntry(final File file, final FileBytesAdapter adapter, final ByteLoadingOption loadingOption, final boolean skipWatchService){
         this.file = file;
         this.loadingOption = loadingOption;
-        this.adapter = bytesAdapter;
+        this.adapter = adapter;
 
         switch(loadingOption){
             case WATCHLOAD:
@@ -76,7 +76,7 @@ class FileEntry {
                                             final Path modified = path.resolve((Path) event.context());
                                             try{
                                                 if(Files.isSameFile(target, modified))
-                                                    preloadedBytes = bytesAdapter.getBytes(file,Files.readAllBytes(target));
+                                                    preloadedBytes = adapter.getBytes(file,Files.readAllBytes(target));
                                             }catch(final IOException ignored){ } // don't overwrite if corrupt
                                         }catch(final ClassCastException ignored){ }
                                     }
@@ -89,7 +89,7 @@ class FileEntry {
                     }
             case PRELOAD:
                 try{
-                    preloadedBytes = bytesAdapter.getBytes(file,Files.readAllBytes(file.toPath()));
+                    preloadedBytes = adapter.getBytes(file,Files.readAllBytes(file.toPath()));
                 }catch(final Exception ignored){
                     preloadedBytes = null;
                 }

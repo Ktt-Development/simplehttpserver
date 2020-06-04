@@ -625,7 +625,7 @@ public class FileHandler implements SimpleHttpHandler {
      * @since 02.00.00
      * @author Ktt Development
      */
-    @Deprecated
+    @Deprecated // todo: convert to boolean to walk after depreciation
     public final void addDirectory(final File directory, final String directoryName, final boolean preload){ // todo: after depreciation replace with walk param
         addDirectory("",directory,directoryName,preload ? ByteLoadingOption.PRELOAD : ByteLoadingOption.LIVELOAD,false);
     }
@@ -759,7 +759,7 @@ public class FileHandler implements SimpleHttpHandler {
      * @since 02.00.00
      * @author Ktt Development
      */
-    @Deprecated
+    @Deprecated // todo: after depreciation convert boolean to walk
     public final void addDirectory(final String context, final File directory, final boolean preload){ // todo: after depreciation replace with walk param
         addDirectory(context,directory,directory.getName(),preload ? ByteLoadingOption.PRELOAD : ByteLoadingOption.LIVELOAD,false);
     }
@@ -895,7 +895,7 @@ public class FileHandler implements SimpleHttpHandler {
      * @since 02.00.00
      * @author Ktt Development
      */
-    @Deprecated
+    @Deprecated // todo: after depreciation convert boolean to walk
     public final void addDirectory(final String context, final File directory, final String directoryName, final boolean preload){ // todo: after depreciation replace with walk param
         addDirectory(context,directory,directoryName,preload ? ByteLoadingOption.PRELOAD : ByteLoadingOption.LIVELOAD,false);
     }
@@ -988,7 +988,7 @@ public class FileHandler implements SimpleHttpHandler {
                 target.isEmpty() ? "/" : target,
                 new DirectoryEntry(directory, adapter,loadingOption,walk)
             );
-        }catch(final Exception ignored){ }
+        }catch(final Exception ignored){}
     }
 
 //
@@ -1016,16 +1016,12 @@ public class FileHandler implements SimpleHttpHandler {
                 final String rel2;
                 try{
                     rel2 = rel.substring(match.length());
-
+                    final File file = entry.getFile(rel2);
                     if(entry.getLoadingOption() != ByteLoadingOption.LIVELOAD){
-                        final File file;
-                        if((file = entry.getFile(rel2)) != null){
-                            handle(exchange, file, entry.getBytes(rel2)); // use adapted preload
-                        }
+                        handle(exchange, file, entry.getBytes(rel2)); // use adapted preload
                     }else{
-                        final File file = new File(entry.getDirectory().getAbsolutePath() + "\\" + rel2);
                         byte[] bytes = null;
-                        try{ bytes = Files.readAllBytes(file.toPath());
+                        try{ bytes = Files.readAllBytes(Objects.requireNonNull(file).toPath());
                         }catch(final Exception ignored){ }
                         handle(exchange,file,adapter.getBytes(file, bytes)); // use adapted now
                     }
