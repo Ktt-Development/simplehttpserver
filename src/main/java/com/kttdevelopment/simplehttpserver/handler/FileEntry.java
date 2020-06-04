@@ -36,7 +36,7 @@ class FileEntry {
      * @author Ktt Development
      */
     FileEntry(final File file, final FileBytesAdapter bytesAdapter, final ByteLoadingOption loadingOption){
-        this(file,bytesAdapter,loadingOption,true);
+        this(file,bytesAdapter,loadingOption,false);
     }
 
     /**
@@ -63,7 +63,8 @@ class FileEntry {
                 if(!skipWatchService)
                     try{
                         final WatchService service = FileSystems.getDefault().newWatchService();
-                        final Path path = file.toPath();
+                        final Path target = file.toPath();
+                        final Path path = file.getParentFile().toPath();
                         path.register(service,StandardWatchEventKinds.ENTRY_CREATE,StandardWatchEventKinds.ENTRY_DELETE,StandardWatchEventKinds.ENTRY_MODIFY);
 
                         new Thread(() -> {
@@ -72,10 +73,10 @@ class FileEntry {
                                 while((key = service.take()) != null){
                                     for(WatchEvent<?> event : key.pollEvents()){
                                         try{
-                                            final Path target = (Path) event.context();
+                                            final Path modified = path.resolve((Path) event.context());
                                             try{
-                                                if(Files.isSameFile(path, target))
-                                                    preloadedBytes = bytesAdapter.getBytes(file,Files.readAllBytes(path));
+                                                if(Files.isSameFile(target, modified))
+                                                    preloadedBytes = bytesAdapter.getBytes(file,Files.readAllBytes(target));
                                             }catch(final IOException ignored){ } // don't overwrite if corrupt
                                         }catch(final ClassCastException ignored){ }
                                     }
