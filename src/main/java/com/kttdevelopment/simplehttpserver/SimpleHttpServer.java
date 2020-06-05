@@ -461,7 +461,7 @@ public abstract class SimpleHttpServer {
      * @param delay delay until server stops all active requests
      *
      * @see #start()
-     * @see #stop(int)
+     * @see #stop()
      * @since 02.00.00
      * @author Ktt Development
      */
