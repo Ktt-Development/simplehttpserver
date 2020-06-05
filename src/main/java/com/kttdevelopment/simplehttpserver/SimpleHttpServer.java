@@ -17,7 +17,7 @@ import java.util.concurrent.Executor;
  * @see SimpleHttpsServer
  * @see SimpleHttpHandler
  * @since 02.00.00
- * @version 03.04.01
+ * @version 03.05.01
  * @author Ktt Development
  */
 @SuppressWarnings("SpellCheckingInspection")
@@ -246,6 +246,7 @@ public abstract class SimpleHttpServer {
      * @return http session
      *
      * @see HttpSession
+     * @see #getHttpSession(SimpleHttpExchange)
      * @since 03.03.00
      * @author Ktt Development
      */
@@ -258,6 +259,7 @@ public abstract class SimpleHttpServer {
      * @return http session
      *
      * @see HttpSession
+     * @see #getHttpSession(HttpExchange)
      * @since 03.03.00
      * @author Ktt Development
      */
