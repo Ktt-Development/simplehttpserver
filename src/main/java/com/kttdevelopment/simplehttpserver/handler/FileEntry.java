@@ -28,7 +28,7 @@ class FileEntry {
      * @param file file to represent
      * @param bytesAdapter how to process the bytes in {@link #getBytes()}
      * @param loadingOption how to handle the initial file loading
-     * @throws RuntimeException I/O failure to start watch service ({@link ByteLoadingOption#WATCHLOAD} only).
+     * @throws UncheckedIOException I/O failure to start watch service ({@link ByteLoadingOption#WATCHLOAD} only).
      *
      * @see FileBytesAdapter
      * @see ByteLoadingOption
@@ -46,7 +46,7 @@ class FileEntry {
      * @param adapter how to process the bytes in {@link #getBytes()}
      * @param loadingOption how to handle the initial file loading
      * @param skipWatchService skip creating a watch service ({@link ByteLoadingOption#WATCHLOAD} only).
-     * @throws RuntimeException I/O failure to start watch service ({@link ByteLoadingOption#WATCHLOAD} only).
+     * @throws UncheckedIOException I/O failure to start watch service ({@link ByteLoadingOption#WATCHLOAD} only).
      *
      * @see FileBytesAdapter
      * @see ByteLoadingOption
@@ -138,7 +138,7 @@ class FileEntry {
             return preloadedBytes; // adapter determined preloaded bytes
         else
             try{
-                return Files.readAllBytes(file.toPath()); // return literal bytes (no preload); adapt bytes in next part
+                return adapter.getBytes(file,Files.readAllBytes(file.toPath())); // return literal bytes & adapt them
             }catch(final IOException e){
                 return null;
             }

@@ -257,17 +257,13 @@ class DirectoryEntry {
      */
     public final byte[] getBytes(final String path){
         final String rel = getContext(path);
-        if(loadingOption != ByteLoadingOption.LIVELOAD){
-            String match = "";
-            for(final String key : preloadedFiles.keySet())
-                if(rel.startsWith(key) && key.startsWith(match))
-                    match = key;
-            return !match.isEmpty() ? preloadedFiles.get(match).getBytes() : null;
+        if(loadingOption != ByteLoadingOption.LIVELOAD ){ // find preloaded bytes
+            return preloadedFiles.get(rel).getBytes(); // already adapted
         }else{
-            final File file = getFile(path);
+            final File file = getFile(path); // find if file allowed
             try{
-                return adapter.getBytes(file,Files.readAllBytes(Objects.requireNonNull(file).toPath()));
-            }catch(final Exception ignored){
+                return adapter.getBytes(file,Files.readAllBytes(Objects.requireNonNull(file).toPath())); // adapt bytes here
+            }catch(final NullPointerException | IOException ignored){
                 return null;
             }
         }
