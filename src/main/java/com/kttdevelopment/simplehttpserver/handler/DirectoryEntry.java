@@ -105,7 +105,7 @@ class DirectoryEntry {
                             );
                         }catch(final RuntimeException ignored){ }
             }
-            if(isWalkthrough){
+            if(isWalkthrough){ /* load sub directories */
                 final Path dirPath = directory.toPath();
 
                 try{
@@ -149,12 +149,13 @@ class DirectoryEntry {
             }catch(final InterruptedException ignored){ }
         });
 
+        th.start();
+
         watchService.put(path,th);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
     private Consumer<WatchEvent<?>> createWatchServiceConsumer(){
-
         return (WatchEvent<?> event) -> {
             try{
                 final Path target = (Path) event.context();
@@ -162,7 +163,7 @@ class DirectoryEntry {
                 final WatchEvent.Kind<?> type = event.kind();
 
                 final String relative = getContext(directoryPath.relativize(target).toString());
-                final String context = relative + getContext(adapter.getName(file));
+                final String context = (relative.isEmpty() || relative.equals("/") || relative.equals("\\") ? "" + getContext(adapter.getName(file));
 
                 if(file.isFile())
                     if(type == ENTRY_CREATE)
