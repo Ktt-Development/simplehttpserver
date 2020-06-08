@@ -10,7 +10,7 @@ import java.util.Arrays;
  * @see ByteLoadingOption
  * @see FileHandler
  * @since 02.00.00
- * @version 03.05.00
+ * @version 03.05.01
  * @author Ktt Development
  */
 class FileEntry {
@@ -75,7 +75,7 @@ class FileEntry {
                                         try{
                                             final Path modified = path.resolve((Path) event.context());
                                             try{
-                                                if(Files.isSameFile(target, modified))
+                                                if(!modified.toFile().isDirectory() && Files.isSameFile(target, modified))
                                                     preloadedBytes = adapter.getBytes(file,Files.readAllBytes(target));
                                             }catch(final IOException ignored){ } // don't overwrite if corrupt
                                         }catch(final ClassCastException ignored){ }

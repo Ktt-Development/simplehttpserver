@@ -1,10 +1,10 @@
 package com.kttdevelopment.simplehttpserver.handler;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 import static java.nio.file.StandardWatchEventKinds.*;
 
@@ -14,7 +14,7 @@ import static java.nio.file.StandardWatchEventKinds.*;
  * @see FileHandler
  * @see FileEntry
  * @since 02.00.00
- * @version 03.05.00
+ * @version 03.05.01
  * @author Ktt Development
  */
 class DirectoryEntry {
@@ -25,6 +25,7 @@ class DirectoryEntry {
     private final boolean isWalkthrough;
 
     private final Map<String,FileEntry> preloadedFiles = new ConcurrentHashMap<>(); // preload/watchload only
+    private final Path directoryPath;
 
     /**
      * Create a directory entry.
@@ -33,7 +34,7 @@ class DirectoryEntry {
      * @param adapter how to process the bytes in {@link #getBytes(String)}
      * @param loadingOption how to handle the initial file loading
      * @param isWalkthrough whether to use sub-directories or not
-     * @throws RuntimeException failure to walk through directory or failure to start watch service
+     * @throws UncheckedIOException failure to walk through directory or failure to start watch service
      *
      * @see FileBytesAdapter
      * @see ByteLoadingOption
@@ -46,62 +47,33 @@ class DirectoryEntry {
         this.loadingOption = loadingOption;
         this.isWalkthrough = isWalkthrough;
 
+        directoryPath = directory.toPath();
+
         if(loadingOption == ByteLoadingOption.WATCHLOAD){
-            {
+            /* load top level directory */ {
                 final File[] listFiles = Objects.requireNonNullElse(directory.listFiles(),new File[0]);
-                for(final File file : listFiles)
-                    if(!file.isDirectory())
+                for(final File file : listFiles) // initial population
+                    if(file.isFile())
                         try{
                             preloadedFiles.put(
                                 getContext(adapter.getName(file)),
                                 new FileEntry(file, adapter, ByteLoadingOption.WATCHLOAD, true)
                             );
                         }catch(final RuntimeException ignored){ }
-                try{
-                    final WatchService service = FileSystems.getDefault().newWatchService();
-                    final Path path = directory.toPath();
-                    path.register(service, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
-
-                    new Thread(() -> {
-                        WatchKey key;
-                        try{
-                            while((key = service.take()) != null){
-                                for(WatchEvent<?> event : key.pollEvents()){
-                                    try{
-                                        final Path target = (Path) event.context();
-                                        final File file = target.toFile();
-                                        final WatchEvent.Kind<?> type = event.kind();
-
-                                        final String context = getContext(adapter.getName(file));
-
-                                        if(type == ENTRY_CREATE)
-                                            preloadedFiles.put(
-                                                context,
-                                                new FileEntry(file, adapter, loadingOption,true)
-                                            );
-                                        else if(type == ENTRY_DELETE)
-                                            preloadedFiles.remove(context);
-                                        else if(type == ENTRY_MODIFY)
-                                            preloadedFiles.get(context).reloadBytes();
-                                    }catch(final ClassCastException ignored){ }
-                                }
-                            }
-                        }catch(final InterruptedException ignored){ }
-                    }).start();
-
+                try{ // create watch service for top level directory
+                    createWatchService(directoryPath, createWatchServiceConsumer());
                 }catch(final IOException e){
-                    throw new RuntimeException(e);
+                    throw new UncheckedIOException(e);
                 }
             }
-            if(isWalkthrough){
-                final Path dirPath = directory.toPath();
+            if(isWalkthrough){ /* load sub directories */
                 try{
-                    Files.walk(dirPath).filter(path -> path.toFile().isDirectory()).forEach(path -> {
+                    Files.walk(directoryPath).filter(path -> path.toFile().isDirectory()).forEach(path -> {
                         final File p2f = path.toFile();
-                        final String rel = dirPath.relativize(path).toString();
+                        final String rel = directoryPath.relativize(path).toString();
 
                         final File[] listFile = Objects.requireNonNullElse(p2f.listFiles(),new File[0]);
-                        for(final File file : listFile)
+                        for(final File file : listFile) // initial population
                             try{
                                 preloadedFiles.put(
                                     (rel.isEmpty() || rel.equals("/") || rel.equals("\\") ? "" : getContext(rel)) + getContext(adapter.getName(file)),
@@ -109,51 +81,22 @@ class DirectoryEntry {
                                 );
                             }catch(final RuntimeException ignored){ }
 
-                        // watch service
+                        // create watch service for directory
                         try{
-                            final WatchService service = FileSystems.getDefault().newWatchService();
-                            path.register(service, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
-                            final String relative = getContext(dirPath.relativize(path).toString());
-
-                            new Thread(() -> {
-                                WatchKey key;
-                                try{
-                                    while((key = service.take()) != null){
-                                        for(WatchEvent<?> event : key.pollEvents()){
-                                            try{
-                                                final Path target = dirPath.resolve((Path) event.context());
-                                                final File targFile = target.toFile();
-                                                final WatchEvent.Kind<?> type = event.kind();
-
-                                                final String context = relative + getContext(adapter.getName(targFile));
-
-                                                if(type == ENTRY_CREATE)
-                                                    preloadedFiles.put(
-                                                        context,
-                                                        new FileEntry(targFile,adapter,loadingOption,true)
-                                                    );
-                                                else if(type == ENTRY_DELETE)
-                                                    preloadedFiles.remove(context);
-                                                else if(type == ENTRY_MODIFY)
-                                                    preloadedFiles.get(context).reloadBytes();
-                                            }catch(final ClassCastException ignored){ }
-                                        }
-                                        key.reset();
-                                    }
-                                }catch(final InterruptedException ignored){ }
-                            }).start();
+                            createWatchService(path, createWatchServiceConsumer());
                         }catch(final IOException e){
-                            throw new RuntimeException(e);
+                            throw new UncheckedIOException(e);
                         }
+
                     });
                 }catch(final IOException e){
                     throw new RuntimeException(e);
                 }
             }
         }else if(loadingOption == ByteLoadingOption.PRELOAD){
-            {
+            /* load top level directory */ {
                 final File[] listFiles = Objects.requireNonNullElse(directory.listFiles(),new File[0]);
-                for(final File file : listFiles)
+                for(final File file : listFiles) // initial population
                     if(!file.isDirectory())
                         try{
                             preloadedFiles.put(
@@ -171,19 +114,76 @@ class DirectoryEntry {
                         final String rel = dirPath.relativize(path).toString();
 
                         final File[] listFiles = Objects.requireNonNullElse(p2f.listFiles(), new File[0]);
-                        for(final File file : listFiles)
+                        for(final File file : listFiles) // populate sub files
                             try{
                                 preloadedFiles.put(
                                     (rel.isEmpty() || rel.equals("/") || rel.equals("\\") ? "" : getContext(rel)) + getContext(adapter.getName(file)),
-                                    new FileEntry(file, adapter, loadingOption)
+                                    new FileEntry(file, adapter, ByteLoadingOption.PRELOAD)
                                 );
                             }catch(final RuntimeException ignored){ }
                     });
                 }catch(final IOException e){
-                    throw new RuntimeException(e);
+                    throw new UncheckedIOException(e);
                 }
             }
         }
+    }
+
+
+    private final Map<Path,Thread> watchService = new ConcurrentHashMap<>();
+
+    private void createWatchService(final Path path, final Consumer<WatchEvent<?>> consumer) throws IOException{
+        final WatchService service = FileSystems.getDefault().newWatchService();
+        path.register(service,ENTRY_CREATE,ENTRY_DELETE,ENTRY_MODIFY);
+
+        final Thread th =
+        new Thread(() -> {
+            WatchKey key;
+            try{
+                while((key = service.take()) != null){
+                    for(WatchEvent<?> event : key.pollEvents()){
+                        consumer.accept(event);
+                        key.reset();
+                    }
+                }
+            }catch(final InterruptedException ignored){ }
+        });
+
+        watchService.put(path,th);
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    private Consumer<WatchEvent<?>> createWatchServiceConsumer(){
+
+        return (WatchEvent<?> event) -> {
+            try{
+                final Path target = (Path) event.context();
+                final File file = target.toFile();
+                final WatchEvent.Kind<?> type = event.kind();
+
+                final String relative = getContext(directoryPath.relativize(target).toString());
+                final String context = relative + getContext(adapter.getName(file));
+
+                if(file.isFile())
+                    if(type == ENTRY_CREATE)
+                        preloadedFiles.put(context, new FileEntry(file,adapter,ByteLoadingOption.WATCHLOAD,true));
+                    else if(type == ENTRY_DELETE)
+                        preloadedFiles.remove(context);
+                    else if(type == ENTRY_MODIFY)
+                        preloadedFiles.get(context).reloadBytes();
+                    else; // prevent ambiguous else with below
+                else
+                   if(type == ENTRY_CREATE)
+                       try{
+                           createWatchService(target, createWatchServiceConsumer());
+                       }catch(final IOException ignored){ }
+                   else if(type == ENTRY_DELETE){
+                       watchService.get(target).stop();
+                       watchService.remove(target);
+                   }
+
+            }catch(final ClassCastException ignored){ }
+        };
     }
 
 //

@@ -625,7 +625,7 @@ public class FileHandler implements SimpleHttpHandler {
                 target.isEmpty() ? "/" : target,
                 new DirectoryEntry(directory, adapter,loadingOption,walk)
             );
-        }catch(final Exception ignored){}
+        }catch(final UncheckedIOException ignored){}
     }
 
 //
