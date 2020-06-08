@@ -85,7 +85,7 @@ class FileEntry {
                             }catch(final InterruptedException ignored){ }
                         }).start();
                     }catch(final IOException e){
-                        throw new RuntimeException(e);
+                        throw new UncheckedIOException(e);
                     }
             case PRELOAD:
                 try{

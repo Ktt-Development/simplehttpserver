@@ -90,7 +90,7 @@ class DirectoryEntry {
 
                     });
                 }catch(final IOException e){
-                    throw new RuntimeException(e);
+                    throw new UncheckedIOException(e);
                 }
             }
         }else if(loadingOption == ByteLoadingOption.PRELOAD){
@@ -103,10 +103,9 @@ class DirectoryEntry {
                                 getContext(adapter.getName(file)),
                                 new FileEntry(file, adapter, ByteLoadingOption.PRELOAD)
                             );
-                        }catch(final RuntimeException ignored){ }
+                        }catch(final UncheckedIOException ignored){ }
             }
             if(isWalkthrough){ /* load sub directories */
-
                 try{
                     Files.walk(directoryPath).filter(path -> path.toFile().isDirectory()).forEach(path -> {
                         final File p2f = path.toFile();
