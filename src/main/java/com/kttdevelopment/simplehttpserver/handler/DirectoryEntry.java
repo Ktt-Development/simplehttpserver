@@ -231,17 +231,14 @@ class DirectoryEntry {
         final String relative = getContext(path);
         if(loadingOption != ByteLoadingOption.LIVELOAD){
             return preloadedFiles.get(relative).getFile();
-        }else{ // path would be the adapted name; every file name (only) must be adapted to see if it matches the parameter
+        }else{ // file is a reference, existence of file does not matter
             final String dabs = directory.getAbsolutePath();
             final File parentFile = new File(dabs + relative).getParentFile();
-            final String pafs = parentFile.getAbsolutePath();
+            final String pabs = parentFile.getAbsolutePath();
 
             // if is in top level directory (both cases) or if is a child of the directory folder (walk case)
-            if(pafs.equals(dabs) || (isWalkthrough && dabs.startsWith(pafs)))
-                for(final File file : Objects.requireNonNullElse(parentFile.listFiles(File::isFile), new File[0]))
-                    if(getContext(adapter.getName(file)).equals(relative))
-                        return file;
-            return null;
+            // null otherwise
+            return pabs.equals(dabs) || (isWalkthrough && pabs.startsWith(dabs)) ? new File(dabs + relative) : null;
         }
     }
 
@@ -260,9 +257,9 @@ class DirectoryEntry {
         if(loadingOption != ByteLoadingOption.LIVELOAD ){ // find preloaded bytes
             return preloadedFiles.get(rel).getBytes(); // already adapted
         }else{
-            final File file = getFile(path); // find if file allowed
             try{
-                return adapter.getBytes(file,Files.readAllBytes(Objects.requireNonNull(file).toPath())); // adapt bytes here
+                final File file = Objects.requireNonNull(getFile(path)); // find if file allowed
+                return adapter.getBytes(file,Files.readAllBytes(file.toPath())); // adapt bytes here
             }catch(final NullPointerException | IOException ignored){
                 return null;
             }
