@@ -338,33 +338,6 @@ public class FileHandler implements SimpleHttpHandler {
     }
 
     /**
-     * Adds a directory to the handler and preloads the files' bytes.
-     *
-     * @deprecated use {@link #addDirectory(File, ByteLoadingOption)}
-     * @param directory directory to add
-     * @param preload whether to read the bytes now or at the exchange
-     *
-     * @see FileHandlerAdapter
-     * @see #addDirectory(File)
-
-     * @see #addDirectory(File, String)
-     * @see #addDirectory(File, String, boolean)
-
-     * @see #addDirectory(String, File)
-     * @see #addDirectory(String, File, boolean)
-
-     * @see #addDirectory(String, File, String)
-     * @see #addDirectory(String, File, String, boolean)
-
-     * @since 02.00.00
-     * @author Ktt Development
-     */
-    @Deprecated
-    public final void addDirectory(final File directory, final boolean preload){ // todo: after depreciation replace with walk param
-        addDirectory("",directory,directory.getName(),preload ? ByteLoadingOption.PRELOAD : ByteLoadingOption.LIVELOAD,false);
-    }
-
-    /**
      * Adds a directory to the handler.
      *
      * @param directory directory to add
@@ -437,34 +410,6 @@ public class FileHandler implements SimpleHttpHandler {
      */
     public final void addDirectory(final File directory, final String directoryName){
         addDirectory("",directory,directoryName,ByteLoadingOption.LIVELOAD,false);
-    }
-
-    /**
-     * Adds a directory with a specified name to the handler and preloads the bytes.
-     *
-     * @deprecated use {@link #addDirectory(File, String, ByteLoadingOption)}
-     * @param directory directory to add
-     * @param directoryName directory name
-     * @param preload whether to read the bytes now or at the exchange
-     *
-     * @see FileHandlerAdapter
-     * @see #addDirectory(File)
-     * @see #addDirectory(File, boolean)
-
-     * @see #addDirectory(File, String)
-
-     * @see #addDirectory(String, File)
-     * @see #addDirectory(String, File, boolean)
-
-     * @see #addDirectory(String, File, String)
-     * @see #addDirectory(String, File, String, boolean)
-
-     * @since 02.00.00
-     * @author Ktt Development
-     */
-    @Deprecated // todo: convert to boolean to walk after depreciation
-    public final void addDirectory(final File directory, final String directoryName, final boolean preload){ // todo: after depreciation replace with walk param
-        addDirectory("",directory,directoryName,preload ? ByteLoadingOption.PRELOAD : ByteLoadingOption.LIVELOAD,false);
     }
 
     /**
@@ -545,34 +490,6 @@ public class FileHandler implements SimpleHttpHandler {
     }
 
     /**
-     * Adds a directory at a specified context to the handler and preloads the bytes.
-     *
-     * @deprecated use {@link #addDirectory(String, File, ByteLoadingOption)}
-     * @param context context to use
-     * @param directory directory to add
-     * @param preload whether to read the bytes now or at the exchange
-     *
-     * @see FileHandlerAdapter
-     * @see #addDirectory(File)
-     * @see #addDirectory(File, boolean)
-
-     * @see #addDirectory(File, String)
-     * @see #addDirectory(File, String, boolean)
-
-     * @see #addDirectory(String, File)
-
-     * @see #addDirectory(String, File, String)
-     * @see #addDirectory(String, File, String, boolean)
-
-     * @since 02.00.00
-     * @author Ktt Development
-     */
-    @Deprecated // todo: after depreciation convert boolean to walk
-    public final void addDirectory(final String context, final File directory, final boolean preload){ // todo: after depreciation replace with walk param
-        addDirectory(context,directory,directory.getName(),preload ? ByteLoadingOption.PRELOAD : ByteLoadingOption.LIVELOAD,false);
-    }
-
-    /**
      * Adds a directory to the handler at a specified context.
      *
      * @param context context to use
@@ -648,35 +565,6 @@ public class FileHandler implements SimpleHttpHandler {
      */
     public final void addDirectory(final String context, final File directory, final String directoryName){
         addDirectory(context,directory,directoryName,ByteLoadingOption.LIVELOAD,false);
-    }
-
-    /**
-     * Adds a directory at a specified context with a specified name and preloads the bytes.
-     *
-     * @deprecated use {@link #addDirectory(String, File, String, ByteLoadingOption)}
-     * @param context context to use
-     * @param directory directory to add
-     * @param directoryName directory name
-     * @param preload whether to read the bytes now or at the exchange
-     *
-     * @see FileHandlerAdapter
-     * @see #addDirectory(File)
-     * @see #addDirectory(File, boolean)
-
-     * @see #addDirectory(File, String)
-     * @see #addDirectory(File, String, boolean)
-
-     * @see #addDirectory(String, File)
-     * @see #addDirectory(String, File, boolean)
-
-     * @see #addDirectory(String, File, String)
-
-     * @since 02.00.00
-     * @author Ktt Development
-     */
-    @Deprecated // todo: after depreciation convert boolean to walk
-    public final void addDirectory(final String context, final File directory, final String directoryName, final boolean preload){ // todo: after depreciation replace with walk param
-        addDirectory(context,directory,directoryName,preload ? ByteLoadingOption.PRELOAD : ByteLoadingOption.LIVELOAD,false);
     }
 
     /**

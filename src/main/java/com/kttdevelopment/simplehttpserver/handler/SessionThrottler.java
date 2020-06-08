@@ -1,13 +1,13 @@
 package com.kttdevelopment.simplehttpserver.handler;
 
-import com.kttdevelopment.simplehttpserver.*;
+import com.kttdevelopment.simplehttpserver.HttpSession;
+import com.kttdevelopment.simplehttpserver.HttpSessionHandler;
 import com.sun.net.httpserver.HttpExchange;
 
-import java.util.*;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Predicate;
 
 /**
  * Limits connections per http session. This can be used to limit simultaneous downloads.
@@ -93,9 +93,9 @@ public class SessionThrottler extends ConnectionThrottler {
     @Override
     public String toString(){
         return
-            "SessionThrottler"              + '{' +
-            "sessionHandler"                + '=' +     sessionHandler          + ", " +
-            "connections"                   + '=' +     connections.toString()  +
+            "SessionThrottler"  + '{' +
+            "sessionHandler"    + '=' +     sessionHandler          + ", " +
+            "connections"       + '=' +     connections.toString()  +
             '}';
     }
 
