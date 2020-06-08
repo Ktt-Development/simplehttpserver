@@ -227,28 +227,21 @@ class DirectoryEntry {
      * @since 02.00.00
      * @author Ktt Development
      */
+    @SuppressWarnings("SpellCheckingInspection")
     public final File getFile(final String path){
-        final String rel = getContext(path);
+        final String relative = getContext(path);
         if(loadingOption != ByteLoadingOption.LIVELOAD){
-            String match = "";
-            for(final String key : preloadedFiles.keySet())
-                if(rel.startsWith(key) && key.startsWith(match))
-                    match = key;
-            return !match.isEmpty() ? preloadedFiles.get(match).getFile() : null;
-        }else{
-            if(isWalkthrough){
-                final File parent = new File(directory.getAbsolutePath() + path).getParentFile();
-                if(!parent.getAbsolutePath().startsWith(directory.getAbsolutePath())) return null;
-                final String name = path.substring(path.lastIndexOf('/'));
+            return preloadedFiles.get(relative).getFile();
+        }else{ // path would be the adapted name; every file name (only) must be adapted to see if it matches the parameter
+            final String dabs = directory.getAbsolutePath();
+            final File parentFile = new File(dabs + relative).getParentFile();
+            final String pafs = parentFile.getAbsolutePath();
 
-                for(final File file : Objects.requireNonNullElse(directory.listFiles(p -> !p.isDirectory()),new File[0]))
-                    if(getContext(adapter.getName(file)).equals(name))
+            // if is in top level directory (both cases) or if is a child of the directory folder (walk case)
+            if(pafs.equals(dabs) || (isWalkthrough && dabs.startsWith(pafs)))
+                for(final File file : Objects.requireNonNullElse(parentFile.listFiles(File::isFile), new File[0]))
+                    if(getContext(adapter.getName(file)).equals(relative))
                         return file;
-            }else{
-                for(final File file : Objects.requireNonNullElse(directory.listFiles(p -> !p.isDirectory()),new File[0]))
-                    if(getContext(adapter.getName(file)).equals(path))
-                        return file;
-            }
             return null;
         }
     }
