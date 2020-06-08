@@ -106,18 +106,17 @@ class DirectoryEntry {
                         }catch(final RuntimeException ignored){ }
             }
             if(isWalkthrough){ /* load sub directories */
-                final Path dirPath = directory.toPath();
 
                 try{
-                    Files.walk(dirPath).filter(path -> path.toFile().isDirectory()).forEach(path -> {
+                    Files.walk(directoryPath).filter(path -> path.toFile().isDirectory()).forEach(path -> {
                         final File p2f = path.toFile();
-                        final String rel = dirPath.relativize(path).toString();
+                        final String relative = directoryPath.relativize(path).toString();
 
                         final File[] listFiles = Objects.requireNonNullElse(p2f.listFiles(), new File[0]);
                         for(final File file : listFiles) // populate sub files
                             try{
                                 preloadedFiles.put(
-                                    (rel.isEmpty() || rel.equals("/") || rel.equals("\\") ? "" : getContext(rel)) + getContext(adapter.getName(file)),
+                                    (relative.isEmpty() || relative.equals("/") || relative.equals("\\") ? "" : getContext(relative)) + getContext(adapter.getName(file)),
                                     new FileEntry(file, adapter, ByteLoadingOption.PRELOAD)
                                 );
                             }catch(final RuntimeException ignored){ }
@@ -163,7 +162,7 @@ class DirectoryEntry {
                 final WatchEvent.Kind<?> type = event.kind();
 
                 final String relative = getContext(directoryPath.relativize(target).toString());
-                final String context = (relative.isEmpty() || relative.equals("/") || relative.equals("\\") ? "" + getContext(adapter.getName(file));
+                final String context = (relative.isEmpty() || relative.equals("/") || relative.equals("\\") ? "" : getContext(relative)) + getContext(adapter.getName(file));
 
                 if(file.isFile())
                     if(type == ENTRY_CREATE)
