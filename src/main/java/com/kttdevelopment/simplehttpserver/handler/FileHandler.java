@@ -235,10 +235,12 @@ public class FileHandler implements SimpleHttpHandler {
      * @author Ktt Development
      */
     public final void addFile(final String context, final File file, final String fileName, final ByteLoadingOption loadingOption){
-        files.put(
-            (context.isEmpty() || context.equals("/") || context.equals("\\") ? "" : getContext(context)) + getContext(fileName),
-            new FileEntry(file,adapter,loadingOption)
-        );
+        try{
+            files.put(
+                (context.isEmpty() || context.equals("/") || context.equals("\\") ? "" : getContext(context)) + getContext(fileName),
+                new FileEntry(file, adapter, loadingOption)
+            );
+        }catch(final UncheckedIOException ignored){ }
     }
 
     //
@@ -632,39 +634,26 @@ public class FileHandler implements SimpleHttpHandler {
 
     @Override
     public final void handle(final SimpleHttpExchange exchange) throws IOException{
-        final String rel = getContext(exchange.getURI().getPath().substring(exchange.getHttpContext().getPath().length()));
+        final String context = getContext(exchange.getURI().getPath().substring(exchange.getHttpContext().getPath().length()));
 
-        String match = "";
-        for(final String key : files.keySet())
-            if(rel.startsWith(key) && key.startsWith(match))
-                match = key;
-
-        if(!match.isEmpty() && files.containsKey(match)){ // exact match
-            final FileEntry entry = files.get(match); // preloaded ? use preloaded bytes : adapt bytes now
-            handle(exchange,entry.getFile(),entry.getLoadingOption() != ByteLoadingOption.LIVELOAD ? entry.getBytes() : adapter.getBytes(entry.getFile(),entry.getBytes()));
-        }else{ // beginning match
-            match = "";
+        if(files.containsKey(context)){ // exact file match
+            final FileEntry entry = files.get(context);
+            handle(exchange,entry.getFile(),entry.getBytes());
+        }else{ // leading directory match
+            String match = "";
             for(final String key : directories.keySet())
-                if(rel.startsWith(key) && key.startsWith(match))
+                if(context.startsWith(key) && key.startsWith(match))
                     match = key;
 
-            if(!match.isEmpty() && directories.containsKey(match)){
+            if(match.isEmpty()){ // no match
+                handle(exchange,null,null);
+            }else{ // get file from matching directory
                 final DirectoryEntry entry = directories.get(match);
-                final String rel2;
-                try{
-                    rel2 = rel.substring(match.length());
-                    final File file = entry.getFile(rel2);
-                    if(entry.getLoadingOption() != ByteLoadingOption.LIVELOAD){
-                        handle(exchange, file, entry.getBytes(rel2)); // use adapted preload
-                    }else{
-                        byte[] bytes = null;
-                        try{ bytes = Files.readAllBytes(Objects.requireNonNull(file).toPath());
-                        }catch(final Exception ignored){ }
-                        handle(exchange,file,adapter.getBytes(file, bytes)); // use adapted now
-                    }
-                }catch(final IndexOutOfBoundsException ignored){ }
+                String rel = context.substring(match.length());
+
+                final File file = entry.getFile(rel);
+                handle(exchange,file,entry.getBytes(rel));
             }
-            handle(exchange,null,null); // not added to handler
         }
         exchange.close();
     }

@@ -90,7 +90,7 @@ class DirectoryEntry {
 
                     });
                 }catch(final IOException e){
-                    throw new RuntimeException(e);
+                    throw new UncheckedIOException(e);
                 }
             }
         }else if(loadingOption == ByteLoadingOption.PRELOAD){
@@ -103,21 +103,19 @@ class DirectoryEntry {
                                 getContext(adapter.getName(file)),
                                 new FileEntry(file, adapter, ByteLoadingOption.PRELOAD)
                             );
-                        }catch(final RuntimeException ignored){ }
+                        }catch(final UncheckedIOException ignored){ }
             }
-            if(isWalkthrough){
-                final Path dirPath = directory.toPath();
-
+            if(isWalkthrough){ /* load sub directories */
                 try{
-                    Files.walk(dirPath).filter(path -> path.toFile().isDirectory()).forEach(path -> {
+                    Files.walk(directoryPath).filter(path -> path.toFile().isDirectory()).forEach(path -> {
                         final File p2f = path.toFile();
-                        final String rel = dirPath.relativize(path).toString();
+                        final String relative = directoryPath.relativize(path).toString();
 
                         final File[] listFiles = Objects.requireNonNullElse(p2f.listFiles(), new File[0]);
                         for(final File file : listFiles) // populate sub files
                             try{
                                 preloadedFiles.put(
-                                    (rel.isEmpty() || rel.equals("/") || rel.equals("\\") ? "" : getContext(rel)) + getContext(adapter.getName(file)),
+                                    (relative.isEmpty() || relative.equals("/") || relative.equals("\\") ? "" : getContext(relative)) + getContext(adapter.getName(file)),
                                     new FileEntry(file, adapter, ByteLoadingOption.PRELOAD)
                                 );
                             }catch(final RuntimeException ignored){ }
@@ -149,12 +147,13 @@ class DirectoryEntry {
             }catch(final InterruptedException ignored){ }
         });
 
+        th.start();
+
         watchService.put(path,th);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
     private Consumer<WatchEvent<?>> createWatchServiceConsumer(){
-
         return (WatchEvent<?> event) -> {
             try{
                 final Path target = (Path) event.context();
@@ -162,7 +161,7 @@ class DirectoryEntry {
                 final WatchEvent.Kind<?> type = event.kind();
 
                 final String relative = getContext(directoryPath.relativize(target).toString());
-                final String context = relative + getContext(adapter.getName(file));
+                final String context = (relative.isEmpty() || relative.equals("/") || relative.equals("\\") ? "" : getContext(relative)) + getContext(adapter.getName(file));
 
                 if(file.isFile())
                     if(type == ENTRY_CREATE)
@@ -227,29 +226,19 @@ class DirectoryEntry {
      * @since 02.00.00
      * @author Ktt Development
      */
+    @SuppressWarnings("SpellCheckingInspection")
     public final File getFile(final String path){
-        final String rel = getContext(path);
+        final String relative = getContext(path);
         if(loadingOption != ByteLoadingOption.LIVELOAD){
-            String match = "";
-            for(final String key : preloadedFiles.keySet())
-                if(rel.startsWith(key) && key.startsWith(match))
-                    match = key;
-            return !match.isEmpty() ? preloadedFiles.get(match).getFile() : null;
-        }else{
-            if(isWalkthrough){
-                final File parent = new File(directory.getAbsolutePath() + path).getParentFile();
-                if(!parent.getAbsolutePath().startsWith(directory.getAbsolutePath())) return null;
-                final String name = path.substring(path.lastIndexOf('/'));
+            return preloadedFiles.get(relative).getFile();
+        }else{ // file is a reference, existence of file does not matter
+            final String dabs = directory.getAbsolutePath();
+            final File parentFile = new File(dabs + relative).getParentFile();
+            final String pabs = parentFile.getAbsolutePath();
 
-                for(final File file : Objects.requireNonNullElse(directory.listFiles(p -> !p.isDirectory()),new File[0]))
-                    if(getContext(adapter.getName(file)).equals(name))
-                        return file;
-            }else{
-                for(final File file : Objects.requireNonNullElse(directory.listFiles(p -> !p.isDirectory()),new File[0]))
-                    if(getContext(adapter.getName(file)).equals(path))
-                        return file;
-            }
-            return null;
+            // if is in top level directory (both cases) or if is a child of the directory folder (walk case)
+            // null otherwise
+            return pabs.equals(dabs) || (isWalkthrough && pabs.startsWith(dabs)) ? new File(dabs + relative) : null;
         }
     }
 
@@ -265,17 +254,13 @@ class DirectoryEntry {
      */
     public final byte[] getBytes(final String path){
         final String rel = getContext(path);
-        if(loadingOption != ByteLoadingOption.LIVELOAD){
-            String match = "";
-            for(final String key : preloadedFiles.keySet())
-                if(rel.startsWith(key) && key.startsWith(match))
-                    match = key;
-            return !match.isEmpty() ? preloadedFiles.get(match).getBytes() : null;
+        if(loadingOption != ByteLoadingOption.LIVELOAD ){ // find preloaded bytes
+            return preloadedFiles.get(rel).getBytes(); // already adapted
         }else{
-            final File file = getFile(path);
             try{
-                return adapter.getBytes(file,Files.readAllBytes(Objects.requireNonNull(file).toPath()));
-            }catch(final Exception ignored){
+                final File file = Objects.requireNonNull(getFile(path)); // find if file allowed
+                return adapter.getBytes(file,Files.readAllBytes(file.toPath())); // adapt bytes here
+            }catch(final NullPointerException | IOException ignored){
                 return null;
             }
         }
