@@ -121,7 +121,9 @@ class FileEntry {
         if(loadingOption != ByteLoadingOption.LIVELOAD)
             try{
                 preloadedBytes = adapter.getBytes(file,Files.readAllBytes(file.toPath()));
-            }catch(final IOException ignored){ }
+            }catch(final IOException ignored){
+                preloadedBytes = null;
+            }
     }
 
     /**
@@ -138,8 +140,8 @@ class FileEntry {
             return preloadedBytes; // adapter determined preloaded bytes
         else
             try{
-                return adapter.getBytes(file,Files.readAllBytes(file.toPath())); // return literal bytes & adapt them
-            }catch(final IOException e){
+                return adapter.getBytes(file,Files.readAllBytes(file.toPath())); // read and adapt bytes
+            }catch(final IOException ignored){
                 return null;
             }
     }

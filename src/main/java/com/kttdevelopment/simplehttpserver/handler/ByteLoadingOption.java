@@ -9,7 +9,7 @@ package com.kttdevelopment.simplehttpserver.handler;
  *
  * @see FileHandler
  * @since 03.05.00
- * @version 03.05.00
+ * @version 03.05.01
  * @author Ktt Development
  */
 @SuppressWarnings("SpellCheckingInspection")

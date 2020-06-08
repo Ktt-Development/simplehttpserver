@@ -4,6 +4,7 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 import static java.nio.file.StandardWatchEventKinds.*;
@@ -61,7 +62,7 @@ class DirectoryEntry {
                             );
                         }catch(final RuntimeException ignored){ }
                 try{ // create watch service for top level directory
-                    createWatchService(directoryPath, createWatchServiceConsumer());
+                    createWatchService(directoryPath, createWatchServiceConsumer(directoryPath)); // double enrollment here
                 }catch(final IOException e){
                     throw new UncheckedIOException(e);
                 }
@@ -83,7 +84,7 @@ class DirectoryEntry {
 
                         // create watch service for directory
                         try{
-                            createWatchService(path, createWatchServiceConsumer());
+                            createWatchService(path, createWatchServiceConsumer(path));
                         }catch(final IOException e){
                             throw new UncheckedIOException(e);
                         }
@@ -128,40 +129,43 @@ class DirectoryEntry {
     }
 
 
-    private final Map<Path,Thread> watchService = new ConcurrentHashMap<>();
+    private final Map<Path,AtomicBoolean> watchService = new ConcurrentHashMap<>();
 
     private void createWatchService(final Path path, final Consumer<WatchEvent<?>> consumer) throws IOException{
         final WatchService service = FileSystems.getDefault().newWatchService();
         path.register(service,ENTRY_CREATE,ENTRY_DELETE,ENTRY_MODIFY);
 
-        final Thread th =
+        final AtomicBoolean stop = new AtomicBoolean(false);
+
         new Thread(() -> {
+            System.out.println("create ws 4 " + path);
             WatchKey key;
             try{
                 while((key = service.take()) != null){
                     for(WatchEvent<?> event : key.pollEvents()){
                         consumer.accept(event);
-                        key.reset();
                     }
+                    key.reset();
+                    System.out.println("reset event");
+                    if(stop.get())
+                        break;
                 }
             }catch(final InterruptedException ignored){ }
-        });
+        }).start();
 
-        th.start();
-
-        watchService.put(path,th);
+        watchService.put(path,stop);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
-    private Consumer<WatchEvent<?>> createWatchServiceConsumer(){
+    private Consumer<WatchEvent<?>> createWatchServiceConsumer(final Path path){
         return (WatchEvent<?> event) -> {
             try{
-                final Path target = (Path) event.context();
+                final Path target = directoryPath.resolve((Path) event.context());
                 final File file = target.toFile();
                 final WatchEvent.Kind<?> type = event.kind();
 
-                final String relative = getContext(directoryPath.relativize(target).toString());
-                final String context = (relative.isEmpty() || relative.equals("/") || relative.equals("\\") ? "" : getContext(relative)) + getContext(adapter.getName(file));
+                final String parentPath = getContext(directoryPath.relativize(path).toString());
+                final String context = (parentPath.isEmpty() || parentPath.equals("/") || parentPath.equals("\\") ? "" : parentPath) + getContext(adapter.getName(file));
 
                 if(file.isFile())
                     if(type == ENTRY_CREATE)
@@ -169,19 +173,25 @@ class DirectoryEntry {
                     else if(type == ENTRY_DELETE)
                         preloadedFiles.remove(context);
                     else if(type == ENTRY_MODIFY)
-                        preloadedFiles.get(context).reloadBytes();
+                        Objects.requireNonNull(preloadedFiles.get(context)).reloadBytes();
                     else; // prevent ambiguous else with below
                 else
                    if(type == ENTRY_CREATE)
                        try{
-                           createWatchService(target, createWatchServiceConsumer());
-                       }catch(final IOException ignored){ }
+                           createWatchService(target, createWatchServiceConsumer(target));
+                       }catch(final IOException e){
+                           e.printStackTrace();
+                       }
                    else if(type == ENTRY_DELETE){
-                       watchService.get(target).stop();
+                       System.out.println("ws:" + watchService);
+                       System.out.println("directory deletion via" + target);
+                       Objects.requireNonNull(watchService.get(target)).set(true);
                        watchService.remove(target);
                    }
 
-            }catch(final ClassCastException ignored){ }
+            }catch(final ClassCastException | NullPointerException e){
+                e.printStackTrace();
+            }
         };
     }
 
