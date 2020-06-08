@@ -24,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @see SimpleHttpHandler
  * @see com.sun.net.httpserver.HttpHandler
  * @since 02.00.00
- * @version 03.05.00
+ * @version 03.05.01
  * @author Ktt Development
  */
 public class FileHandler implements SimpleHttpHandler {
@@ -89,29 +89,6 @@ public class FileHandler implements SimpleHttpHandler {
     }
 
     /**
-     * Adds a file to the handler at a name given by the adapter and preloads the bytes.
-     *
-     * @deprecated use {@link #addFile(File, ByteLoadingOption)}
-     * @param file file to add
-     * @param preload whether to load the bytes now or at the exchange
-     *
-     * @see FileHandlerAdapter
-     * @see #addFile(File)
-     * @see #addFile(File, String)
-     * @see #addFile(File, String, boolean)
-     * @see #addFile(String, File)
-     * @see #addFile(String, File, boolean)
-     * @see #addFile(String, File, String)
-     * @see #addFile(String, File, String, boolean)
-     * @since 02.00.00
-     * @author Ktt Development
-     */
-    @Deprecated
-    public final void addFile(final File file, final boolean preload){
-        addFile("",file,adapter.getName(file),preload ? ByteLoadingOption.PRELOAD : ByteLoadingOption.LIVELOAD);
-    }
-
-    /**
      * Adds a file to the handler.
      *
      * @param file file to add
@@ -150,30 +127,6 @@ public class FileHandler implements SimpleHttpHandler {
      */
     public final void addFile(final File file, final String fileName){
         addFile("",file,fileName,ByteLoadingOption.LIVELOAD);
-    }
-
-    /**
-     * Adds a file to the handler and preloads the bytes.
-     *
-     * @deprecated use {@link #addFile(String, File, ByteLoadingOption)}
-     * @param file file to add
-     * @param fileName file name to use
-     * @param preload whether to load the bytes now or at the exchange
-     *
-     * @see FileHandlerAdapter
-     * @see #addFile(File)
-     * @see #addFile(File, boolean)
-     * @see #addFile(File, String)
-     * @see #addFile(String, File)
-     * @see #addFile(String, File, boolean)
-     * @see #addFile(String, File, String)
-     * @see #addFile(String, File, String, boolean)
-     * @since 02.00.00
-     * @author Ktt Development
-     */
-    @Deprecated
-    public final void addFile(final File file, final String fileName, final boolean preload){
-        addFile("",file,fileName,preload ? ByteLoadingOption.PRELOAD : ByteLoadingOption.LIVELOAD);
     }
 
     /**
@@ -220,30 +173,6 @@ public class FileHandler implements SimpleHttpHandler {
     }
 
     /**
-     * Adds a file to the handler at a specified context at a name given by the adapter and preloads the bytes.
-     *
-     * @deprecated use {@link #addFile(String, File, ByteLoadingOption)}
-     * @param context context to use
-     * @param file file to add
-     * @param preload whether to load the bytes now or at the exchange
-     *
-     * @see FileHandlerAdapter
-     * @see #addFile(File)
-     * @see #addFile(File, boolean)
-     * @see #addFile(File, String)
-     * @see #addFile(File, String, boolean)
-     * @see #addFile(String, File)
-     * @see #addFile(String, File, String)
-     * @see #addFile(String, File, String, boolean)
-     * @since 02.00.00
-     * @author Ktt Development
-     */
-    @Deprecated
-    public final void addFile(final String context, final File file, final boolean preload){
-        addFile(context,file,adapter.getName(file),preload ? ByteLoadingOption.PRELOAD : ByteLoadingOption.LIVELOAD);
-    }
-
-    /**
      * Adds a file to the handler at a specified context.
      *
      * @param context context to use
@@ -284,31 +213,6 @@ public class FileHandler implements SimpleHttpHandler {
      */
     public final void addFile(final String context, final File file, final String fileName){
         addFile(context,file,fileName,ByteLoadingOption.LIVELOAD);
-    }
-
-    /**
-     * Adds a file to the handler at a specified context and preloads the bytes.
-     *
-     * @deprecated use {@link #addFile(String, File, String, ByteLoadingOption)}
-     * @param context context to use
-     * @param file file to add
-     * @param fileName file name to use
-     * @param preload whether to load the bytes now or at the exchange.
-     *
-     * @see FileHandlerAdapter
-     * @see #addFile(File)
-     * @see #addFile(File, boolean)
-     * @see #addFile(File, String)
-     * @see #addFile(File, String, boolean)
-     * @see #addFile(String, File)
-     * @see #addFile(String, File, boolean)
-     * @see #addFile(String, File, String)
-     * @since 02.00.00
-     * @author Ktt Development
-     */
-    @Deprecated
-    public final void addFile(final String context, final File file, final String fileName, final boolean preload){
-        addFile(context,file,fileName,preload ? ByteLoadingOption.PRELOAD : ByteLoadingOption.LIVELOAD);
     }
 
     /**
@@ -356,25 +260,6 @@ public class FileHandler implements SimpleHttpHandler {
     }
 
     /**
-     * Adds files to the handler at the names given by the adapter and preloads the bytes.
-     *
-     * @deprecated use {@link #addFiles(File[], ByteLoadingOption)}
-     * @param files files to add
-     * @param preload whether to load the bytes now or at the exchange
-     *
-     * @see FileHandlerAdapter
-     * @see #addFiles(File[])
-     * @see #addFiles(String, File[])
-     * @see #addFiles(String, File[], boolean)
-     * @since 02.00.00
-     * @author Ktt Development
-     */
-    @Deprecated
-    public final void addFiles(final File[] files, final boolean preload){
-        addFiles("",files,preload ? ByteLoadingOption.PRELOAD : ByteLoadingOption.LIVELOAD);
-    }
-
-    /**
      * Adds multiple files to the handler.
      *
      * @param files files to add
@@ -406,26 +291,6 @@ public class FileHandler implements SimpleHttpHandler {
      */
     public final void addFiles(final String context, final File[] files){
         addFiles(context,files,ByteLoadingOption.LIVELOAD);
-    }
-
-    /**
-     * Adds files to the handler at the specified context at the names given by the adapter and preloads the bytes.
-     *
-     * @deprecated use {@link #addFiles(String, File[], ByteLoadingOption)}
-     * @param context context to use
-     * @param files files to add
-     * @param preload whether to read the bytes now or at the exchange
-     *
-     * @see FileHandlerAdapter
-     * @see #addFiles(File[])
-     * @see #addFiles(File[], boolean)
-     * @see #addFiles(String, File[])
-     * @since 02.00.00
-     * @author Ktt Development
-     */
-    @Deprecated
-    public final void addFiles(final String context, final File[] files, final boolean preload){
-        addFiles(context,files,preload ? ByteLoadingOption.PRELOAD : ByteLoadingOption.LIVELOAD);
     }
 
     /**
@@ -481,16 +346,16 @@ public class FileHandler implements SimpleHttpHandler {
      *
      * @see FileHandlerAdapter
      * @see #addDirectory(File)
-     * @see #addDirectory(File, boolean, boolean)
+
      * @see #addDirectory(File, String)
      * @see #addDirectory(File, String, boolean)
-     * @see #addDirectory(File, String, boolean, boolean)
+
      * @see #addDirectory(String, File)
      * @see #addDirectory(String, File, boolean)
-     * @see #addDirectory(String, File, boolean, boolean)
+
      * @see #addDirectory(String, File, String)
      * @see #addDirectory(String, File, String, boolean)
-     * @see #addDirectory(String, File, String, boolean, boolean)
+
      * @since 02.00.00
      * @author Ktt Development
      */
@@ -522,34 +387,6 @@ public class FileHandler implements SimpleHttpHandler {
      */
     public final void addDirectory(final File directory, final ByteLoadingOption loadingOption){
         addDirectory("",directory,directory.getName(),loadingOption,false);
-    }
-
-    /**
-     * Adds a directory and all its inner folders to the handler and preloads the files' bytes.
-     *
-     * @deprecated use {@link #addDirectory(File, ByteLoadingOption, boolean)}
-     * @param directory directory to add
-     * @param preload whether to read the bytes now or at the exchange
-     * @param walk whether to use the inner directories or not
-     *
-     * @see FileHandlerAdapter
-     * @see #addDirectory(File)
-     * @see #addDirectory(File, boolean)
-     * @see #addDirectory(File, String)
-     * @see #addDirectory(File, String, boolean)
-     * @see #addDirectory(File, String, boolean, boolean)
-     * @see #addDirectory(String, File)
-     * @see #addDirectory(String, File, boolean)
-     * @see #addDirectory(String, File, boolean, boolean)
-     * @see #addDirectory(String, File, String)
-     * @see #addDirectory(String, File, String, boolean)
-     * @see #addDirectory(String, File, String, boolean, boolean)
-     * @since 02.00.00
-     * @author Ktt Development
-     */
-    @Deprecated
-    public final void addDirectory(final File directory, final boolean preload, final boolean walk){
-        addDirectory("",directory,directory.getName(),preload ? ByteLoadingOption.PRELOAD : ByteLoadingOption.LIVELOAD,walk);
     }
 
     /**
@@ -613,15 +450,15 @@ public class FileHandler implements SimpleHttpHandler {
      * @see FileHandlerAdapter
      * @see #addDirectory(File)
      * @see #addDirectory(File, boolean)
-     * @see #addDirectory(File, boolean, boolean)
+
      * @see #addDirectory(File, String)
-     * @see #addDirectory(File, String, boolean, boolean)
+
      * @see #addDirectory(String, File)
      * @see #addDirectory(String, File, boolean)
-     * @see #addDirectory(String, File, boolean, boolean)
+
      * @see #addDirectory(String, File, String)
      * @see #addDirectory(String, File, String, boolean)
-     * @see #addDirectory(String, File, String, boolean, boolean)
+
      * @since 02.00.00
      * @author Ktt Development
      */
@@ -654,35 +491,6 @@ public class FileHandler implements SimpleHttpHandler {
      */
     public final void addDirectory(final File directory, final String directoryName, final ByteLoadingOption loadingOption){
         addDirectory("",directory,directoryName,loadingOption,false);
-    }
-
-    /**
-     * Adds a directory with a specified name to the handler and all its inner folders and preloads the bytes.
-     *
-     * @deprecated use {@link #addDirectory(File, String, ByteLoadingOption, boolean)}
-     * @param directory directory to add
-     * @param directoryName directory name
-     * @param preload whether to read the bytes now or at the exchange
-     * @param walk whether to use the inner directories or not
-     *
-     * @see FileHandlerAdapter
-     * @see #addDirectory(File)
-     * @see #addDirectory(File, boolean)
-     * @see #addDirectory(File, boolean, boolean)
-     * @see #addDirectory(File, String)
-     * @see #addDirectory(File, String, boolean)
-     * @see #addDirectory(String, File)
-     * @see #addDirectory(String, File, boolean)
-     * @see #addDirectory(String, File, boolean, boolean)
-     * @see #addDirectory(String, File, String)
-     * @see #addDirectory(String, File, String, boolean)
-     * @see #addDirectory(String, File, String, boolean, boolean)
-     * @since 02.00.00
-     * @author Ktt Development
-     */
-    @Deprecated
-    public final void addDirectory(final File directory, final String directoryName, final boolean preload, final boolean walk){
-        addDirectory("",directory,directoryName,preload ? ByteLoadingOption.PRELOAD : ByteLoadingOption.LIVELOAD,walk);
     }
 
     /**
@@ -747,15 +555,15 @@ public class FileHandler implements SimpleHttpHandler {
      * @see FileHandlerAdapter
      * @see #addDirectory(File)
      * @see #addDirectory(File, boolean)
-     * @see #addDirectory(File, boolean, boolean)
+
      * @see #addDirectory(File, String)
      * @see #addDirectory(File, String, boolean)
-     * @see #addDirectory(File, String, boolean, boolean)
+
      * @see #addDirectory(String, File)
-     * @see #addDirectory(String, File, boolean, boolean)
+
      * @see #addDirectory(String, File, String)
      * @see #addDirectory(String, File, String, boolean)
-     * @see #addDirectory(String, File, String, boolean, boolean)
+
      * @since 02.00.00
      * @author Ktt Development
      */
@@ -788,35 +596,6 @@ public class FileHandler implements SimpleHttpHandler {
      */
     public final void addDirectory(final String context, final File directory, final ByteLoadingOption loadingOption){
         addDirectory(context,directory,directory.getName(),loadingOption,false);
-    }
-
-    /**
-     * Adds a directory at a specified context and its inner folders and preloads the bytes.
-     *
-     * @deprecated use {@link #addDirectory(String, File, ByteLoadingOption, boolean)}
-     * @param context context to use
-     * @param directory directory to add
-     * @param preload whether to read the bytes now or at the exchange
-     * @param walk whether to use the inner directories or not`
-     *
-     * @see FileHandlerAdapter
-     * @see #addDirectory(File)
-     * @see #addDirectory(File, boolean)
-     * @see #addDirectory(File, boolean, boolean)
-     * @see #addDirectory(File, String)
-     * @see #addDirectory(File, String, boolean)
-     * @see #addDirectory(File, String, boolean, boolean)
-     * @see #addDirectory(String, File)
-     * @see #addDirectory(String, File, boolean)
-     * @see #addDirectory(String, File, String)
-     * @see #addDirectory(String, File, String, boolean)
-     * @see #addDirectory(String, File, String, boolean, boolean)
-     * @since 02.00.00
-     * @author Ktt Development
-     */
-    @Deprecated
-    public final void addDirectory(final String context, final File directory, final boolean preload, final boolean walk){
-        addDirectory(context,directory,directory.getName(),preload ? ByteLoadingOption.PRELOAD : ByteLoadingOption.LIVELOAD,walk);
     }
 
     /**
@@ -883,15 +662,15 @@ public class FileHandler implements SimpleHttpHandler {
      * @see FileHandlerAdapter
      * @see #addDirectory(File)
      * @see #addDirectory(File, boolean)
-     * @see #addDirectory(File, boolean, boolean)
+
      * @see #addDirectory(File, String)
      * @see #addDirectory(File, String, boolean)
-     * @see #addDirectory(File, String, boolean, boolean)
+
      * @see #addDirectory(String, File)
      * @see #addDirectory(String, File, boolean)
-     * @see #addDirectory(String, File, boolean, boolean)
+
      * @see #addDirectory(String, File, String)
-     * @see #addDirectory(String, File, String, boolean, boolean)
+
      * @since 02.00.00
      * @author Ktt Development
      */
@@ -925,36 +704,6 @@ public class FileHandler implements SimpleHttpHandler {
      */
     public final void addDirectory(final String context, final File directory, final String directoryName, final ByteLoadingOption loadingOption){
         addDirectory(context,directory,directoryName,loadingOption,false);
-    }
-
-    /**
-     * Adds a directory at a specified context with a specified name and all its inner folders and preloads the bytes.
-     *
-     * @deprecated use {@link #addDirectory(String, File, String, ByteLoadingOption, boolean)}
-     * @param context context to use
-     * @param directory directory to add
-     * @param directoryName directory name
-     * @param preload whether to read the bytes now or at the exchange
-     * @param walk whether to use the inner directories or not
-     *
-     * @see FileHandlerAdapter
-     * @see #addDirectory(File)
-     * @see #addDirectory(File, boolean)
-     * @see #addDirectory(File, boolean, boolean)
-     * @see #addDirectory(File, String)
-     * @see #addDirectory(File, String, boolean)
-     * @see #addDirectory(File, String, boolean, boolean)
-     * @see #addDirectory(String, File)
-     * @see #addDirectory(String, File, boolean)
-     * @see #addDirectory(String, File, boolean, boolean)
-     * @see #addDirectory(String, File, String)
-     * @see #addDirectory(String, File, String, boolean)
-     * @since 02.00.00
-     * @author Ktt Development
-     */
-    @Deprecated
-    public final void addDirectory(final String context, final File directory, final String directoryName, final boolean preload, final boolean walk){
-        addDirectory(context,directory,directoryName,preload ? ByteLoadingOption.PRELOAD : ByteLoadingOption.LIVELOAD, walk);
     }
 
     /**
