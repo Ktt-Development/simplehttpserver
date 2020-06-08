@@ -47,6 +47,7 @@ public class ServerExchangeThrottler extends ConnectionThrottler {
         uConnMax.set(maxConnections);
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     @Override
     final boolean addConnection(final HttpExchange exchange){
         final InetAddress address = exchange.getRemoteAddress().getAddress();
@@ -120,6 +121,7 @@ public class ServerExchangeThrottler extends ConnectionThrottler {
      * @since 03.05.00
      * @author Ktt Development
      */
+    @SuppressWarnings("SameReturnValue")
     public boolean canIgnoreConnectionLimit(final HttpExchange exchange){
         return false;
     }

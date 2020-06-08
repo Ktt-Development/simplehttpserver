@@ -12,6 +12,7 @@ package com.kttdevelopment.simplehttpserver.handler;
  * @version 03.05.00
  * @author Ktt Development
  */
+@SuppressWarnings("SpellCheckingInspection")
 public enum ByteLoadingOption {
 
     PRELOAD,

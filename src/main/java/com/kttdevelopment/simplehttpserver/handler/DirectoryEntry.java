@@ -24,7 +24,7 @@ class DirectoryEntry {
     private final ByteLoadingOption loadingOption;
     private final boolean isWalkthrough;
 
-    private final Map<String,FileEntry> preloadedFiles = new ConcurrentHashMap<>(); // preload/watchload only
+    private final Map<String,FileEntry> preloadedFiles = new ConcurrentHashMap<>(); // preload/watch-load only
     private final Path directoryPath;
 
     /**

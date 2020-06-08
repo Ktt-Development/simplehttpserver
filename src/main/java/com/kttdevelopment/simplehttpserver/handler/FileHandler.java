@@ -6,7 +6,6 @@ import com.kttdevelopment.simplehttpserver.SimpleHttpHandler;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.*;
-import java.nio.file.Files;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 

@@ -58,6 +58,7 @@ public class ServerSessionThrottler extends ConnectionThrottler{
         uConnMax.set(maxConnections);
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     @Override
     final boolean addConnection(final HttpExchange exchange){
         final HttpSession session = sessionHandler.getSession(exchange);
@@ -147,6 +148,7 @@ public class ServerSessionThrottler extends ConnectionThrottler{
      * @since 03.05.00
      * @author Ktt Development
      */
+    @SuppressWarnings("SameReturnValue")
     public boolean canIgnoreConnectionLimit(final HttpSession session, final HttpExchange exchange){
         return false;
     }
