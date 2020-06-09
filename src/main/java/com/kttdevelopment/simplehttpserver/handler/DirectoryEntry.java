@@ -2,8 +2,10 @@ package com.kttdevelopment.simplehttpserver.handler;
 
 import java.io.*;
 import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 import static java.nio.file.StandardWatchEventKinds.*;
@@ -50,52 +52,51 @@ class DirectoryEntry {
         directoryPath = directory.toPath();
 
         if(loadingOption == ByteLoadingOption.WATCHLOAD){
-            /* load top level directory */ {
-                final File[] listFiles = Objects.requireNonNullElse(directory.listFiles(),new File[0]);
-                for(final File file : listFiles) // initial population
-                    if(file.isFile())
+            if(!isWalkthrough){ // load top level only
+                for(final File file : Objects.requireNonNullElse(directory.listFiles(), new File[0])) // initial population
+                    if(!file.isDirectory()) // File#isFile does not work
                         try{
                             preloadedFiles.put(
                                 getContext(adapter.getName(file)),
                                 new FileEntry(file, adapter, ByteLoadingOption.WATCHLOAD, true)
                             );
-                        }catch(final RuntimeException ignored){ }
+                        }catch(final UncheckedIOException ignored){ }
                 try{ // create watch service for top level directory
-                    createWatchService(directoryPath, createWatchServiceConsumer());
+                    createWatchService(directoryPath, createWatchServiceConsumer(directoryPath));
                 }catch(final IOException e){
                     throw new UncheckedIOException(e);
                 }
-            }
-            if(isWalkthrough){ /* load sub directories */
+            }else{ // load top and sub levels
                 try{
-                    Files.walk(directoryPath).filter(path -> path.toFile().isDirectory()).forEach(path -> {
-                        final File p2f = path.toFile();
-                        final String rel = directoryPath.relativize(path).toString();
-
-                        final File[] listFile = Objects.requireNonNullElse(p2f.listFiles(),new File[0]);
-                        for(final File file : listFile) // initial population
-                            try{
-                                preloadedFiles.put(
-                                    (rel.isEmpty() || rel.equals("/") || rel.equals("\\") ? "" : getContext(rel)) + getContext(adapter.getName(file)),
-                                    new FileEntry(file,adapter,loadingOption,true)
-                                );
-                            }catch(final RuntimeException ignored){ }
-
-                        // create watch service for directory
-                        try{
-                            createWatchService(path, createWatchServiceConsumer());
-                        }catch(final IOException e){
-                            throw new UncheckedIOException(e);
+                    Files.walkFileTree(directoryPath, new SimpleFileVisitor<>() {
+                        @Override
+                        public final FileVisitResult preVisitDirectory(final Path path, final BasicFileAttributes attrs) throws IOException{
+                            createWatchService(path, createWatchServiceConsumer(path));
+                            return FileVisitResult.CONTINUE;
                         }
 
+                        @Override
+                        public final FileVisitResult visitFile(final Path path, final BasicFileAttributes attrs){
+                            final File file = path.toFile();
+                            final String relative = directoryPath.relativize(path.getParent()).toString(); // attach the relative path (parent) to the adapted file name
+
+                            try{
+                                preloadedFiles.put(
+                                    joinContext(relative, adapter.getName(file)),
+                                    new FileEntry(file, adapter, loadingOption, true)
+                                );
+                            }catch(final UncheckedIOException ignored){ }
+
+                            return FileVisitResult.CONTINUE;
+                        }
                     });
                 }catch(final IOException e){
                     throw new UncheckedIOException(e);
                 }
             }
         }else if(loadingOption == ByteLoadingOption.PRELOAD){
-            /* load top level directory */ {
-                final File[] listFiles = Objects.requireNonNullElse(directory.listFiles(),new File[0]);
+            if(!isWalkthrough){ // load top level only
+                final File[] listFiles = Objects.requireNonNullElse(directory.listFiles(), new File[0]);
                 for(final File file : listFiles) // initial population
                     if(!file.isDirectory())
                         try{
@@ -104,21 +105,23 @@ class DirectoryEntry {
                                 new FileEntry(file, adapter, ByteLoadingOption.PRELOAD)
                             );
                         }catch(final UncheckedIOException ignored){ }
-            }
-            if(isWalkthrough){ /* load sub directories */
+            }else{ // load top and sub levels
                 try{
-                    Files.walk(directoryPath).filter(path -> path.toFile().isDirectory()).forEach(path -> {
-                        final File p2f = path.toFile();
-                        final String relative = directoryPath.relativize(path).toString();
+                    Files.walkFileTree(directoryPath, new SimpleFileVisitor<>() {
+                        @Override
+                        public final FileVisitResult visitFile(final Path path, final BasicFileAttributes attrs){
+                            final File file = path.toFile();
+                            final String relative = directoryPath.relativize(path.getParent()).toString(); // attach the relative path (parent) to the adapted file name
 
-                        final File[] listFiles = Objects.requireNonNullElse(p2f.listFiles(), new File[0]);
-                        for(final File file : listFiles) // populate sub files
                             try{
                                 preloadedFiles.put(
-                                    (relative.isEmpty() || relative.equals("/") || relative.equals("\\") ? "" : getContext(relative)) + getContext(adapter.getName(file)),
+                                    joinContext(relative,adapter.getName(file)),
                                     new FileEntry(file, adapter, ByteLoadingOption.PRELOAD)
                                 );
                             }catch(final RuntimeException ignored){ }
+
+                            return FileVisitResult.CONTINUE;
+                        }
                     });
                 }catch(final IOException e){
                     throw new UncheckedIOException(e);
@@ -128,60 +131,64 @@ class DirectoryEntry {
     }
 
 
-    private final Map<Path,Thread> watchService = new ConcurrentHashMap<>();
+    private final Map<Path,AtomicBoolean> watchService = new ConcurrentHashMap<>();
 
     private void createWatchService(final Path path, final Consumer<WatchEvent<?>> consumer) throws IOException{
         final WatchService service = FileSystems.getDefault().newWatchService();
         path.register(service,ENTRY_CREATE,ENTRY_DELETE,ENTRY_MODIFY);
 
-        final Thread th =
+        final AtomicBoolean stop = new AtomicBoolean(false);
+
         new Thread(() -> {
             WatchKey key;
             try{
                 while((key = service.take()) != null){
-                    for(WatchEvent<?> event : key.pollEvents()){
+                    for(WatchEvent<?> event : key.pollEvents())
                         consumer.accept(event);
-                        key.reset();
-                    }
+                    key.reset();
+                    if(stop.get())
+                        break;
                 }
             }catch(final InterruptedException ignored){ }
-        });
+        }).start();
 
-        th.start();
-
-        watchService.put(path,th);
+        watchService.put(path,stop);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    private Consumer<WatchEvent<?>> createWatchServiceConsumer(){
+    @SuppressWarnings({"StatementWithEmptyBody", "SpellCheckingInspection"})
+    private Consumer<WatchEvent<?>> createWatchServiceConsumer(final Path path){
         return (WatchEvent<?> event) -> {
             try{
-                final Path target = (Path) event.context();
-                final File file = target.toFile();
+                final Path relTarg = directoryPath.resolve((Path) event.context()); // only the file name (this method is flawed!)
+                final File relFile = relTarg.toFile(); // only the file name (this method if flawed!)
                 final WatchEvent.Kind<?> type = event.kind();
 
-                final String relative = getContext(directoryPath.relativize(target).toString());
-                final String context = (relative.isEmpty() || relative.equals("/") || relative.equals("\\") ? "" : getContext(relative)) + getContext(adapter.getName(file));
+                final String top2sub = getContext(directoryPath.relativize(path).toString()); // the relative path between the top level directory and sub directory
+                final String context = joinContext(top2sub,adapter.getName(relFile)); // the file key
+                final File file = new File(directoryPath + joinContext(top2sub,relFile.getName())); // the actual referable file
+                final Path target = file.toPath();
 
-                if(file.isFile())
+                if(!file.isDirectory()) // File#isFile does not work
                     if(type == ENTRY_CREATE)
                         preloadedFiles.put(context, new FileEntry(file,adapter,ByteLoadingOption.WATCHLOAD,true));
                     else if(type == ENTRY_DELETE)
                         preloadedFiles.remove(context);
                     else if(type == ENTRY_MODIFY)
-                        preloadedFiles.get(context).reloadBytes();
+                        Objects.requireNonNull(preloadedFiles.get(context)).reloadBytes();
                     else; // prevent ambiguous else with below
-                else
+                else if(isWalkthrough) // only add/remove if walkthrough
                    if(type == ENTRY_CREATE)
                        try{
-                           createWatchService(target, createWatchServiceConsumer());
+                           createWatchService(target, createWatchServiceConsumer(target));
                        }catch(final IOException ignored){ }
                    else if(type == ENTRY_DELETE){
-                       watchService.get(target).stop();
-                       watchService.remove(target);
+                       Objects.requireNonNull(watchService.get(relTarg)).set(true);
+                       watchService.remove(relTarg);
                    }
 
-            }catch(final ClassCastException ignored){ }
+                   preloadedFiles.get(context).reloadBytes();
+
+            }catch(final ClassCastException | NullPointerException ignored){ }
         };
     }
 
@@ -293,11 +300,21 @@ class DirectoryEntry {
 
 //
 
+    // leading slash only
     private static String getContext(final String path){
         final String linSlash = path.replace("\\","/");
         if(linSlash.equals("/")) return "/";
         final String seSlash = (!linSlash.startsWith("/") ? "/" : "") + linSlash + (!linSlash.endsWith("/") ? "/" : "");
         return seSlash.substring(0,seSlash.length()-1);
+    }
+
+    private static String joinContext(final String... paths){
+        final StringBuilder OUT = new StringBuilder();
+        for(final String path : paths){
+            final String context = getContext(path);
+            OUT.append(context.isEmpty() || context.equals("/") || context.equals("\\") ? "" : context);
+        }
+        return OUT.toString();
     }
 
 //

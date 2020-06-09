@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @see ServerExchangeThrottler
  * @see SessionThrottler
  * @since 03.05.00
- * @version 03.05.00
+ * @version 03.05.01
  * @author Ktt Development
  */
 public class ServerSessionThrottler extends ConnectionThrottler{

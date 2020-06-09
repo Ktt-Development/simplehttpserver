@@ -6,6 +6,8 @@ import com.kttdevelopment.simplehttpserver.SimpleHttpHandler;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.*;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -633,7 +635,7 @@ public class FileHandler implements SimpleHttpHandler {
 
     @Override
     public final void handle(final SimpleHttpExchange exchange) throws IOException{
-        final String context = getContext(exchange.getURI().getPath().substring(exchange.getHttpContext().getPath().length()));
+        final String context = URLDecoder.decode(getContext(exchange.getURI().getPath().substring(exchange.getHttpContext().getPath().length())), StandardCharsets.UTF_8);
 
         if(files.containsKey(context)){ // exact file match
             final FileEntry entry = files.get(context);
