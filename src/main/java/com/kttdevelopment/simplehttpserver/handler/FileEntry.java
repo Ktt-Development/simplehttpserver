@@ -16,7 +16,6 @@ import java.util.Arrays;
 class FileEntry {
 
     private final File file;
-    @SuppressWarnings("FieldCanBeLocal")
     private final FileBytesAdapter adapter;
     private final ByteLoadingOption loadingOption;
 
@@ -121,7 +120,7 @@ class FileEntry {
         if(loadingOption != ByteLoadingOption.LIVELOAD)
             try{
                 preloadedBytes = adapter.getBytes(file,Files.readAllBytes(file.toPath()));
-            }catch(final IOException ignored){
+            }catch(final IOException e){
                 preloadedBytes = null;
             }
     }
