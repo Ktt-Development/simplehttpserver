@@ -65,7 +65,6 @@
                 <version>3.0.0-M5</version>
                 <configuration>
                     <useFile>false</useFile>
-                    <argLine>-Djava.net.preferIPv4Stack=true</argLine>
                 </configuration>
             </plugin>
         </plugins>
