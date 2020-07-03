@@ -8,6 +8,7 @@ import java.io.IOException;
 
 public class SimpleHttpServerReadTests {
 
+    @SuppressWarnings("SpellCheckingInspection")
     @Test
     public void get() throws IOException{
         final int port = 10005;

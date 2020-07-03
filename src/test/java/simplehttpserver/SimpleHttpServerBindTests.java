@@ -5,7 +5,6 @@ import org.junit.*;
 
 import java.io.IOException;
 import java.net.BindException;
-import java.util.concurrent.TimeUnit;
 
 public class SimpleHttpServerBindTests {
 
@@ -35,7 +34,7 @@ public class SimpleHttpServerBindTests {
     }
 
     @Test
-    public void testOccupiedPortBind() throws IOException, InterruptedException{
+    public void testOccupiedPortBind() throws IOException{
         final int port = 10002;
         final SimpleHttpServer s1 = SimpleHttpServer.create(port);
         s1.start();
@@ -46,8 +45,6 @@ public class SimpleHttpServerBindTests {
         s1.stop();
 
         Assert.assertNotNull("Bind server to occupied port should throw an exception",exception);
-
-        Thread.sleep(TimeUnit.SECONDS.toMillis(2));
 
         exception = null;
         try{ SimpleHttpServer.create(port);
