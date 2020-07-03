@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.net.BindException;
 
 public class SimpleHttpServerBindTests {
-    final int port = 80; // port may clash with other tests
+    final int port = 10001; // port may clash with other tests
 
     @Test
     public void testPortRange() throws IOException{

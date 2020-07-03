@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class SimpleHttpServerReadTests {
 
-    final int port = 82; // port may clash with other tests
+    final int port = 10003; // port may clash with other tests
 
     @Test
     public void get() throws IOException{
