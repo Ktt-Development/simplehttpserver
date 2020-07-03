@@ -422,10 +422,10 @@ public abstract class SimpleHttpServer {
     public abstract String getRandomContext();
 
     /**
-     * Generates a randome context that can be used on the server.
+     * Generates a random context that can be used on the server.
      *
      * @param context where to generate the random context
-     * @return randome safe context
+     * @return random safe context
      *
      * @see #getRandomContext()
      * @see com.kttdevelopment.simplehttpserver.handler.TemporaryHandler
