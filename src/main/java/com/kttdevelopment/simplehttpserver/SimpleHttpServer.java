@@ -17,7 +17,7 @@ import java.util.concurrent.Executor;
  * @see SimpleHttpsServer
  * @see SimpleHttpHandler
  * @since 02.00.00
- * @version 03.05.01
+ * @version 03.05.02
  * @author Ktt Development
  */
 @SuppressWarnings("SpellCheckingInspection")
