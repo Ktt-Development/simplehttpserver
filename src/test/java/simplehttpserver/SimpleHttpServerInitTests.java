@@ -9,10 +9,10 @@ import java.io.IOException;
 
 public class SimpleHttpServerInitTests {
 
-    final int port = 10002; // port may clash with other tests
 
     @Test
     public void create() throws IOException{
+        final int port = 10003;
         SimpleHttpServer server  = SimpleHttpServer.create();
         Exception exception = null;
         try{
@@ -29,6 +29,7 @@ public class SimpleHttpServerInitTests {
 
     @Test
     public void createHTTPS() throws IOException{
+        final int port = 10004;
         SimpleHttpsServer server  = SimpleHttpsServer.create();
         Exception exception = null;
         try{

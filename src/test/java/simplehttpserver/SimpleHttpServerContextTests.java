@@ -9,8 +9,6 @@ import java.io.IOException;
 
 public class SimpleHttpServerContextTests {
 
-    final int port = 10004; // port may clash with other tests
-
     @Test
     public void randContext() throws IOException{
         final SimpleHttpServer server = SimpleHttpServer.create();

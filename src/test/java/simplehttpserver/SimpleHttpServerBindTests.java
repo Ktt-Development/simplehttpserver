@@ -8,10 +8,11 @@ import java.net.BindException;
 import java.util.concurrent.TimeUnit;
 
 public class SimpleHttpServerBindTests {
-    final int port = 10001; // port may clash with other tests
 
     @Test
     public void testPortRange() throws IOException{
+        final int port = 10001;
+
         final SimpleHttpServer server = SimpleHttpServer.create();
 
         Exception exception = null;
@@ -35,6 +36,7 @@ public class SimpleHttpServerBindTests {
 
     @Test
     public void testOccupiedPortBind() throws IOException, InterruptedException{
+        final int port = 10002;
         final SimpleHttpServer s1 = SimpleHttpServer.create(port);
         s1.start();
 

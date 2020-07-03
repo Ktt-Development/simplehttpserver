@@ -8,10 +8,10 @@ import java.io.IOException;
 
 public class SimpleHttpServerReadTests {
 
-    final int port = 10003; // port may clash with other tests
-
     @Test
     public void get() throws IOException{
+        final int port = 10005;
+
         final SimpleHttpServer server = SimpleHttpServer.create();
         Assert.assertNotNull("#getHttpServer() should not be null", server.getHttpServer());
 
