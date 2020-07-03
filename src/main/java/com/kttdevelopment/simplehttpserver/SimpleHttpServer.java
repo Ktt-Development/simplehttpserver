@@ -179,6 +179,7 @@ public abstract class SimpleHttpServer {
      * Returns the address that the server is binded to.
      *
      * @return binded address
+     * @throws NullPointerException if server is not binded to a port
      *
      * @see InetSocketAddress
      * @since 02.00.00
