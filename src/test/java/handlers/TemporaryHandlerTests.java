@@ -2,7 +2,6 @@ package handlers;
 
 import com.kttdevelopment.simplehttpserver.*;
 import com.kttdevelopment.simplehttpserver.handler.TemporaryHandler;
-import com.sun.net.httpserver.HttpContext;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -10,7 +9,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.http.*;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class TemporaryHandlerTests {
 

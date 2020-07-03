@@ -1,9 +1,9 @@
 package handlers;
 
-import com.kttdevelopment.simplehttpserver.*;
-import com.kttdevelopment.simplehttpserver.handler.*;
-import com.kttdevelopment.simplehttpserver.var.HttpCode;
-import com.sun.net.httpserver.HttpExchange;
+import com.kttdevelopment.simplehttpserver.SimpleHttpHandler;
+import com.kttdevelopment.simplehttpserver.SimpleHttpServer;
+import com.kttdevelopment.simplehttpserver.handler.PredicateHandler;
+import com.kttdevelopment.simplehttpserver.handler.RootHandler;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.http.*;
 import java.util.concurrent.ExecutionException;
-import java.util.function.Predicate;
 
 public class PredicateHandlerTests {
 

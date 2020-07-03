@@ -2,7 +2,6 @@ package handlers;
 
 import com.kttdevelopment.simplehttpserver.*;
 import com.kttdevelopment.simplehttpserver.handler.RedirectHandler;
-import com.kttdevelopment.simplehttpserver.handler.TemporaryHandler;
 import com.kttdevelopment.simplehttpserver.var.HttpCode;
 import org.junit.Assert;
 import org.junit.Test;
