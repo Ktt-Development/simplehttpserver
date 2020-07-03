@@ -61,6 +61,8 @@ public class SimpleHttpExchangeCookieSessionTests {
         final HttpSession session = server.getHttpSession(exchange);
         Assert.assertTrue("Client session creation time was in the future",session.getCreationTime() < System.currentTimeMillis());
         Assert.assertTrue("Client session last access time was in the future",session.getLastAccessTime() < System.currentTimeMillis());
+
+        server.stop();
     }
 
 }

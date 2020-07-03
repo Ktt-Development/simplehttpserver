@@ -70,7 +70,6 @@ public class SimpleHttpExchangeReadTests {
         Assert.assertTrue("Client did not send any cookies",exchange.getCookies().isEmpty());
 
         server.stop();
-
     }
 
 }

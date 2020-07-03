@@ -89,6 +89,8 @@ public class SimpleHttpExchangeGetPostTests {
         Assert.assertEquals("Client request method did not match exchange request method (POST)", RequestMethod.POST,exchange.getRequestMethod());
         Assert.assertTrue("Exchange was missing client POST map", exchange.hasPost());
         Assert.assertEquals("Exchange POST did not match client POST", queryValue, exchange.getPostMap().get(queryKey));
+
+        server.stop();
     }
 
     @Test @Ignore
