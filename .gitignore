@@ -10,3 +10,4 @@ src/LICENSE.txt
 .gradle
 # Maven
 target
+/test/

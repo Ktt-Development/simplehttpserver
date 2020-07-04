@@ -68,7 +68,7 @@ public class ThrottledHandlerTests {
 
     @Test
     public void serverSessionThrottler() throws IOException{
-        final int port = 30011;
+        final int port = 30015;
 
         final SimpleHttpServer server = SimpleHttpServer.create(port);
         final HttpSessionHandler sessionHandler = new HttpSessionHandler();

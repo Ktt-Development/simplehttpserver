@@ -75,9 +75,9 @@ public class SimpleHttpExchangeGetPostTests {
         String url = "http://localhost:" + port + context ;
 
         HttpRequest request = HttpRequest.newBuilder()
-             .uri(URI.create(url))
-             .POST(HttpRequest.BodyPublishers.ofString(queryKey + '=' + queryValue))
-             .build();
+            .uri(URI.create(url))
+            .POST(HttpRequest.BodyPublishers.ofString(queryKey + '=' + queryValue))
+            .build();
 
         HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
             .thenApply(HttpResponse::body).get();
@@ -129,10 +129,10 @@ public class SimpleHttpExchangeGetPostTests {
         OUT.append("--------------------------").append(boundary).append("--");
 
         HttpRequest request = HttpRequest.newBuilder()
-             .uri(URI.create(url))
-             .header("Content-type","multipart/form-data; boundary=" + boundary)
-             .POST(HttpRequest.BodyPublishers.ofString(OUT.toString()))
-             .build();
+            .uri(URI.create(url))
+            .header("Content-type","multipart/form-data; boundary=" + boundary)
+            .POST(HttpRequest.BodyPublishers.ofString(OUT.toString()))
+            .build();
 
         HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
             .thenApply(HttpResponse::body).get();
@@ -142,8 +142,6 @@ public class SimpleHttpExchangeGetPostTests {
 
         Assert.assertEquals("Client request method did not match exchange request method (POST)", RequestMethod.POST,exchange.getRequestMethod());
         Assert.assertTrue("Exchange was missing client POST map", exchange.hasPost());
-
-        System.out.println(exchange.getPostMap().toString());
 
         Assert.assertEquals("Client form value did not match server value",value, ((Map) exchange.getPostMap().get(key)).get("value"));
         Assert.assertEquals("Client file name did not match server value",filename, ((Map) ((Map) ((Map) ((Map) exchange.getPostMap().get(fkey)).get("headers")).get("Content-Disposition")).get("parameters")).get("filename"));

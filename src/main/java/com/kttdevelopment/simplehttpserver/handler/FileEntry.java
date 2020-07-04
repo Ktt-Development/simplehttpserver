@@ -140,7 +140,7 @@ class FileEntry {
         else
             try{
                 return adapter.getBytes(file,Files.readAllBytes(file.toPath())); // read and adapt bytes
-            }catch(final IOException ignored){
+            }catch(final IOException e){
                 return null;
             }
     }
