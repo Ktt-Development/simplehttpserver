@@ -92,8 +92,43 @@ public class SimpleHttpExchangeGetPostTests {
     }
 
     @Test @Ignore
-    public void postMultipartFormData(){
+    public void postMultipartFormData() throws IOException, ExecutionException, InterruptedException{
+        final int port = 20005;
 
+        final SimpleHttpServer server = SimpleHttpServer.create(port);
+        final AtomicReference<SimpleHttpExchange> exchangeRef = new AtomicReference<>();
+        final AtomicReference<String> exchangeResponse = new AtomicReference<>();
+        final SimpleHttpHandler handler = exchange -> {
+            exchangeRef.set(exchange);
+            exchangeResponse.set(exchange.toString());
+            exchange.send(exchange.toString());
+        };
+
+        final String context = server.getRandomContext();
+        final AtomicReference<HttpContext> contextRef = new AtomicReference<>();
+        contextRef.set(server.createContext(context,handler));
+        server.start();
+
+
+        String url = "http://localhost:" + port + context ;
+
+        HttpRequest request = HttpRequest.newBuilder()
+             .uri(URI.create(url))
+             // .POST(HttpRequest.BodyPublishers.ofString(queryKey + '=' + queryValue)) // todo: load file
+             .build();
+
+        HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
+            .thenApply(HttpResponse::body).get();
+
+        // exchange
+        final SimpleHttpExchange exchange = exchangeRef.get();
+
+        Assert.assertEquals("Client request method did not match exchange request method (POST)", RequestMethod.POST,exchange.getRequestMethod());
+        Assert.assertTrue("Exchange was missing client POST map", exchange.hasPost());
+        // todo: check if value matches load file
+        // Assert.assertEquals("Exchange POST did not match client POST", queryValue, exchange.getPostMap().get(queryKey));
+
+        server.stop();
     }
 
 }

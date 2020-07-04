@@ -2,8 +2,7 @@ package handlers;
 
 import com.kttdevelopment.simplehttpserver.SimpleHttpServer;
 import com.kttdevelopment.simplehttpserver.handler.SSEHandler;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.*;
 
 import java.io.IOException;
 import java.net.URL;
@@ -21,7 +20,14 @@ public class SSEHandlerTests {
         server.createContext("",handler);
         server.start();
 
+        // todo: connect to sse
 
+        final String result = "result";
+        handler.push(result);
+
+        String response = null;
+
+        Assert.assertEquals("Client did not match event pushed by server",result,response);
 
         server.stop();
     }
