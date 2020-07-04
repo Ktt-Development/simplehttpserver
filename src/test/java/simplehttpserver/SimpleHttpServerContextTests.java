@@ -73,6 +73,25 @@ public class SimpleHttpServerContextTests {
     }
 
     @Test
+    public void removeNativeContext() throws IOException{
+        final SimpleHttpServer server = SimpleHttpServer.create();
+
+        try{ server.removeContext(server.getHttpServer().createContext(server.getRandomContext()));
+        }catch(IllegalArgumentException ignored){
+            Assert.fail("Removing a context added by the native http server should not throw an exception");
+        }
+
+        String context = server.getRandomContext();
+        server.createContext(context);
+        server.getHttpServer().removeContext(context);
+        try{
+            server.createContext(context);
+        }catch(IllegalArgumentException ignored){
+            Assert.fail("Server should be able to create a new context if remove by native http server");
+        }
+    }
+
+    @Test
     public void createContext() throws IOException{
         final SimpleHttpServer server = SimpleHttpServer.create();
         String context = server.getRandomContext();
