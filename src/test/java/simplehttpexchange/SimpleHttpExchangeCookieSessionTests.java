@@ -27,7 +27,7 @@ public class SimpleHttpExchangeCookieSessionTests {
             exchange.send(exchange.toString());
         };
 
-        final String context = server.getRandomContext();
+        final String context = "";
         final AtomicReference<HttpContext> contextRef = new AtomicReference<>();
         contextRef.set(server.createContext(context,handler));
         final String cookie = "__session-id";

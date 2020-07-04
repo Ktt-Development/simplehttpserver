@@ -18,7 +18,7 @@ public class TemporaryHandlerTests {
 
         final SimpleHttpServer server = SimpleHttpServer.create(port);
 
-        final String context = server.getRandomContext();
+        final String context = "";
         server.createContext(context,new TemporaryHandler(server,(SimpleHttpHandler) SimpleHttpExchange::close, 1000));
         server.start();
 
@@ -46,7 +46,7 @@ public class TemporaryHandlerTests {
 
         final SimpleHttpServer server = SimpleHttpServer.create(port);
 
-        final String context = server.getRandomContext();
+        final String context = "";
         server.createContext(context,new TemporaryHandler(server,(SimpleHttpHandler) SimpleHttpExchange::close));
         server.start();
 

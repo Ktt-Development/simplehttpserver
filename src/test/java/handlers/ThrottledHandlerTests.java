@@ -21,7 +21,7 @@ public class ThrottledHandlerTests {
         final HttpSessionHandler sessionHandler = new HttpSessionHandler();
         server.setHttpSessionHandler(sessionHandler);
 
-        final String context = server.getRandomContext();
+        final String context = "";
         server.createContext(
             context,
             new ThrottledHandler(
@@ -74,7 +74,7 @@ public class ThrottledHandlerTests {
         final HttpSessionHandler sessionHandler = new HttpSessionHandler();
         server.setHttpSessionHandler(sessionHandler);
 
-        final String context = server.getRandomContext();
+        final String context = "";
         server.createContext(
             context,
             new ThrottledHandler(
@@ -125,7 +125,7 @@ public class ThrottledHandlerTests {
 
         final SimpleHttpServer server = SimpleHttpServer.create(port);
 
-        final String context = server.getRandomContext();
+        final String context = "";
         server.createContext(
             context,
             new ThrottledHandler(
@@ -176,7 +176,7 @@ public class ThrottledHandlerTests {
 
         final SimpleHttpServer server = SimpleHttpServer.create(port);
 
-        final String context = server.getRandomContext();
+        final String context = "";
         server.createContext(
             context,
             new ThrottledHandler(

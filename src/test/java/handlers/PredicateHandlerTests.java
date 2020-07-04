@@ -22,7 +22,7 @@ public class PredicateHandlerTests {
 
         final boolean condition = System.currentTimeMillis() % 2 == 1;
 
-        final String context = server.getRandomContext();
+        final String context = "";
         server.createContext(context,new PredicateHandler((SimpleHttpHandler) exchange -> exchange.send("A"), (SimpleHttpHandler) exchange -> exchange.send("B"), exchange -> condition));
         server.start();
 
@@ -47,8 +47,8 @@ public class PredicateHandlerTests {
         final int port = 30005;
 
         final SimpleHttpServer server = SimpleHttpServer.create(port);
-
-        server.createContext("",new RootHandler((SimpleHttpHandler) exchange -> exchange.send("A"), (SimpleHttpHandler) exchange -> exchange.send("B")));
+        String context = "";
+        server.createContext(context,new RootHandler((SimpleHttpHandler) exchange -> exchange.send("A"), (SimpleHttpHandler) exchange -> exchange.send("B")));
         server.start();
 
         Assert.assertFalse("Server did not contain a temporary context", server.getContexts().isEmpty());

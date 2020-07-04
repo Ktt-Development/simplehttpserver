@@ -27,7 +27,7 @@ public class SimpleHttpExchangeReadTests {
             exchange.send(exchange.toString());
         };
 
-        final String context = server.getRandomContext();
+        final String context = "/";
         final AtomicReference<HttpContext> contextRef = new AtomicReference<>();
         contextRef.set(server.createContext(context,handler));
         server.start();

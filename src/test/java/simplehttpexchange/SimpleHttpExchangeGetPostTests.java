@@ -26,7 +26,7 @@ public class SimpleHttpExchangeGetPostTests {
             exchange.send(exchange.toString());
         };
 
-        final String context = server.getRandomContext();
+        final String context = "";
         final AtomicReference<HttpContext> contextRef = new AtomicReference<>();
         contextRef.set(server.createContext(context,handler));
         server.start();
@@ -65,7 +65,7 @@ public class SimpleHttpExchangeGetPostTests {
             exchange.send(exchange.toString());
         };
 
-        final String context = server.getRandomContext();
+        final String context = "";
         final AtomicReference<HttpContext> contextRef = new AtomicReference<>();
         contextRef.set(server.createContext(context,handler));
         server.start();
@@ -104,7 +104,7 @@ public class SimpleHttpExchangeGetPostTests {
             exchange.send(exchange.toString());
         };
 
-        final String context = server.getRandomContext();
+        final String context = "";
         final AtomicReference<HttpContext> contextRef = new AtomicReference<>();
         contextRef.set(server.createContext(context,handler));
         server.start();

@@ -19,12 +19,11 @@ public class SSEHandlerTests {
         final int port = 30006;
 
         final SimpleHttpServer server = SimpleHttpServer.create(port);
+        String context = "";
 
         final SSEHandler handler = new SSEHandler();
-        server.createContext("",handler);
+        server.createContext(context,handler);
         server.start();
-
-        // todo: connect to sse
 
         HttpRequest request = HttpRequest.newBuilder()
              .uri(URI.create("http://localhost:" + port))

@@ -19,7 +19,7 @@ public class RedirectHandlerTests {
 
         final SimpleHttpServer server = SimpleHttpServer.create(port);
 
-        final String context = server.getRandomContext();
+        final String context = "";
         server.createContext(context,new RedirectHandler("https://www.google.com/"));
         server.start();
 
