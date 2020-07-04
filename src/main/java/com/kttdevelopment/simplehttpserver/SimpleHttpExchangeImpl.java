@@ -160,7 +160,7 @@ final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
 
                                 headerMap.put("header-name", headerMatcher.group(1));
                                 headerMap.put("header-value", headerMatcher.group(2));
-                                headerMap.put("parameter", val);
+                                headerMap.put("parameters", val);
                             }
                             postHeaders.put((String) headerMap.get("header-name"), headerMap);
                         }
@@ -170,7 +170,7 @@ final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
                         row.put("value",pair.substring(pair.indexOf("\r\n\r\n")+4,pair.lastIndexOf("\r\n")));
 
                         postMap.put(
-                            ((HashMap<String, String>) postHeaders.get("Content-Disposition").get("parameter")).get("name"),
+                            ((HashMap<String, String>) postHeaders.get("Content-Disposition").get("parameters")).get("name"),
                             row
                         );
                     }
