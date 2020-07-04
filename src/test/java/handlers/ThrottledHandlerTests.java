@@ -26,7 +26,7 @@ public class ThrottledHandlerTests {
             context,
             new ThrottledHandler(
                 (SimpleHttpHandler) exchange -> {
-                    try{ Thread.sleep(TimeUnit.SECONDS.toMillis(5));
+                    try{ Thread.sleep(TimeUnit.SECONDS.toMillis(3));
                     }catch(InterruptedException ignored){ }
                     exchange.send(exchange.toString());
                 },
@@ -44,7 +44,7 @@ public class ThrottledHandlerTests {
 
         HttpRequest request = HttpRequest.newBuilder()
              .uri(URI.create(url))
-             .timeout(Duration.ofSeconds(2))
+             .timeout(Duration.ofSeconds(1))
              .build();
 
         new Thread(() -> {
@@ -79,7 +79,7 @@ public class ThrottledHandlerTests {
             context,
             new ThrottledHandler(
                 (SimpleHttpHandler) exchange -> {
-                    try{ Thread.sleep(TimeUnit.SECONDS.toMillis(5));
+                    try{ Thread.sleep(TimeUnit.SECONDS.toMillis(3));
                     }catch(InterruptedException ignored){ }
                     exchange.send(exchange.toString());
                 },
@@ -97,7 +97,7 @@ public class ThrottledHandlerTests {
 
         HttpRequest request = HttpRequest.newBuilder()
              .uri(URI.create(url))
-             .timeout(Duration.ofSeconds(2))
+             .timeout(Duration.ofSeconds(1))
              .build();
 
         new Thread(() -> {
@@ -120,7 +120,7 @@ public class ThrottledHandlerTests {
     }
 
     @Test
-    public void exchangeThrottler() throws IOException{ // server & per
+    public void exchangeThrottler() throws IOException{
         final int port = 30012;
 
         final SimpleHttpServer server = SimpleHttpServer.create(port);
@@ -130,7 +130,7 @@ public class ThrottledHandlerTests {
             context,
             new ThrottledHandler(
                 (SimpleHttpHandler) exchange -> {
-                    try{ Thread.sleep(TimeUnit.SECONDS.toMillis(5));
+                    try{ Thread.sleep(TimeUnit.SECONDS.toMillis(3));
                     }catch(InterruptedException ignored){ }
                     exchange.send(exchange.toString());
                 },
@@ -148,7 +148,7 @@ public class ThrottledHandlerTests {
 
         HttpRequest request = HttpRequest.newBuilder()
              .uri(URI.create(url))
-             .timeout(Duration.ofSeconds(2))
+             .timeout(Duration.ofSeconds(1))
              .build();
 
         new Thread(() -> {
@@ -171,7 +171,7 @@ public class ThrottledHandlerTests {
     }
 
     @Test
-    public void serverExchangeThrottler() throws IOException{ // server & per
+    public void serverExchangeThrottler() throws IOException{
         final int port = 30013;
 
         final SimpleHttpServer server = SimpleHttpServer.create(port);
@@ -181,7 +181,7 @@ public class ThrottledHandlerTests {
             context,
             new ThrottledHandler(
                 (SimpleHttpHandler) exchange -> {
-                    try{ Thread.sleep(TimeUnit.SECONDS.toMillis(5));
+                    try{ Thread.sleep(TimeUnit.SECONDS.toMillis(3));
                     }catch(InterruptedException ignored){ }
                     exchange.send(exchange.toString());
                 },
@@ -199,7 +199,7 @@ public class ThrottledHandlerTests {
 
         HttpRequest request = HttpRequest.newBuilder()
              .uri(URI.create(url))
-             .timeout(Duration.ofSeconds(2))
+             .timeout(Duration.ofSeconds(1))
              .build();
 
         new Thread(() -> {

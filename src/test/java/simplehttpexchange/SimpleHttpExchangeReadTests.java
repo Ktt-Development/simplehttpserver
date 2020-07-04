@@ -41,7 +41,7 @@ public class SimpleHttpExchangeReadTests {
             .build();
 
         String response = HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
-              .thenApply(HttpResponse::body).get();
+            .thenApply(HttpResponse::body).get();
 
         Assert.assertEquals("Response body did not match response sent",exchangeResponse.get(),response);
 

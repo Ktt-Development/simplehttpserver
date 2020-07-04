@@ -36,7 +36,7 @@ public class RedirectHandlerTests {
         int response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
              .thenApply(HttpResponse::statusCode).get();
 
-        Assert.assertEquals("Client did not respond with redirect code (302 HTTP FOUND)",HttpCode.HTTP_OK, response);
+        Assert.assertEquals("Client responded with redirect code (302 HTTP FOUND) not 200 HTTP OK",HttpCode.HTTP_OK, response);
 
         server.stop();
     }

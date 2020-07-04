@@ -78,10 +78,8 @@ public class SimpleHttpExchangeGetPostTests {
              .POST(HttpRequest.BodyPublishers.ofString(queryKey + '=' + queryValue))
              .build();
 
-        String response = HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
+        HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
             .thenApply(HttpResponse::body).get();
-
-        Assert.assertEquals("Response body did not match response sent", exchangeResponse.get(), response);
 
         // exchange
         final SimpleHttpExchange exchange = exchangeRef.get();
@@ -95,7 +93,7 @@ public class SimpleHttpExchangeGetPostTests {
 
     @Test @Ignore
     public void postMultipartFormData(){
-        // todo
+
     }
 
 }

@@ -45,9 +45,8 @@ public class SimpleHttpExchangeCookieSessionTests {
             .cookieHandler(cookies)
             .build();
 
-        String response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+        client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
             .thenApply(HttpResponse::body).get();
-        Assert.assertEquals("Response body did not match response sent", exchangeResponse.get(), response);
 
 
         // exchange
