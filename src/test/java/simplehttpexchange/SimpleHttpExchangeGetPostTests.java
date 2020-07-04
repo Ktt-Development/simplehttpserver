@@ -8,6 +8,7 @@ import org.junit.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.*;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -91,7 +92,8 @@ public class SimpleHttpExchangeGetPostTests {
         server.stop();
     }
 
-    @Test @Ignore
+    @SuppressWarnings("rawtypes")
+    @Test
     public void postMultipartFormData() throws IOException, ExecutionException, InterruptedException{
         final int port = 20005;
 
@@ -105,16 +107,31 @@ public class SimpleHttpExchangeGetPostTests {
         };
 
         final String context = "";
-        final AtomicReference<HttpContext> contextRef = new AtomicReference<>();
-        contextRef.set(server.createContext(context,handler));
+        server.createContext(context,handler);
         server.start();
 
+        String boundary = "d74496d66958873e";
 
         String url = "http://localhost:" + port + context ;
 
+        String key = "key", value = "value";
+        String fkey = "fileKey", filename = "fileName.txt", fvalue = "fileValue";
+
+        StringBuilder OUT = new StringBuilder();
+        OUT.append("--------------------------").append(boundary).append("\r\n");
+        OUT.append("Content-Disposition: ").append("form-data; ").append("name=\"").append(key).append('\"').append("\r\n\r\n");
+        OUT.append(value).append("\r\n");
+        OUT.append("--------------------------").append(boundary).append("\r\n");
+        OUT.append("Content-Disposition: ").append("form-data; ").append("name=\"").append(fkey).append("\"; ");
+        OUT.append("filename=\"").append(filename).append('\"').append('\n');
+        OUT.append("Content-Type: ").append("text/plain").append("\r\n\r\n");
+        OUT.append(fvalue).append("\r\n");
+        OUT.append("--------------------------").append(boundary).append("--");
+
         HttpRequest request = HttpRequest.newBuilder()
              .uri(URI.create(url))
-             // .POST(HttpRequest.BodyPublishers.ofString(queryKey + '=' + queryValue)) // todo: load file
+             .header("Content-type","multipart/form-data; boundary=" + boundary)
+             .POST(HttpRequest.BodyPublishers.ofString(OUT.toString()))
              .build();
 
         HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
@@ -125,8 +142,12 @@ public class SimpleHttpExchangeGetPostTests {
 
         Assert.assertEquals("Client request method did not match exchange request method (POST)", RequestMethod.POST,exchange.getRequestMethod());
         Assert.assertTrue("Exchange was missing client POST map", exchange.hasPost());
-        // todo: check if value matches load file
-        // Assert.assertEquals("Exchange POST did not match client POST", queryValue, exchange.getPostMap().get(queryKey));
+
+        System.out.println(exchange.getPostMap().toString());
+
+        Assert.assertEquals("Client form value did not match server value",value, ((Map) exchange.getPostMap().get(key)).get("value"));
+        Assert.assertEquals("Client file name did not match server value",filename, ((Map) ((Map) ((Map) ((Map) exchange.getPostMap().get(fkey)).get("headers")).get("Content-Disposition")).get("parameters")).get("filename"));
+        Assert.assertEquals("Client file value did not match server value",fvalue, ((Map) exchange.getPostMap().get(fkey)).get("value"));
 
         server.stop();
     }
