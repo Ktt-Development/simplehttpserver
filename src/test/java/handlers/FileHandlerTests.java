@@ -1,6 +1,7 @@
 package handlers;
 
-import com.kttdevelopment.simplehttpserver.*;
+import com.kttdevelopment.simplehttpserver.SimpleHttpServer;
+import com.kttdevelopment.simplehttpserver.SimpleHttpsServer;
 import com.kttdevelopment.simplehttpserver.handler.*;
 import org.junit.*;
 
@@ -8,15 +9,83 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.*;
+import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class FileHandlerTests {
 
-    @Test @Ignore
-    public void addFileTests() throws IOException{ // test load types
+    @Test
+    public void addFileTests() throws IOException{
         final int port = 25001;
-        final SimpleHttpsServer server = SimpleHttpsServer.create(port);
+        final SimpleHttpServer server = SimpleHttpServer.create(port);
         final FileHandler handler = new FileHandler();
+        final String context = "";
+
+        final File dir = new File("src/test/resources/file");
+
+        final Map<File,ByteLoadingOption> files = new HashMap<>();
+        for(final ByteLoadingOption blop : ByteLoadingOption.values())
+            files.put(new File(dir.getPath() + '/' + blop.name() + ".txt"),blop);
+
+        // initial write
+        final String init = String.valueOf(System.currentTimeMillis());
+        files.forEach((file, loadingOption) -> {
+            if(!file.exists() || file.delete()){
+                try{
+                    if(file.createNewFile())
+                        Files.write(file.toPath(), init.getBytes());
+                    else
+                        Assert.fail("Failed to create new file for testing: " + file.getPath());
+                }catch(Exception e){
+                    Assert.fail("Failed to create new file for testing: " + file.getPath());
+                }
+
+                handler.addFile(file, loadingOption);
+            }else{
+                Assert.fail("Failed to clear file for testing: " + file.getPath());
+            }
+        });
+
+        server.createContext(context,handler);
+        server.start();
+
+        files.forEach((file, loadingOption) -> {
+            final String url = "http://localhost:" + port + context + '/' + file.getName();
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .build();
+
+            try{
+                String response = HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                    .thenApply(HttpResponse::body).get();
+
+                Assert.assertEquals("Client data did not match server data for " + file.getName(),init,response);
+            }catch(InterruptedException | ExecutionException e){
+                Assert.fail("Failed to read context of " + file.getName());
+            }
+
+            // second write
+
+            final String after = String.valueOf(System.currentTimeMillis());
+            try{
+                Files.write(file.toPath(), after.getBytes());
+            }catch(Exception e){
+                Assert.fail("Failed to second write file " + file.getPath());
+            }
+
+            try{
+                String response = HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                    .thenApply(HttpResponse::body).get();
+
+                Assert.assertEquals("Client data did not match server data for " + file.getName(),loadingOption == ByteLoadingOption.PRELOAD ? init : after,response);
+            }catch(InterruptedException | ExecutionException e){
+                Assert.fail("Failed to read context " + file.getName());
+            }
+        });
+
+        server.stop();
     }
 
     @Test
