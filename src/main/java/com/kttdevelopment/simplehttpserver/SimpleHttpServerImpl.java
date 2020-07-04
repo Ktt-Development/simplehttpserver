@@ -13,7 +13,7 @@ import java.util.concurrent.Executor;
  *
  * @see SimpleHttpServer
  * @since 02.00.00
- * @version 03.05.00
+ * @version 03.05.02
  * @author Ktt Development
  */
 @SuppressWarnings("SpellCheckingInspection")
@@ -168,11 +168,16 @@ final class SimpleHttpServerImpl extends SimpleHttpServer {
 
     @Override
     public synchronized final void removeContext(final String path){
-        server.removeContext(getContext(path));
-        for(final HttpContext context : contexts.keySet()){
-            if(context.getPath().equalsIgnoreCase(getContext(path))){
-                contexts.remove(context);
-                break;
+        try{
+            server.removeContext(getContext(path));
+        }catch(final IllegalArgumentException e){
+            throw e;
+        }finally{
+            for(final HttpContext context : contexts.keySet()){
+                if(context.getPath().equalsIgnoreCase(getContext(path))){
+                    contexts.remove(context);
+                    break;
+                }
             }
         }
     }
