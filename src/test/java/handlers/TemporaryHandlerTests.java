@@ -19,7 +19,7 @@ public class TemporaryHandlerTests {
         final SimpleHttpServer server = SimpleHttpServer.create(port);
 
         final String context = server.getRandomContext();
-        server.createContext(context,new TemporaryHandler((SimpleHttpHandler) SimpleHttpExchange::close, 1000));
+        server.createContext(context,new TemporaryHandler(server,(SimpleHttpHandler) SimpleHttpExchange::close, 1000));
         server.start();
 
         Assert.assertFalse("Server did not contain a temporary context", server.getContexts().isEmpty());
@@ -32,16 +32,12 @@ public class TemporaryHandlerTests {
              .uri(URI.create(url))
              .build();
 
-        int response = HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
+        HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
             .thenApply(HttpResponse::statusCode).get();
 
-        // BUG!!!!
-        // Assert.assertTrue("Server did not remove temporary context", server.getContexts().isEmpty());
-        Exception exception = null;
-        try{ server.getHttpServer().removeContext(context);
-        }catch(IllegalArgumentException e){ exception = e; }
-        Assert.assertNotNull("Server did not remove temporary context",exception);
-        // an exception should exist if removing already removed
+        Assert.assertTrue("Server did not remove temporary context", server.getContexts().isEmpty());
+
+        server.stop();
     }
 
     @Test
@@ -51,7 +47,7 @@ public class TemporaryHandlerTests {
         final SimpleHttpServer server = SimpleHttpServer.create(port);
 
         final String context = server.getRandomContext();
-        server.createContext(context,new TemporaryHandler((SimpleHttpHandler) SimpleHttpExchange::close));
+        server.createContext(context,new TemporaryHandler(server,(SimpleHttpHandler) SimpleHttpExchange::close));
         server.start();
 
         Assert.assertFalse("Server did not contain a temporary context", server.getContexts().isEmpty());
@@ -62,16 +58,10 @@ public class TemporaryHandlerTests {
              .uri(URI.create(url))
              .build();
 
-        int response = HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
+        HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
             .thenApply(HttpResponse::statusCode).get();
 
-        // BUG!!!!
-        // Assert.assertTrue("Server did not remove temporary context", server.getContexts().isEmpty());
-        Exception exception = null;
-        try{ server.getHttpServer().removeContext(context);
-        }catch(IllegalArgumentException e){ exception = e; }
-        Assert.assertNotNull("Server did not remove temporary context",exception);
-        // an exception should exist if removing already removed
+        Assert.assertTrue("Server did not remove temporary context", server.getContexts().isEmpty());
 
         server.stop();
     }
