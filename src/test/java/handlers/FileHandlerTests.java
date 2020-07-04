@@ -153,7 +153,7 @@ public class FileHandlerTests {
         server.stop();
     }
 
-    @Test @Ignore
+    @Test
     public void addDirectoryTestsWalk() throws IOException, InterruptedException{
         final int port = 25004;
         final SimpleHttpServer server = SimpleHttpServer.create(port);
