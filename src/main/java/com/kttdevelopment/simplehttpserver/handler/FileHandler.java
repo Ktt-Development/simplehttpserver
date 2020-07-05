@@ -25,7 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @see SimpleHttpHandler
  * @see com.sun.net.httpserver.HttpHandler
  * @since 02.00.00
- * @version 03.05.01
+ * @version 03.05.02
  * @author Ktt Development
  */
 public class FileHandler implements SimpleHttpHandler {
@@ -322,15 +322,19 @@ public class FileHandler implements SimpleHttpHandler {
      *
      * @param directory directory to add
      *
+     * @see #addDirectory(File, boolean)
      * @see #addDirectory(File, ByteLoadingOption)
      * @see #addDirectory(File, ByteLoadingOption, boolean)
      * @see #addDirectory(File, String)
+     * @see #addDirectory(File, String, boolean)
      * @see #addDirectory(File, String, ByteLoadingOption)
      * @see #addDirectory(File, String, ByteLoadingOption, boolean)
      * @see #addDirectory(String, File)
+     * @see #addDirectory(String, File, boolean)
      * @see #addDirectory(String, File, ByteLoadingOption)
      * @see #addDirectory(String, File, ByteLoadingOption, boolean)
      * @see #addDirectory(String, File, String)
+     * @see #addDirectory(String, File, String, boolean)
      * @see #addDirectory(String, File, String, ByteLoadingOption)
      * @see #addDirectory(String, File, String, ByteLoadingOption, boolean)
      * @since 02.00.00
@@ -344,18 +348,50 @@ public class FileHandler implements SimpleHttpHandler {
      * Adds a directory to the handler.
      *
      * @param directory directory to add
+     * @param walk whether to use sub-directories or not
+     *
+     * @see #addDirectory(File)
+     * @see #addDirectory(File, ByteLoadingOption)
+     * @see #addDirectory(File, ByteLoadingOption, boolean)
+     * @see #addDirectory(File, String)
+     * @see #addDirectory(File, String, boolean)
+     * @see #addDirectory(File, String, ByteLoadingOption)
+     * @see #addDirectory(File, String, ByteLoadingOption, boolean)
+     * @see #addDirectory(String, File)
+     * @see #addDirectory(String, File, boolean)
+     * @see #addDirectory(String, File, ByteLoadingOption)
+     * @see #addDirectory(String, File, ByteLoadingOption, boolean)
+     * @see #addDirectory(String, File, String)
+     * @see #addDirectory(String, File, String, boolean)
+     * @see #addDirectory(String, File, String, ByteLoadingOption)
+     * @see #addDirectory(String, File, String, ByteLoadingOption, boolean)
+     * @since 03.05.02
+     * @author Ktt Development
+     */
+    public final void addDirectory(final File directory, final boolean walk){
+        addDirectory("",directory,directory.getName(),ByteLoadingOption.LIVELOAD,walk);
+    }
+
+    /**
+     * Adds a directory to the handler.
+     *
+     * @param directory directory to add
      * @param loadingOption file loading option
      *
      * @see ByteLoadingOption
      * @see #addDirectory(File)
+     * @see #addDirectory(File, boolean)
      * @see #addDirectory(File, ByteLoadingOption, boolean)
      * @see #addDirectory(File, String)
+     * @see #addDirectory(File, String, boolean)
      * @see #addDirectory(File, String, ByteLoadingOption)
      * @see #addDirectory(File, String, ByteLoadingOption, boolean)
      * @see #addDirectory(String, File)
+     * @see #addDirectory(String, File, boolean)
      * @see #addDirectory(String, File, ByteLoadingOption)
      * @see #addDirectory(String, File, ByteLoadingOption, boolean)
      * @see #addDirectory(String, File, String)
+     * @see #addDirectory(String, File, String, boolean)
      * @see #addDirectory(String, File, String, ByteLoadingOption)
      * @see #addDirectory(String, File, String, ByteLoadingOption, boolean)
      * @since 03.05.00
@@ -374,14 +410,18 @@ public class FileHandler implements SimpleHttpHandler {
      *
      * @see ByteLoadingOption
      * @see #addDirectory(File)
+     * @see #addDirectory(File, boolean)
      * @see #addDirectory(File, ByteLoadingOption)
      * @see #addDirectory(File, String)
+     * @see #addDirectory(File, String, boolean)
      * @see #addDirectory(File, String, ByteLoadingOption)
      * @see #addDirectory(File, String, ByteLoadingOption, boolean)
      * @see #addDirectory(String, File)
+     * @see #addDirectory(String, File, boolean)
      * @see #addDirectory(String, File, ByteLoadingOption)
      * @see #addDirectory(String, File, ByteLoadingOption, boolean)
      * @see #addDirectory(String, File, String)
+     * @see #addDirectory(String, File, String, boolean)
      * @see #addDirectory(String, File, String, ByteLoadingOption)
      * @see #addDirectory(String, File, String, ByteLoadingOption, boolean)
      * @since 03.05.00
@@ -398,14 +438,18 @@ public class FileHandler implements SimpleHttpHandler {
      * @param directoryName directory name to use
      *
      * @see #addDirectory(File)
+     * @see #addDirectory(File, boolean)
      * @see #addDirectory(File, ByteLoadingOption)
      * @see #addDirectory(File, ByteLoadingOption, boolean)
+     * @see #addDirectory(File, String, boolean)
      * @see #addDirectory(File, String, ByteLoadingOption)
      * @see #addDirectory(File, String, ByteLoadingOption, boolean)
      * @see #addDirectory(String, File)
+     * @see #addDirectory(String, File, boolean)
      * @see #addDirectory(String, File, ByteLoadingOption)
      * @see #addDirectory(String, File, ByteLoadingOption, boolean)
      * @see #addDirectory(String, File, String)
+     * @see #addDirectory(String, File, String, boolean)
      * @see #addDirectory(String, File, String, ByteLoadingOption)
      * @see #addDirectory(String, File, String, ByteLoadingOption, boolean)
      * @since 02.00.00
@@ -420,18 +464,51 @@ public class FileHandler implements SimpleHttpHandler {
      *
      * @param directory directory to add
      * @param directoryName directory name to use
+     * @param walk whether to use sub-directories or not
+     *
+     * @see #addDirectory(File)
+     * @see #addDirectory(File, boolean)
+     * @see #addDirectory(File, ByteLoadingOption)
+     * @see #addDirectory(File, ByteLoadingOption, boolean)
+     * @see #addDirectory(File, String)
+     * @see #addDirectory(File, String, ByteLoadingOption)
+     * @see #addDirectory(File, String, ByteLoadingOption, boolean)
+     * @see #addDirectory(String, File)
+     * @see #addDirectory(String, File, boolean)
+     * @see #addDirectory(String, File, ByteLoadingOption)
+     * @see #addDirectory(String, File, ByteLoadingOption, boolean)
+     * @see #addDirectory(String, File, String)
+     * @see #addDirectory(String, File, String, boolean)
+     * @see #addDirectory(String, File, String, ByteLoadingOption)
+     * @see #addDirectory(String, File, String, ByteLoadingOption, boolean)
+     * @since 03.05.02
+     * @author Ktt Development
+     */
+    public final void addDirectory(final File directory, final String directoryName, final boolean walk){
+        addDirectory("",directory,directoryName,ByteLoadingOption.LIVELOAD,walk);
+    }
+
+    /**
+     * Adds a directory to the handler with a specified name.
+     *
+     * @param directory directory to add
+     * @param directoryName directory name to use
      * @param loadingOption file loading option
      *
      * @see ByteLoadingOption
      * @see #addDirectory(File)
+     * @see #addDirectory(File, boolean)
      * @see #addDirectory(File, ByteLoadingOption)
      * @see #addDirectory(File, ByteLoadingOption, boolean)
      * @see #addDirectory(File, String)
+     * @see #addDirectory(File, String, boolean)
      * @see #addDirectory(File, String, ByteLoadingOption, boolean)
      * @see #addDirectory(String, File)
+     * @see #addDirectory(String, File, boolean)
      * @see #addDirectory(String, File, ByteLoadingOption)
      * @see #addDirectory(String, File, ByteLoadingOption, boolean)
      * @see #addDirectory(String, File, String)
+     * @see #addDirectory(String, File, String, boolean)
      * @see #addDirectory(String, File, String, ByteLoadingOption)
      * @see #addDirectory(String, File, String, ByteLoadingOption, boolean)
      * @since 03.05.00
@@ -451,14 +528,18 @@ public class FileHandler implements SimpleHttpHandler {
      *
      * @see ByteLoadingOption
      * @see #addDirectory(File)
+     * @see #addDirectory(File, boolean)
      * @see #addDirectory(File, ByteLoadingOption)
      * @see #addDirectory(File, ByteLoadingOption, boolean)
      * @see #addDirectory(File, String)
+     * @see #addDirectory(File, String, boolean)
      * @see #addDirectory(File, String, ByteLoadingOption)
      * @see #addDirectory(String, File)
+     * @see #addDirectory(String, File, boolean)
      * @see #addDirectory(String, File, ByteLoadingOption)
      * @see #addDirectory(String, File, ByteLoadingOption, boolean)
      * @see #addDirectory(String, File, String)
+     * @see #addDirectory(String, File, String, boolean)
      * @see #addDirectory(String, File, String, ByteLoadingOption)
      * @see #addDirectory(String, File, String, ByteLoadingOption, boolean)
      * @since 03.05.00
@@ -475,14 +556,18 @@ public class FileHandler implements SimpleHttpHandler {
      * @param directory directory to add
      *
      * @see #addDirectory(File)
+     * @see #addDirectory(File, boolean)
      * @see #addDirectory(File, ByteLoadingOption)
      * @see #addDirectory(File, ByteLoadingOption, boolean)
      * @see #addDirectory(File, String)
+     * @see #addDirectory(File, String, boolean)
      * @see #addDirectory(File, String, ByteLoadingOption)
      * @see #addDirectory(File, String, ByteLoadingOption, boolean)
+     * @see #addDirectory(String, File, boolean)
      * @see #addDirectory(String, File, ByteLoadingOption)
      * @see #addDirectory(String, File, ByteLoadingOption, boolean)
      * @see #addDirectory(String, File, String)
+     * @see #addDirectory(String, File, String, boolean)
      * @see #addDirectory(String, File, String, ByteLoadingOption)
      * @see #addDirectory(String, File, String, ByteLoadingOption, boolean)
      * @since 02.00.00
@@ -497,18 +582,49 @@ public class FileHandler implements SimpleHttpHandler {
      *
      * @param context context to use
      * @param directory directory to add
+     * @param walk whether to use sub-directories or not
+     *
+     * @see #addDirectory(File)
+     * @see #addDirectory(File, boolean)
+     * @see #addDirectory(File, ByteLoadingOption)
+     * @see #addDirectory(File, ByteLoadingOption, boolean)
+     * @see #addDirectory(File, String)
+     * @see #addDirectory(File, String, boolean)
+     * @see #addDirectory(File, String, ByteLoadingOption)
+     * @see #addDirectory(File, String, ByteLoadingOption, boolean)
+     * @see #addDirectory(String, File)
+     * @see #addDirectory(String, File, ByteLoadingOption)
+     * @see #addDirectory(String, File, ByteLoadingOption, boolean)
+     * @see #addDirectory(String, File, String)
+     * @see #addDirectory(String, File, String, boolean)
+     * @see #addDirectory(String, File, String, ByteLoadingOption)
+     * @see #addDirectory(String, File, String, ByteLoadingOption, boolean)
+     */
+    public final void addDirectory(final String context, final File directory, final boolean walk){
+        addDirectory(context,directory,directory.getName(),ByteLoadingOption.LIVELOAD,walk);
+    }
+
+    /**
+     * Adds a directory to the handler at a specified context.
+     *
+     * @param context context to use
+     * @param directory directory to add
      * @param loadingOption file loading option
      *
      * @see ByteLoadingOption
      * @see #addDirectory(File)
+     * @see #addDirectory(File, boolean)
      * @see #addDirectory(File, ByteLoadingOption)
      * @see #addDirectory(File, ByteLoadingOption, boolean)
      * @see #addDirectory(File, String)
+     * @see #addDirectory(File, String, boolean)
      * @see #addDirectory(File, String, ByteLoadingOption)
      * @see #addDirectory(File, String, ByteLoadingOption, boolean)
      * @see #addDirectory(String, File)
+     * @see #addDirectory(String, File, boolean)
      * @see #addDirectory(String, File, ByteLoadingOption, boolean)
      * @see #addDirectory(String, File, String)
+     * @see #addDirectory(String, File, String, boolean)
      * @see #addDirectory(String, File, String, ByteLoadingOption)
      * @see #addDirectory(String, File, String, ByteLoadingOption, boolean)
      * @since 03.05.00
@@ -528,14 +644,18 @@ public class FileHandler implements SimpleHttpHandler {
      *
      * @see ByteLoadingOption
      * @see #addDirectory(File)
+     * @see #addDirectory(File, boolean)
      * @see #addDirectory(File, ByteLoadingOption)
      * @see #addDirectory(File, ByteLoadingOption, boolean)
      * @see #addDirectory(File, String)
+     * @see #addDirectory(File, String, boolean)
      * @see #addDirectory(File, String, ByteLoadingOption)
      * @see #addDirectory(File, String, ByteLoadingOption, boolean)
      * @see #addDirectory(String, File)
+     * @see #addDirectory(String, File, boolean)
      * @see #addDirectory(String, File, ByteLoadingOption)
      * @see #addDirectory(String, File, String)
+     * @see #addDirectory(String, File, String, boolean)
      * @see #addDirectory(String, File, String, ByteLoadingOption)
      * @see #addDirectory(String, File, String, ByteLoadingOption, boolean)
      * @since 03.05.00
@@ -553,14 +673,18 @@ public class FileHandler implements SimpleHttpHandler {
      * @param directoryName directory name to use
      *
      * @see #addDirectory(File)
+     * @see #addDirectory(File, boolean)
      * @see #addDirectory(File, ByteLoadingOption)
      * @see #addDirectory(File, ByteLoadingOption, boolean)
      * @see #addDirectory(File, String)
+     * @see #addDirectory(File, String, boolean)
      * @see #addDirectory(File, String, ByteLoadingOption)
      * @see #addDirectory(File, String, ByteLoadingOption, boolean)
      * @see #addDirectory(String, File)
+     * @see #addDirectory(String, File, boolean)
      * @see #addDirectory(String, File, ByteLoadingOption)
      * @see #addDirectory(String, File, ByteLoadingOption, boolean)
+     * @see #addDirectory(String, File, String, boolean)
      * @see #addDirectory(String, File, String, ByteLoadingOption)
      * @see #addDirectory(String, File, String, ByteLoadingOption, boolean)
      * @since 02.00.00
@@ -576,19 +700,53 @@ public class FileHandler implements SimpleHttpHandler {
      * @param context context to use
      * @param directory directory to add
      * @param directoryName directory name to use
+     * @param walk whether to use sub-directories or not
+     *
+     * @see #addDirectory(File)
+     * @see #addDirectory(File, boolean)
+     * @see #addDirectory(File, ByteLoadingOption)
+     * @see #addDirectory(File, ByteLoadingOption, boolean)
+     * @see #addDirectory(File, String)
+     * @see #addDirectory(File, String, boolean)
+     * @see #addDirectory(File, String, ByteLoadingOption)
+     * @see #addDirectory(File, String, ByteLoadingOption, boolean)
+     * @see #addDirectory(String, File)
+     * @see #addDirectory(String, File, boolean)
+     * @see #addDirectory(String, File, ByteLoadingOption)
+     * @see #addDirectory(String, File, ByteLoadingOption, boolean)
+     * @see #addDirectory(String, File, String)
+     * @see #addDirectory(String, File, String, ByteLoadingOption)
+     * @see #addDirectory(String, File, String, ByteLoadingOption, boolean)
+     * @since 03.05.01
+     * @author Ktt Development
+     */
+    public final void addDirectory(final String context, final File directory, final String directoryName, final boolean walk){
+        addDirectory(context,directory,directoryName,ByteLoadingOption.LIVELOAD,walk);
+    }
+
+    /**
+     * Adds a directory to the handler at a specified context with a specified name.
+     *
+     * @param context context to use
+     * @param directory directory to add
+     * @param directoryName directory name to use
      * @param loadingOption file loading option
      *
      * @see ByteLoadingOption
      * @see #addDirectory(File)
+     * @see #addDirectory(File, boolean)
      * @see #addDirectory(File, ByteLoadingOption)
      * @see #addDirectory(File, ByteLoadingOption, boolean)
      * @see #addDirectory(File, String)
+     * @see #addDirectory(File, String, boolean)
      * @see #addDirectory(File, String, ByteLoadingOption)
      * @see #addDirectory(File, String, ByteLoadingOption, boolean)
      * @see #addDirectory(String, File)
+     * @see #addDirectory(String, File, boolean)
      * @see #addDirectory(String, File, ByteLoadingOption)
      * @see #addDirectory(String, File, ByteLoadingOption, boolean)
      * @see #addDirectory(String, File, String)
+     * @see #addDirectory(String, File, String, boolean)
      * @see #addDirectory(String, File, String, ByteLoadingOption, boolean)
      * @since 03.05.00
      * @author Ktt Development
@@ -608,15 +766,19 @@ public class FileHandler implements SimpleHttpHandler {
      *
      * @see ByteLoadingOption
      * @see #addDirectory(File)
+     * @see #addDirectory(File, boolean)
      * @see #addDirectory(File, ByteLoadingOption)
      * @see #addDirectory(File, ByteLoadingOption, boolean)
      * @see #addDirectory(File, String)
+     * @see #addDirectory(File, String, boolean)
      * @see #addDirectory(File, String, ByteLoadingOption)
      * @see #addDirectory(File, String, ByteLoadingOption, boolean)
      * @see #addDirectory(String, File)
+     * @see #addDirectory(String, File, boolean)
      * @see #addDirectory(String, File, ByteLoadingOption)
      * @see #addDirectory(String, File, ByteLoadingOption, boolean)
      * @see #addDirectory(String, File, String)
+     * @see #addDirectory(String, File, String, boolean)
      * @see #addDirectory(String, File, String, ByteLoadingOption)
      * @since 03.05.00
      * @author Ktt Development
