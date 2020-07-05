@@ -2,7 +2,8 @@ package handlers;
 
 import com.kttdevelopment.simplehttpserver.SimpleHttpServer;
 import com.kttdevelopment.simplehttpserver.handler.*;
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +16,7 @@ import java.util.concurrent.ExecutionException;
 
 public class FileHandlerTests {
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test
     public void addFileTests() throws IOException{
         final int port = 25001;
@@ -83,6 +85,8 @@ public class FileHandlerTests {
                 Assert.fail("Failed to read context " + file.getName());
             }
         });
+
+        files.forEach((file, loadingOption) -> file.delete());
 
         server.stop();
     }

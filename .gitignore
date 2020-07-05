@@ -11,4 +11,3 @@ src/LICENSE.txt
 # Maven
 target
 /test/
-/src/test/resources/file/
