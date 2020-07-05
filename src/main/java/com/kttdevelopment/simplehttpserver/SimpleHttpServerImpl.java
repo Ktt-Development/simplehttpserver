@@ -166,6 +166,7 @@ final class SimpleHttpServerImpl extends SimpleHttpServer {
 
     //
 
+    @SuppressWarnings("CaughtExceptionImmediatelyRethrown")
     @Override
     public synchronized final void removeContext(final String path){
         try{

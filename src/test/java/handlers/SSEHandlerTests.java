@@ -6,7 +6,6 @@ import org.junit.*;
 
 import java.io.*;
 import java.net.URI;
-import java.net.URL;
 import java.net.http.*;
 import java.time.Duration;
 import java.util.concurrent.*;

@@ -1,7 +1,6 @@
 package handlers;
 
 import com.kttdevelopment.simplehttpserver.SimpleHttpServer;
-import com.kttdevelopment.simplehttpserver.SimpleHttpsServer;
 import com.kttdevelopment.simplehttpserver.handler.*;
 import org.junit.*;
 
@@ -236,8 +235,7 @@ public class FileHandlerTests {
 
         final String context = "";
 
-        // handler.addDirectory(noWalk,true);
-        handler.addDirectory(noWalk, ByteLoadingOption.LIVELOAD,true); // todo: def liveload for walk param
+        handler.addDirectory(noWalk,true);
 
         server.createContext(context,handler);
         server.start();

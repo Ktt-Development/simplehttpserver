@@ -92,7 +92,7 @@ public class SimpleHttpExchangeGetPostTests {
         server.stop();
     }
 
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({"rawtypes", "StringBufferReplaceableByString"})
     @Test
     public void postMultipartFormData() throws IOException, ExecutionException, InterruptedException{
         final int port = 20005;
