@@ -35,7 +35,7 @@ public class FileHandlerTests {
         files.forEach((file, loadingOption) -> {
             if(!file.exists() || file.delete()){
                 try{
-                    if(file.createNewFile())
+                    if(file.mkdirs() && file.createNewFile())
                         Files.write(file.toPath(), init.getBytes());
                     else
                         Assert.fail("Failed to create new file for testing: " + file.getPath());
