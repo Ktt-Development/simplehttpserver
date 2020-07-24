@@ -13,9 +13,10 @@ import java.util.concurrent.Executor;
  *
  * @see SimpleHttpsServer
  * @since 03.04.00
- * @version 03.05.00
+ * @version 03.05.03
  * @author Ktt Development
  */
+@SuppressWarnings("SpellCheckingInspection")
 final class SimpleHttpsServerImpl extends SimpleHttpsServer {
 
     private final HttpsServer server = HttpsServer.create();
@@ -74,7 +75,6 @@ final class SimpleHttpsServerImpl extends SimpleHttpsServer {
 
     // region copySimpleHttpServerImpl
 
-    @SuppressWarnings("SpellCheckingInspection")
     @Override
     public synchronized final InetSocketAddress bind(final int port) throws IOException{
         final InetSocketAddress addr = new InetSocketAddress(port);
@@ -82,7 +82,6 @@ final class SimpleHttpsServerImpl extends SimpleHttpsServer {
         return addr;
     }
 
-    @SuppressWarnings("SpellCheckingInspection")
     @Override
     public synchronized final InetSocketAddress bind(final int port, final int backlog) throws IOException{
         final InetSocketAddress addr = new InetSocketAddress(port);
@@ -90,13 +89,11 @@ final class SimpleHttpsServerImpl extends SimpleHttpsServer {
         return addr;
     }
 
-    @SuppressWarnings("SpellCheckingInspection")
     @Override
     public synchronized final void bind(final InetSocketAddress addr) throws IOException{
         server.bind(addr,0);
     }
 
-    @SuppressWarnings("SpellCheckingInspection")
     @Override
     public synchronized final void bind(final InetSocketAddress addr, final int backlog) throws IOException{
         server.bind(addr,backlog);
@@ -143,26 +140,26 @@ final class SimpleHttpsServerImpl extends SimpleHttpsServer {
 
     //
 
-@Override
-    public synchronized final HttpContext createContext(final String path){
-        return createContext(path,HttpExchange::close,null);
+    @Override
+    public synchronized final HttpContext createContext(final String context){
+        return createContext(context,HttpExchange::close,null);
     }
 
     @Override
-    public synchronized final HttpContext createContext(final String path, final HttpHandler handler){
-        return createContext(path,handler,null);
+    public synchronized final HttpContext createContext(final String context, final HttpHandler handler){
+        return createContext(context,handler,null);
     }
 
     //
 
     @Override
-    public synchronized final HttpContext createContext(final String path, final Authenticator authenticator){
-        return createContext(path,HttpExchange::close,authenticator);
+    public synchronized final HttpContext createContext(final String context, final Authenticator authenticator){
+        return createContext(context,HttpExchange::close,authenticator);
     }
 
     @Override
-    public synchronized final HttpContext createContext(final String path, final HttpHandler handler, final Authenticator authenticator){
-        if(!getContext(path).equals("/") && handler instanceof RootHandler)
+    public synchronized final HttpContext createContext(final String context, final HttpHandler handler, final Authenticator authenticator){
+        if(!ContextUtil.getContext(context,true,false).equals("/") && handler instanceof RootHandler)
             throw new IllegalArgumentException("RootHandler can only be used at the root '/' context");
 
         final HttpHandler wrapper = exchange -> {
@@ -170,24 +167,30 @@ final class SimpleHttpsServerImpl extends SimpleHttpsServer {
             handler.handle(exchange);
         };
 
-        final HttpContext context = server.createContext(getContext(path),wrapper);
-        contexts.put(context,handler);
+        final HttpContext hc = server.createContext(ContextUtil.getContext(context,true,false),wrapper);
+        contexts.put(hc,handler);
 
         if(authenticator != null)
-            context.setAuthenticator(authenticator);
+            hc.setAuthenticator(authenticator);
 
-        return context;
+        return hc;
     }
 
     //
 
+    @SuppressWarnings("CaughtExceptionImmediatelyRethrown")
     @Override
-    public synchronized final void removeContext(final String path){
-        server.removeContext(getContext(path));
-        for(final HttpContext context : contexts.keySet()){
-            if(context.getPath().equalsIgnoreCase(getContext(path))){
-                contexts.remove(context);
-                break;
+    public synchronized final void removeContext(final String context){
+        try{
+            server.removeContext(ContextUtil.getContext(context,true,false));
+        }catch(final IllegalArgumentException e){
+            throw e;
+        }finally{
+            for(final HttpContext hc : contexts.keySet()){
+                if(hc.getPath().equalsIgnoreCase(ContextUtil.getContext(context,true,false))){
+                    contexts.remove(hc);
+                    break;
+                }
             }
         }
     }
@@ -201,9 +204,9 @@ final class SimpleHttpsServerImpl extends SimpleHttpsServer {
 //
 
     @Override
-    public final HttpHandler getContextHandler(final String path){
+    public final HttpHandler getContextHandler(final String context){
         for(final Map.Entry<HttpContext, HttpHandler> entry : contexts.entrySet())
-            if(entry.getKey().getPath().equals(getContext(path)))
+            if(entry.getKey().getPath().equals(ContextUtil.getContext(context,true,false)))
                 return entry.getValue();
         return null;
     }
@@ -229,9 +232,9 @@ final class SimpleHttpsServerImpl extends SimpleHttpsServer {
     public synchronized final String getRandomContext(final String context){
         String targetContext;
 
-        final String head = context.isEmpty() ? "" : getContext(context);
+        final String head = context.isEmpty() ? "" : ContextUtil.getContext(context,true,false);
 
-        do targetContext = head + getContext(UUID.randomUUID().toString());
+        do targetContext = head + ContextUtil.getContext(UUID.randomUUID().toString(),true,false);
             while(getContextHandler(targetContext) != null);
 
         return targetContext;
@@ -273,14 +276,6 @@ final class SimpleHttpsServerImpl extends SimpleHttpsServer {
             "address"           + '=' +     getAddress()            + ", " +
             "executor"          + '=' +     getExecutor()           +
             '}';
-    }
-
-    // start slash; no end slash
-    private static String getContext(final String path){
-        final String linSlash = path.replace("\\","/");
-        if(linSlash.equals("/")) return "/";
-        final String seSlash = (!linSlash.startsWith("/") ? "/" : "") + linSlash + (!linSlash.endsWith("/") ? "/" : "");
-        return seSlash.substring(0,seSlash.length()-1);
     }
 
 }
