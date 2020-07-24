@@ -1,8 +1,7 @@
 package com.kttdevelopment.simplehttpserver.handler;
 
+import com.kttdevelopment.simplehttpserver.*;
 import com.kttdevelopment.simplehttpserver.var.HttpCode;
-import com.kttdevelopment.simplehttpserver.SimpleHttpExchange;
-import com.kttdevelopment.simplehttpserver.SimpleHttpHandler;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.*;
@@ -25,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @see SimpleHttpHandler
  * @see com.sun.net.httpserver.HttpHandler
  * @since 02.00.00
- * @version 03.05.02
+ * @version 03.05.03
  * @author Ktt Development
  */
 public class FileHandler implements SimpleHttpHandler {
@@ -238,7 +237,7 @@ public class FileHandler implements SimpleHttpHandler {
     public final void addFile(final String context, final File file, final String fileName, final ByteLoadingOption loadingOption){
         try{
             files.put(
-                (context.isEmpty() || context.equals("/") || context.equals("\\") ? "" : getContext(context)) + getContext(fileName),
+                ContextUtil.joinContexts(true,false,context,fileName),
                 new FileEntry(file, adapter, loadingOption)
             );
         }catch(final UncheckedIOException ignored){ }
@@ -785,9 +784,9 @@ public class FileHandler implements SimpleHttpHandler {
      */
     public final void addDirectory(final String context, final File directory, final String directoryName, final ByteLoadingOption loadingOption, final boolean walk){
         try{
-            final String target = (context.isEmpty() || context.equals("/") || context.equals("\\") ? "" : getContext(context)) + (directoryName.isEmpty() ? "" : getContext(directoryName));
+            final String target = ContextUtil.joinContexts(true,false,context,directoryName);
             directories.put(
-                target.isEmpty() ? "/" : target,
+                target,
                 new DirectoryEntry(directory, adapter,loadingOption,walk)
             );
         }catch(final UncheckedIOException ignored){}
@@ -797,7 +796,7 @@ public class FileHandler implements SimpleHttpHandler {
 
     @Override
     public final void handle(final SimpleHttpExchange exchange) throws IOException{
-        final String context = URLDecoder.decode(getContext(exchange.getURI().getPath().substring(exchange.getHttpContext().getPath().length())), StandardCharsets.UTF_8);
+        final String context = URLDecoder.decode(ContextUtil.getContext(exchange.getURI().getPath().substring(exchange.getHttpContext().getPath().length()),true,false), StandardCharsets.UTF_8);
 
         if(files.containsKey(context)){ // exact file match
             final FileEntry entry = files.get(context);
@@ -839,15 +838,6 @@ public class FileHandler implements SimpleHttpHandler {
      */
     public void handle(final SimpleHttpExchange exchange, final File source, final byte[] bytes) throws IOException {
         exchange.send(bytes, HttpCode.HTTP_OK);
-    }
-
-//
-
-    private static String getContext(final String path){
-        final String linSlash = path.replace("\\","/");
-        if(linSlash.equals("/")) return "/";
-        final String seSlash = (!linSlash.startsWith("/") ? "/" : "") + linSlash + (!linSlash.endsWith("/") ? "/" : "");
-        return seSlash.substring(0,seSlash.length()-1);
     }
 
 //

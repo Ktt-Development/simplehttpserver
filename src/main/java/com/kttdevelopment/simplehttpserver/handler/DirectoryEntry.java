@@ -1,5 +1,7 @@
 package com.kttdevelopment.simplehttpserver.handler;
 
+import com.kttdevelopment.simplehttpserver.ContextUtil;
+
 import java.io.*;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -16,7 +18,7 @@ import static java.nio.file.StandardWatchEventKinds.*;
  * @see FileHandler
  * @see FileEntry
  * @since 02.00.00
- * @version 03.05.01
+ * @version 03.05.03
  * @author Ktt Development
  */
 class DirectoryEntry {
@@ -57,7 +59,7 @@ class DirectoryEntry {
                     if(!file.isDirectory()) // File#isFile does not work
                         try{
                             preloadedFiles.put(
-                                getContext(adapter.getName(file)),
+                                ContextUtil.getContext(adapter.getName(file),true,false),
                                 new FileEntry(file, adapter, ByteLoadingOption.WATCHLOAD, true)
                             );
                         }catch(final UncheckedIOException ignored){ }
@@ -82,7 +84,7 @@ class DirectoryEntry {
 
                             try{
                                 preloadedFiles.put(
-                                    joinContext(relative, adapter.getName(file)),
+                                   ContextUtil.joinContexts(false,false,relative, adapter.getName(file)),
                                     new FileEntry(file, adapter, loadingOption, true)
                                 );
                             }catch(final UncheckedIOException ignored){ }
@@ -101,7 +103,7 @@ class DirectoryEntry {
                     if(!file.isDirectory())
                         try{
                             preloadedFiles.put(
-                                getContext(adapter.getName(file)),
+                                ContextUtil.getContext(adapter.getName(file),true,false),
                                 new FileEntry(file, adapter, ByteLoadingOption.PRELOAD)
                             );
                         }catch(final UncheckedIOException ignored){ }
@@ -115,7 +117,7 @@ class DirectoryEntry {
 
                             try{
                                 preloadedFiles.put(
-                                    joinContext(relative,adapter.getName(file)),
+                                    ContextUtil.joinContexts(false,false,relative,adapter.getName(file)),
                                     new FileEntry(file, adapter, ByteLoadingOption.PRELOAD)
                                 );
                             }catch(final RuntimeException ignored){ }
@@ -163,9 +165,9 @@ class DirectoryEntry {
                 final File relFile = relTarg.toFile(); // only the file name (this method if flawed!)
                 final WatchEvent.Kind<?> type = event.kind();
 
-                final String top2sub = getContext(directoryPath.relativize(path).toString()); // the relative path between the top level directory and sub directory
-                final String context = joinContext(top2sub,adapter.getName(relFile)); // the file key
-                final File file = new File(directoryPath + joinContext(top2sub,relFile.getName())); // the actual referable file
+                final String top2sub = ContextUtil.getContext(directoryPath.relativize(path).toString(),true,false); // the relative path between the top level directory and sub directory
+                final String context = ContextUtil.joinContexts(false,false,top2sub,adapter.getName(relFile)); // the file key
+                final File file = new File(directoryPath + ContextUtil.joinContexts(false,false,top2sub,relFile.getName())); // the actual referable file
                 final Path target = file.toPath();
 
                 if(!file.isDirectory()) // File#isFile does not work
@@ -235,7 +237,7 @@ class DirectoryEntry {
      */
     @SuppressWarnings("SpellCheckingInspection")
     public final File getFile(final String path){
-        final String relative = getContext(path);
+        final String relative = ContextUtil.getContext(path,true,false);
         if(loadingOption != ByteLoadingOption.LIVELOAD){
             return preloadedFiles.get(relative).getFile();
         }else{ // file is a reference, existence of file does not matter
@@ -260,7 +262,7 @@ class DirectoryEntry {
      * @author Ktt Development
      */
     public final byte[] getBytes(final String path){
-        final String rel = getContext(path);
+        final String rel = ContextUtil.getContext(path,true,false);
         if(loadingOption != ByteLoadingOption.LIVELOAD ){ // find preloaded bytes
             return preloadedFiles.get(rel).getBytes(); // already adapted
         }else{
@@ -299,26 +301,6 @@ class DirectoryEntry {
     }
 
 //
-
-    // leading slash only
-    private static String getContext(final String path){
-        final String linSlash = path.replace("\\","/");
-        if(linSlash.equals("/")) return "/";
-        final String seSlash = (!linSlash.startsWith("/") ? "/" : "") + linSlash + (!linSlash.endsWith("/") ? "/" : "");
-        return seSlash.substring(0,seSlash.length()-1);
-    }
-
-    private static String joinContext(final String... paths){
-        final StringBuilder OUT = new StringBuilder();
-        for(final String path : paths){
-            final String context = getContext(path);
-            OUT.append(context.isEmpty() || context.equals("/") || context.equals("\\") ? "" : context);
-        }
-        return OUT.toString();
-    }
-
-//
-
 
     @Override
     public String toString(){
