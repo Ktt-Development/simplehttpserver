@@ -47,7 +47,7 @@ public class SSEHandlerTests {
                 try{
                     while((ln = IN.readLine()) != null)
                             OUT.append(ln).append('\n');
-                }catch(IOException e){
+                }catch(final IOException ignored){
                     Assert.fail("Unable to read input stream from client");
                 }
                 return OUT.toString();

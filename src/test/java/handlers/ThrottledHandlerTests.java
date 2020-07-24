@@ -27,7 +27,7 @@ public class ThrottledHandlerTests {
             new ThrottledHandler(
                 (SimpleHttpHandler) exchange -> {
                     try{ Thread.sleep(TimeUnit.SECONDS.toMillis(3));
-                    }catch(InterruptedException ignored){ }
+                    }catch(final InterruptedException ignored){ }
                     exchange.send(exchange.toString());
                 },
                 new SessionThrottler(sessionHandler){
@@ -51,14 +51,14 @@ public class ThrottledHandlerTests {
             try{
                 HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
                     .thenApply(HttpResponse::statusCode).get();
-            }catch(InterruptedException | ExecutionException ignored){ }
+            }catch(final InterruptedException | ExecutionException ignored){ }
         }).start();
 
         Exception exception = null;
         try{
             HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
                       .thenApply(HttpResponse::statusCode).get();
-        }catch(InterruptedException | ExecutionException e){ // JDK failure to recognize HttpTimeoutException as valid catch
+        }catch(final InterruptedException | ExecutionException e){ // JDK failure to recognize HttpTimeoutException as valid catch
             exception = e;
         }
         Assert.assertTrue("Second request returned a result for a throttled thread (connection not allowed)",exception instanceof ExecutionException);
@@ -80,7 +80,7 @@ public class ThrottledHandlerTests {
             new ThrottledHandler(
                 (SimpleHttpHandler) exchange -> {
                     try{ Thread.sleep(TimeUnit.SECONDS.toMillis(3));
-                    }catch(InterruptedException ignored){ }
+                    }catch(final InterruptedException ignored){ }
                     exchange.send(exchange.toString());
                 },
                 new ServerSessionThrottler(sessionHandler){
@@ -104,14 +104,14 @@ public class ThrottledHandlerTests {
             try{
                 HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
                     .thenApply(HttpResponse::statusCode).get();
-            }catch(InterruptedException | ExecutionException ignored){ }
+            }catch(final InterruptedException | ExecutionException ignored){ }
         }).start();
 
         Exception exception = null;
         try{
             HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenApply(HttpResponse::statusCode).get();
-        }catch(InterruptedException | ExecutionException e){ // JDK failure to recognize HttpTimeoutException as valid catch
+        }catch(final InterruptedException | ExecutionException e){ // JDK failure to recognize HttpTimeoutException as valid catch
             exception = e;
         }
         Assert.assertTrue("Second request returned a result for a throttled thread (connection not allowed)",exception instanceof ExecutionException);
@@ -131,7 +131,7 @@ public class ThrottledHandlerTests {
             new ThrottledHandler(
                 (SimpleHttpHandler) exchange -> {
                     try{ Thread.sleep(TimeUnit.SECONDS.toMillis(3));
-                    }catch(InterruptedException ignored){ }
+                    }catch(final InterruptedException ignored){ }
                     exchange.send(exchange.toString());
                 },
                 new ExchangeThrottler(){
@@ -155,14 +155,14 @@ public class ThrottledHandlerTests {
             try{
                 HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
                     .thenApply(HttpResponse::statusCode).get();
-            }catch(InterruptedException | ExecutionException ignored){ }
+            }catch(final InterruptedException | ExecutionException ignored){ }
         }).start();
 
         Exception exception = null;
         try{
             HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenApply(HttpResponse::statusCode).get();
-        }catch(InterruptedException | ExecutionException e){ // JDK failure to recognize HttpTimeoutException as valid catch
+        }catch(final InterruptedException | ExecutionException e){ // JDK failure to recognize HttpTimeoutException as valid catch
             exception = e;
         }
         Assert.assertTrue("Second request returned a result for a throttled thread (connection not allowed)",exception instanceof ExecutionException);
@@ -182,7 +182,7 @@ public class ThrottledHandlerTests {
             new ThrottledHandler(
                 (SimpleHttpHandler) exchange -> {
                     try{ Thread.sleep(TimeUnit.SECONDS.toMillis(3));
-                    }catch(InterruptedException ignored){ }
+                    }catch(final InterruptedException ignored){ }
                     exchange.send(exchange.toString());
                 },
                 new ServerExchangeThrottler(){
@@ -206,14 +206,14 @@ public class ThrottledHandlerTests {
             try{
                 HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
                     .thenApply(HttpResponse::statusCode).get();
-            }catch(InterruptedException | ExecutionException ignored){ }
+            }catch(final InterruptedException | ExecutionException ignored){ }
         }).start();
 
         Exception exception = null;
         try{
             HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenApply(HttpResponse::statusCode).get();
-        }catch(InterruptedException | ExecutionException e){ // JDK failure to recognize HttpTimeoutException as valid catch
+        }catch(final InterruptedException | ExecutionException e){ // JDK failure to recognize HttpTimeoutException as valid catch
             exception = e;
         }
         Assert.assertTrue("Second request returned a result for a throttled thread (connection not allowed)",exception instanceof ExecutionException);

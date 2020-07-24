@@ -39,20 +39,13 @@ public class SimpleHttpServerContextTests {
 
         Exception exception = null;
         try{ server.removeContext((String) null);
-        }catch(NullPointerException e){ exception = e; }
+        }catch(final NullPointerException e){ exception = e; }
         Assert.assertNotNull("Null string context should throw NPE", exception);
-
-        /* broken
-        exception = null;
-        try{ server.removeContext((HttpContext) null);
-        }catch(NullPointerException e){ exception = e; }
-        Assert.assertNotNull("Null http context should throw NPE", exception);
-        */
 
         String context = "";
         exception = null;
         try{ server.removeContext(context);
-        }catch(IllegalArgumentException e){ exception = e; }
+        }catch(final IllegalArgumentException e){ exception = e; }
         Assert.assertNotNull("Server should throw IllegalArgumentException when removing a context that doesn't exist", exception);
     }
 
@@ -63,12 +56,12 @@ public class SimpleHttpServerContextTests {
         final String context = "";
         server.createContext(context);
         try{ server.removeContext(context);
-        }catch(IllegalArgumentException e){
+        }catch(final IllegalArgumentException ignored){
             Assert.fail("Server should not throw exception when removing existing string context");
         }
 
         try{ server.removeContext(server.createContext(context));
-        }catch(IllegalArgumentException e){
+        }catch(final IllegalArgumentException ignored){
             Assert.fail("Server should not throw exception when removing existing http context");
         }
     }
@@ -79,7 +72,7 @@ public class SimpleHttpServerContextTests {
         String context = "/";
 
         try{ server.removeContext(server.getHttpServer().createContext(context));
-        }catch(IllegalArgumentException ignored){
+        }catch(final IllegalArgumentException ignored){
             Assert.fail("Removing a context added by the native http server should not throw an exception");
         }
 
@@ -87,7 +80,7 @@ public class SimpleHttpServerContextTests {
         server.getHttpServer().removeContext(context);
         try{
             server.createContext(context);
-        }catch(IllegalArgumentException ignored){
+        }catch(final IllegalArgumentException ignored){
             Assert.fail("Server should be able to create a new context if removed by native http server");
         }
     }
@@ -120,7 +113,7 @@ public class SimpleHttpServerContextTests {
         Exception exception = null;
         try{
             server.createContext(context,handler);
-        }catch(IllegalArgumentException e){ exception = e; }
+        }catch(final IllegalArgumentException e){ exception = e; }
         Assert.assertNotNull("Server should throw IllegalArgumentException when adding RootHandler to non-root context",exception);
 
         final String[] testRoots = {"/","\\",""};
