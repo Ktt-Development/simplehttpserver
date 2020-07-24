@@ -39,7 +39,7 @@ public class FileHandlerTests {
                         Files.write(file.toPath(), init.getBytes());
                     else
                         Assert.fail("Failed to create new file for testing: " + file.getPath());
-                }catch(Exception e){
+                }catch(final Exception ignored){
                     Assert.fail("Failed to create new file for testing: " + file.getPath());
                 }
 
@@ -63,7 +63,7 @@ public class FileHandlerTests {
                     .thenApply(HttpResponse::body).get();
 
                 Assert.assertEquals("Client data did not match server data for " + file.getName(),init,response);
-            }catch(InterruptedException | ExecutionException e){
+            }catch(final InterruptedException | ExecutionException ignored){
                 Assert.fail("Failed to read context of " + file.getName());
             }
 
@@ -72,7 +72,7 @@ public class FileHandlerTests {
             final String after = String.valueOf(System.currentTimeMillis());
             try{
                 Files.write(file.toPath(), after.getBytes());
-            }catch(Exception e){
+            }catch(final Exception ignored){
                 Assert.fail("Failed to second write file " + file.getPath());
             }
 
@@ -81,7 +81,7 @@ public class FileHandlerTests {
                     .thenApply(HttpResponse::body).get();
 
                 Assert.assertEquals("Client data did not match server data for " + file.getName(),loadingOption == ByteLoadingOption.PRELOAD ? init : after,response);
-            }catch(InterruptedException | ExecutionException e){
+            }catch(final InterruptedException | ExecutionException ignored){
                 Assert.fail("Failed to read context " + file.getName());
             }
         });
@@ -194,7 +194,7 @@ public class FileHandlerTests {
 
                 Assert.assertNotNull("Client did not find data for " + path,response);
                 Assert.assertEquals("Client data did not match server data for " + path,testFileContent,response);
-            }catch(ExecutionException e){
+            }catch(final ExecutionException ignored){
                 Assert.fail("Client did not find data for " + path);
             }
         }
@@ -216,7 +216,93 @@ public class FileHandlerTests {
                     .thenApply(HttpResponse::body).get();
 
                 Assert.assertNull("Client found data for blocked path " + path,response);
-            }catch(ExecutionException e){
+            }catch(final ExecutionException e){
+                exception = e;
+            }
+            Assert.assertNotNull("Client found data for blocked path",exception);
+        }
+
+        server.stop();
+    }
+
+    @Test
+    public void addDirectoryTestsNoWalkAdapter() throws IOException, InterruptedException{
+        final int port = 25022;
+        final SimpleHttpServer server = SimpleHttpServer.create(port);
+        final FileHandlerAdapter adapter = new FileHandlerAdapter() {
+            @Override
+            public byte[] getBytes(final File file, final byte[] bytes){
+                return bytes;
+            }
+
+            @Override
+            public String getName(final File file){
+                return file.getName().substring(0,file.getName().lastIndexOf('.'));
+            }
+        };
+        final FileHandler handler = new FileHandler(adapter);
+        final String contextNoName = "alt";
+        final String contextWName = "altn";
+        final String dirNewName = "dirName";
+
+        final String testRealFile = "test", testFileContent = "readme";
+        final String noReadDir = "dirnoread";
+        final String noReadFile = "innerNoRead";
+
+        final File noWalk = new File("src/test/resources/directory/nowalk");
+
+        final String context = "";
+
+        handler.addDirectory(noWalk); // test file & directory read
+        handler.addDirectory(contextNoName,noWalk);
+        handler.addDirectory(noWalk,dirNewName);
+        handler.addDirectory(contextWName,noWalk,dirNewName);
+
+        server.createContext(context,handler);
+        server.start();
+
+        final String[] validPathsToTest = { // valid reads
+            noWalk.getName() + '/' + testRealFile,
+            contextNoName + '/' + noWalk.getName()  + '/' + testRealFile,
+            dirNewName + '/' + testRealFile,
+            contextWName + '/' + dirNewName + '/' + testRealFile
+        };
+
+        for(final String path : validPathsToTest){
+            String url = "http://localhost:" + port + '/' + path;
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .build();
+
+            try{
+                String response = HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                    .thenApply(HttpResponse::body).get();
+
+                Assert.assertNotNull("Client did not find data for " + path,response);
+                Assert.assertEquals("Client data did not match server data for " + path,testFileContent,response);
+            }catch(final ExecutionException ignored){
+                Assert.fail("Client did not find data for " + path);
+            }
+        }
+
+        final String[] invalidPathsToTest = {
+            noWalk.getName() + '/' + noReadDir,
+            noWalk.getName() + '/' + noReadDir + '/' + noReadFile
+        };
+
+        for(final String path : invalidPathsToTest){
+            String url = "http://localhost:" + port + '/' +  path;
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .build();
+
+            Exception exception = null;
+            try{
+                String response = HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                    .thenApply(HttpResponse::body).get();
+
+                Assert.assertNull("Client found data for blocked path " + path,response);
+            }catch(final ExecutionException e){
                 exception = e;
             }
             Assert.assertNotNull("Client found data for blocked path",exception);
@@ -261,7 +347,7 @@ public class FileHandlerTests {
 
                 Assert.assertNotNull("Client did not find data for " + path,response);
                 Assert.assertEquals("Client data did not match server data for " + path,testFileContent,response);
-            }catch(ExecutionException e){
+            }catch(final ExecutionException ignored){
                 Assert.fail("Client did not find data for " + path);
             }
         }
@@ -282,7 +368,7 @@ public class FileHandlerTests {
                     .thenApply(HttpResponse::body).get();
 
                 Assert.assertNull("Client found data for blocked path " + path,response);
-            }catch(ExecutionException e){
+            }catch(final ExecutionException e){
                 exception = e;
             }
             Assert.assertNotNull("Client found data for blocked path",exception);

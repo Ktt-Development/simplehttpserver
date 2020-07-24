@@ -245,9 +245,16 @@ class DirectoryEntry {
             final File parentFile = new File(dabs + relative).getParentFile();
             final String pabs = parentFile.getAbsolutePath();
 
-            // if is in top level directory (both cases) or if is a child of the directory folder (walk case)
-            // null otherwise
-            return pabs.equals(dabs) || (isWalkthrough && pabs.startsWith(dabs)) ? new File(dabs + relative) : null;
+            // if not top level directory or if not child of directory folder, then return null file
+            if(!pabs.equals(dabs) && (!isWalkthrough || !pabs.startsWith(dabs))) return null;
+
+            final String fileName = new File(dabs + relative).getName();
+
+            // for each file in parent directory, run adapter to find file that matches adapted name
+            for(final File file : Objects.requireNonNullElse(parentFile.listFiles(), new File[0]))
+                if(!file.isDirectory() && adapter.getName(file).equals(fileName))
+                    return file;
+            return null;
         }
     }
 

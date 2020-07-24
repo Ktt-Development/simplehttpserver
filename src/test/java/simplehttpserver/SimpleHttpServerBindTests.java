@@ -16,17 +16,17 @@ public class SimpleHttpServerBindTests {
 
         Exception exception = null;
         try{ server.bind(-1);
-        }catch(IllegalArgumentException | IOException e){ exception = e; }
+        }catch(final IllegalArgumentException | IOException e){ exception = e; }
         Assert.assertTrue("Bind server to bad port (-1) should throw an exception", exception instanceof  IllegalArgumentException);
 
         exception = null;
         try{ server.bind(65536);
-        }catch(IllegalArgumentException | IOException e){ exception = e; }
+        }catch(final IllegalArgumentException | IOException e){ exception = e; }
         Assert.assertTrue("Bind server to bad port (65536) should throw an exception", exception instanceof  IllegalArgumentException);
 
         exception = null;
         try{ server.bind(port);
-        }catch(IllegalArgumentException | IOException e){ exception = e; }
+        }catch(final IllegalArgumentException | IOException e){ exception = e; }
         Assert.assertNull("Bind server to valid port (" + port + ") should not throw an exception",exception);
 
         Assert.assertNotNull("Server address should not be null for successful bind",server.getAddress());
