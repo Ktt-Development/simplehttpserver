@@ -18,7 +18,7 @@ import static java.nio.file.StandardWatchEventKinds.*;
  * @see FileHandler
  * @see FileEntry
  * @since 02.00.00
- * @version 03.05.03
+ * @version 03.05.04
  * @author Ktt Development
  */
 class DirectoryEntry {
@@ -84,7 +84,7 @@ class DirectoryEntry {
 
                             try{
                                 preloadedFiles.put(
-                                   ContextUtil.joinContexts(false,false,relative, adapter.getName(file)),
+                                   ContextUtil.joinContexts(true,false,relative, adapter.getName(file)),
                                     new FileEntry(file, adapter, loadingOption, true)
                                 );
                             }catch(final UncheckedIOException ignored){ }
@@ -117,7 +117,7 @@ class DirectoryEntry {
 
                             try{
                                 preloadedFiles.put(
-                                    ContextUtil.joinContexts(false,false,relative,adapter.getName(file)),
+                                    ContextUtil.joinContexts(true,false,relative,adapter.getName(file)),
                                     new FileEntry(file, adapter, ByteLoadingOption.PRELOAD)
                                 );
                             }catch(final RuntimeException ignored){ }
@@ -166,8 +166,8 @@ class DirectoryEntry {
                 final WatchEvent.Kind<?> type = event.kind();
 
                 final String top2sub = ContextUtil.getContext(directoryPath.relativize(path).toString(),true,false); // the relative path between the top level directory and sub directory
-                final String context = ContextUtil.joinContexts(false,false,top2sub,adapter.getName(relFile)); // the file key
-                final File file = new File(directoryPath + ContextUtil.joinContexts(false,false,top2sub,relFile.getName())); // the actual referable file
+                final String context = ContextUtil.joinContexts(true,false,top2sub,adapter.getName(relFile)); // the file key
+                final File file = new File(ContextUtil.joinContexts(true,false,directoryPath.toString(),top2sub,relFile.getName())); // the actual referable file
                 final Path target = file.toPath();
 
                 if(!file.isDirectory()) // File#isFile does not work
