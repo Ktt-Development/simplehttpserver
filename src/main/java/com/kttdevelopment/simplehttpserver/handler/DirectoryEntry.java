@@ -18,7 +18,7 @@ import static java.nio.file.StandardWatchEventKinds.*;
  * @see FileHandler
  * @see FileEntry
  * @since 02.00.00
- * @version 03.05.03
+ * @version 03.05.04
  * @author Ktt Development
  */
 class DirectoryEntry {
