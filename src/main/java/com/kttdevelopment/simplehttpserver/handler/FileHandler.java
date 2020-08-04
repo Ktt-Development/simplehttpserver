@@ -24,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @see SimpleHttpHandler
  * @see com.sun.net.httpserver.HttpHandler
  * @since 02.00.00
- * @version 03.05.03
+ * @version 03.05.05
  * @author Ktt Development
  */
 public class FileHandler implements SimpleHttpHandler {
@@ -49,7 +49,7 @@ public class FileHandler implements SimpleHttpHandler {
 
             @Override
             public String getName(final File file){
-                return file.getName();
+                return FileHandler.this.getName(file);
             }
         };
     }
@@ -340,7 +340,7 @@ public class FileHandler implements SimpleHttpHandler {
      * @author Ktt Development
      */
     public final void addDirectory(final File directory){
-        addDirectory("",directory,directory.getName(),ByteLoadingOption.LIVELOAD,false);
+        addDirectory("",directory,getName(directory),ByteLoadingOption.LIVELOAD,false);
     }
 
     /**
@@ -368,7 +368,7 @@ public class FileHandler implements SimpleHttpHandler {
      * @author Ktt Development
      */
     public final void addDirectory(final File directory, final boolean walk){
-        addDirectory("",directory,directory.getName(),ByteLoadingOption.LIVELOAD,walk);
+        addDirectory("",directory,getName(directory),ByteLoadingOption.LIVELOAD,walk);
     }
 
     /**
@@ -397,7 +397,7 @@ public class FileHandler implements SimpleHttpHandler {
      * @author Ktt Development
      */
     public final void addDirectory(final File directory, final ByteLoadingOption loadingOption){
-        addDirectory("",directory,directory.getName(),loadingOption,false);
+        addDirectory("",directory,getName(directory),loadingOption,false);
     }
 
     /**
@@ -427,7 +427,7 @@ public class FileHandler implements SimpleHttpHandler {
      * @author Ktt Development
      */
     public final void addDirectory(final File directory, final ByteLoadingOption loadingOption, final boolean walk){
-        addDirectory("",directory,directory.getName(),loadingOption,walk);
+        addDirectory("",directory,getName(directory),loadingOption,walk);
     }
 
     /**
@@ -573,7 +573,7 @@ public class FileHandler implements SimpleHttpHandler {
      * @author Ktt Development
      */
     public final void addDirectory(final String context, final File directory){
-        addDirectory(context,directory,directory.getName(),ByteLoadingOption.LIVELOAD,false);
+        addDirectory(context,directory,getName(directory),ByteLoadingOption.LIVELOAD,false);
     }
 
     /**
@@ -600,7 +600,7 @@ public class FileHandler implements SimpleHttpHandler {
      * @see #addDirectory(String, File, String, ByteLoadingOption, boolean)
      */
     public final void addDirectory(final String context, final File directory, final boolean walk){
-        addDirectory(context,directory,directory.getName(),ByteLoadingOption.LIVELOAD,walk);
+        addDirectory(context,directory,getName(directory),ByteLoadingOption.LIVELOAD,walk);
     }
 
     /**
@@ -630,7 +630,7 @@ public class FileHandler implements SimpleHttpHandler {
      * @author Ktt Development
      */
     public final void addDirectory(final String context, final File directory, final ByteLoadingOption loadingOption){
-        addDirectory(context,directory,directory.getName(),loadingOption,false);
+        addDirectory(context,directory,getName(directory),loadingOption,false);
     }
 
     /**
@@ -661,7 +661,7 @@ public class FileHandler implements SimpleHttpHandler {
      * @author Ktt Development
      */
     public final void addDirectory(final String context, final File directory, final ByteLoadingOption loadingOption, final boolean walk){
-        addDirectory(context,directory,directory.getName(),loadingOption,walk);
+        addDirectory(context,directory,getName(directory),loadingOption,walk);
     }
 
     /**
@@ -790,6 +790,12 @@ public class FileHandler implements SimpleHttpHandler {
                 new DirectoryEntry(directory, adapter,loadingOption,walk)
             );
         }catch(final UncheckedIOException ignored){}
+    }
+
+//
+
+    private String getName(final File file){
+        return file.getParentFile() == null ? file.getPath() : file.getName();
     }
 
 //
