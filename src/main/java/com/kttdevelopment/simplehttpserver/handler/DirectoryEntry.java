@@ -248,7 +248,8 @@ class DirectoryEntry {
             // if not top level directory or if not child of directory folder, then return null file
             if(!pabs.equals(dabs) && (!isWalkthrough || !pabs.startsWith(dabs))) return null;
 
-            final String fileName = new File(dabs + relative).getName();
+            final File targetFile = Paths.get(dabs,relative).toFile();
+            final String fileName = targetFile.getParentFile() == null ? targetFile.getPath() : targetFile.getName();
 
             // for each file in parent directory, run adapter to find file that matches adapted name
             for(final File file : Objects.requireNonNullElse(parentFile.listFiles(), new File[0]))
