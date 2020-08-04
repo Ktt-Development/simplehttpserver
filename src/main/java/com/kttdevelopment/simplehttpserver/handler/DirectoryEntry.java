@@ -18,7 +18,7 @@ import static java.nio.file.StandardWatchEventKinds.*;
  * @see FileHandler
  * @see FileEntry
  * @since 02.00.00
- * @version 03.05.04
+ * @version 03.05.06
  * @author Ktt Development
  */
 class DirectoryEntry {
@@ -248,11 +248,14 @@ class DirectoryEntry {
             // if not top level directory or if not child of directory folder, then return null file
             if(!pabs.equals(dabs) && (!isWalkthrough || !pabs.startsWith(dabs))) return null;
 
-            final String fileName = new File(dabs + relative).getName();
+            final File targetFile = Paths.get(dabs,relative).toFile();
+            final String fileName = targetFile.getParentFile() == null ? targetFile.getPath() : targetFile.getName();
 
             // for each file in parent directory, run adapter to find file that matches adapted name
             for(final File file : Objects.requireNonNullElse(parentFile.listFiles(), new File[0]))
                 if(!file.isDirectory() && adapter.getName(file).equals(fileName))
+                    return file;
+                else if(file.isDirectory() && file.getName().equals(fileName)) // directories are not subject to adapter names
                     return file;
             return null;
         }
@@ -275,7 +278,7 @@ class DirectoryEntry {
         }else{
             try{
                 final File file = Objects.requireNonNull(getFile(path)); // find if file allowed
-                return adapter.getBytes(file,Files.readAllBytes(file.toPath())); // adapt bytes here
+                return !file.isDirectory() ? adapter.getBytes(file,Files.readAllBytes(file.toPath())) : null; // adapt bytes here
             }catch(final NullPointerException | IOException ignored){
                 return null;
             }
