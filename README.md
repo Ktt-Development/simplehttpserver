@@ -14,7 +14,7 @@ SimpleHttpServer is a simplified implementation of the [sun http server](https:/
 
 ### Documentation
 - [Documentation](https://docs.kttdevelopment.com/simplehttpserver)
-- [Wiki](https://github.com/Ktt-Development/simplehttpserver/wiki)
+- [Wiki](https://wiki.kttdevelopment.com/simplehttpserver)
 
 ### Reporting Issues
 Issues or suggestions can be posted [here](https://github.com/Ktt-Development/simplehttpserver/issues).
