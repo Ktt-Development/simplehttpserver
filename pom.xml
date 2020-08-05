@@ -60,6 +60,9 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <additionalJOption>--no-module-directories</additionalJOption>
+                </configuration>
             </plugin>
 
             <!-- tests -->
