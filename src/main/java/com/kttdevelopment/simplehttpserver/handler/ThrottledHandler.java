@@ -43,8 +43,11 @@ public class ThrottledHandler implements HttpHandler {
     @Override
     public final void handle(final HttpExchange exchange) throws IOException{
         if(throttler.addConnection(exchange)){
-            handler.handle(exchange);
-            throttler.deleteConnection(exchange);
+            try{
+                handler.handle(exchange);
+            }finally{
+                throttler.deleteConnection(exchange);
+            }
         }else{
             exchange.close();
         }
