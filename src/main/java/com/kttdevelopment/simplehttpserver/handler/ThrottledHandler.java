@@ -13,7 +13,7 @@ import java.io.IOException;
  * @see SessionThrottler
  * @see ServerSessionThrottler
  * @since 03.03.00
- * @version 03.05.00
+ * @version 03.05.07
  * @author Ktt Development
  */
 public class ThrottledHandler implements HttpHandler {
