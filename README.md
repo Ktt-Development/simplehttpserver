@@ -1,7 +1,7 @@
 # SimpleHttpServer
 [![jitpack](https://jitpack.io/v/com.kttdevelopment/simplehttpserver.svg)](https://jitpack.io/#com.kttdevelopment/simplehttpserver)
 [![jitci](https://jitci.com/gh/Ktt-Development/simplehttpserver/svg)](https://jitci.com/gh/Ktt-Development/simplehttpserver)
-[![Build Status](https://travis-ci.com/Ktt-Development/webdir.svg?branch=master)](https://travis-ci.com/Ktt-Development/webdir)
+[![Build Status](https://travis-ci.com/Ktt-Development/core.svg?branch=master)](https://travis-ci.com/Ktt-Development/core)
 [![version](https://img.shields.io/github/v/release/ktt-development/simplehttpserver?include_prereleases)](https://github.com/Ktt-Development/simplehttpserver/releases)
 [![license](https://img.shields.io/github/license/Ktt-Development/simplehttpserver)](https://github.com/Ktt-Development/simplehttpserver/blob/master/LICENSE)
 
