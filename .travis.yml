@@ -1,5 +1,1 @@
-language: java
-jdk:
- - openjdk11
-script:
-  mvn test -fae
+import: Ktt-Development/.github:.travis/java-LTS.yml@master
