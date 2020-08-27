@@ -12,11 +12,11 @@ import java.net.http.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class SimpleHttpExchangeCookieSessionTests {
+public final class SimpleHttpExchangeCookieSessionTests {
 
     @Test
-    public void testSession() throws IOException, ExecutionException, InterruptedException{
-        final int port = 20004;
+    public final void testSession() throws IOException, ExecutionException, InterruptedException{
+        final int port = 8080;
 
         final SimpleHttpServer server = SimpleHttpServer.create(port);
         final AtomicReference<SimpleHttpExchange> exchangeRef = new AtomicReference<>();
@@ -47,7 +47,6 @@ public class SimpleHttpExchangeCookieSessionTests {
 
         client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
             .thenApply(HttpResponse::body).get();
-
 
         // exchange
 
