@@ -10,12 +10,12 @@ import java.net.http.*;
 import java.time.Duration;
 import java.util.concurrent.*;
 
-public class SSEHandlerTests {
+public final class SSEHandlerTests {
 
     @SuppressWarnings({"unchecked", "Convert2Lambda", "rawtypes"})
     @Test
-    public void test() throws IOException, ExecutionException, InterruptedException{
-        final int port = 30006;
+    public final void test() throws IOException, ExecutionException, InterruptedException{
+        final int port = 8080;
 
         final SimpleHttpServer server = SimpleHttpServer.create(port);
         String context = "";
@@ -25,9 +25,9 @@ public class SSEHandlerTests {
         server.start();
 
         HttpRequest request = HttpRequest.newBuilder()
-             .uri(URI.create("http://localhost:" + port))
-             .timeout(Duration.ofSeconds(2))
-             .build();
+            .uri(URI.create("http://localhost:" + port))
+            .timeout(Duration.ofSeconds(2))
+            .build();
 
         final HttpClient client = HttpClient.newHttpClient();
         HttpResponse<InputStream> response = client.sendAsync(request, HttpResponse.BodyHandlers.ofInputStream()).get();
@@ -35,18 +35,18 @@ public class SSEHandlerTests {
         final String result = "result";
         handler.push(result);
 
-        BufferedReader IN = new BufferedReader(new InputStreamReader(response.body()));
-        StringBuilder OUT = new StringBuilder();
+        final BufferedReader IN = new BufferedReader(new InputStreamReader(response.body()));
+        final StringBuilder OUT = new StringBuilder();
 
         final Duration dur = Duration.ofSeconds(2);
         final ExecutorService executor = Executors.newSingleThreadExecutor();
         final Future<String> future = executor.submit(new Callable() {
             @Override
-            public String call(){
+            public final String call(){
                 String ln;
                 try{
                     while((ln = IN.readLine()) != null)
-                            OUT.append(ln).append('\n');
+                        OUT.append(ln).append('\n');
                 }catch(final IOException ignored){
                     Assert.fail("Unable to read input stream from client");
                 }
@@ -54,9 +54,10 @@ public class SSEHandlerTests {
             }
         });
 
-        try {
+        try{
             future.get(dur.toMillis(), TimeUnit.MILLISECONDS);
-        } catch (TimeoutException e) {
+        }catch(final TimeoutException ignored){
+        }finally{
             future.cancel(true);
         }
 

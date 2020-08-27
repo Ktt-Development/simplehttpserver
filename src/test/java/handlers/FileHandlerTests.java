@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
+@SuppressWarnings("SpellCheckingInspection")
 public class FileHandlerTests {
 
     @SuppressWarnings("ResultOfMethodCallIgnored")

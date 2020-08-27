@@ -21,6 +21,7 @@ import static java.nio.file.StandardWatchEventKinds.*;
  * @version 03.05.06
  * @author Ktt Development
  */
+@SuppressWarnings("SpellCheckingInspection")
 class DirectoryEntry {
 
     private final File directory;

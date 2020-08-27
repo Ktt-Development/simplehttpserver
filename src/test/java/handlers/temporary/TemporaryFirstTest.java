@@ -1,8 +1,8 @@
-package handlers;
+package handlers.temporary;
 
 import com.kttdevelopment.simplehttpserver.*;
-import com.kttdevelopment.simplehttpserver.handler.RedirectHandler;
-import com.kttdevelopment.simplehttpserver.var.HttpCode;
+import com.kttdevelopment.simplehttpserver.handler.TemporaryHandler;
+import com.sun.net.httpserver.HttpExchange;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -11,16 +11,16 @@ import java.net.URI;
 import java.net.http.*;
 import java.util.concurrent.ExecutionException;
 
-public final class RedirectHandlerTests {
+public class TemporaryFirstTest {
 
     @Test
-    public final void redirectToGoogle() throws IOException, ExecutionException, InterruptedException{
+    public void testFirstConn() throws ExecutionException, InterruptedException, IOException{
         final int port = 8080;
 
         final SimpleHttpServer server = SimpleHttpServer.create(port);
 
         final String context = "";
-        server.createContext(context,new RedirectHandler("https://www.google.com/"));
+        server.createContext(context,new TemporaryHandler(server, HttpExchange::close));
         server.start();
 
         Assert.assertFalse("Server did not contain a temporary context", server.getContexts().isEmpty());
@@ -31,12 +31,10 @@ public final class RedirectHandlerTests {
             .uri(URI.create(url))
             .build();
 
-        final HttpClient client = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.ALWAYS).build();
-
-        final int response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+        HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
             .thenApply(HttpResponse::statusCode).get();
 
-        Assert.assertEquals("Client responded with redirect code (302 HTTP FOUND) not 200 HTTP OK",HttpCode.HTTP_OK, response);
+        Assert.assertTrue("Server did not remove temporary context", server.getContexts().isEmpty());
 
         server.stop();
     }

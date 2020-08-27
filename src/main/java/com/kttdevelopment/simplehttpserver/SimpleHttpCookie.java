@@ -9,7 +9,7 @@ import java.util.Date;
  * @see SimpleHttpExchange
  * @see Builder
  * @since 02.00.00
- * @version 03.05.00
+ * @version 03.05.08
  * @author Ktt Development
  */
 public class SimpleHttpCookie {
@@ -61,7 +61,6 @@ public class SimpleHttpCookie {
         this.httpOnly = httpOnly;
     }
 
-    @SuppressWarnings("SpellCheckingInspection")
     private final SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss");
 
     /**

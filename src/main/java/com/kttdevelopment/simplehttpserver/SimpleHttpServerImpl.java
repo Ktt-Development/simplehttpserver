@@ -7,14 +7,13 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.*;
 import java.util.concurrent.Executor;
-import java.util.function.BiConsumer;
 
 /**
  * Implementation for {@link SimpleHttpServer}. Applications do not use this class.
  *
  * @see SimpleHttpServer
  * @since 02.00.00
- * @version 03.05.03
+ * @version 03.05.08
  * @author Ktt Development
  */
 @SuppressWarnings("SpellCheckingInspection")

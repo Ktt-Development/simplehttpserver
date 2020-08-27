@@ -17,7 +17,7 @@ import java.util.concurrent.Executor;
  * @see SimpleHttpsServer
  * @see SimpleHttpHandler
  * @since 02.00.00
- * @version 03.05.02
+ * @version 03.05.08
  * @author Ktt Development
  */
 @SuppressWarnings("SpellCheckingInspection")
@@ -270,11 +270,14 @@ public abstract class SimpleHttpServer {
 
     /**
      * Creates an empty context.
+     * <br>
+     * * {@link HttpServer} often does not throw an exception for duplicate contexts. <a href="https://github.com/Ktt-Development/simplehttpserver/issues/86">#86</a>
      *
      * @param context the context
      * @return the http context associated with the context
-     * @throws IllegalArgumentException if the context is invalid or taken
+     * @throws IllegalArgumentException if the context is invalid or taken*
      * @throws NullPointerException if the context is null
+     *
      *
      * @see HttpContext
      * @see #createContext(String, HttpHandler)
@@ -287,11 +290,13 @@ public abstract class SimpleHttpServer {
 
     /**
      * Creates a context mapped to a specified {@link HttpHandler}.
+     * <br>
+     * * {@link HttpServer} often does not throw an exception for duplicate contexts. <a href="https://github.com/Ktt-Development/simplehttpserver/issues/86">#86</a>
      *
      * @param context the context
      * @param handler the handler
      * @return the http context associated with the context
-     * @throws IllegalArgumentException if the context is invalid or taken
+     * @throws IllegalArgumentException if the context is invalid or taken*
      * @throws NullPointerException if the context is null
      *
      * @see HttpContext
@@ -308,11 +313,13 @@ public abstract class SimpleHttpServer {
 
     /**
      * Creates a context mapped to a specific {@link HttpContext} with an {@link Authenticator}.
+     * <br>
+     * * {@link HttpServer} often does not throw an exception for duplicate contexts. <a href="https://github.com/Ktt-Development/simplehttpserver/issues/86">#86</a>
      *
      * @param context the context
      * @param authenticator authenticator
      * @return the http context associated with the context
-     * @throws IllegalArgumentException if the context is invalid or taken
+     * @throws IllegalArgumentException if the context is invalid or taken*
      * @throws NullPointerException if the context is null
      *
      * @see HttpContext
@@ -327,12 +334,14 @@ public abstract class SimpleHttpServer {
 
     /**
      * Creates a context mapped to a specific {@link HttpContext} with an {@link Authenticator}.
+     * <br>
+     * * {@link HttpServer} often does not throw an exception for duplicate contexts. <a href="https://github.com/Ktt-Development/simplehttpserver/issues/86">#86</a>
      *
      * @param context the context
      * @param handler the handler
      * @param authenticator authenticator
      * @return the http context associated with the context
-     * @throws IllegalArgumentException if the context is invalid or taken
+     * @throws IllegalArgumentException if the context is invalid or taken*
      * @throws NullPointerException if the context is null
      *
      * @see HttpContext

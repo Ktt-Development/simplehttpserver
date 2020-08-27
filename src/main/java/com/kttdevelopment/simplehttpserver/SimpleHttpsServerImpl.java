@@ -13,7 +13,7 @@ import java.util.concurrent.Executor;
  *
  * @see SimpleHttpsServer
  * @since 03.04.00
- * @version 03.05.03
+ * @version 03.05.08
  * @author Ktt Development
  */
 @SuppressWarnings("SpellCheckingInspection")
@@ -73,7 +73,7 @@ final class SimpleHttpsServerImpl extends SimpleHttpsServer {
         return server.getHttpsConfigurator();
     }
 
-    // region copySimpleHttpServerImpl
+// region copy
 
     @Override
     public synchronized final InetSocketAddress bind(final int port) throws IOException{
@@ -159,7 +159,8 @@ final class SimpleHttpsServerImpl extends SimpleHttpsServer {
 
     @Override
     public synchronized final HttpContext createContext(final String context, final HttpHandler handler, final Authenticator authenticator){
-        if(!ContextUtil.getContext(context,true,false).equals("/") && handler instanceof RootHandler)
+        final String ct = ContextUtil.getContext(context,true,false);
+        if(!ct.equals("/") && handler instanceof RootHandler)
             throw new IllegalArgumentException("RootHandler can only be used at the root '/' context");
 
         final HttpHandler wrapper = exchange -> {
@@ -167,7 +168,9 @@ final class SimpleHttpsServerImpl extends SimpleHttpsServer {
             handler.handle(exchange);
         };
 
-        final HttpContext hc = server.createContext(ContextUtil.getContext(context,true,false),wrapper);
+        final HttpContext hc = server.createContext(ct);
+
+        hc.setHandler(wrapper);
         contexts.put(hc,handler);
 
         if(authenticator != null)
@@ -264,7 +267,7 @@ final class SimpleHttpsServerImpl extends SimpleHttpsServer {
         }
     }
 
-    // endregion
+// endregion copy
 
     @Override
     public String toString(){

@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public final class SimpleHttpExchangePostTest {
 
     @Test
-    public void postSimple() throws IOException, ExecutionException, InterruptedException{
+    public final void postSimple() throws IOException, ExecutionException, InterruptedException{
         final int port = 20003;
 
         final SimpleHttpServer server = SimpleHttpServer.create(port);
