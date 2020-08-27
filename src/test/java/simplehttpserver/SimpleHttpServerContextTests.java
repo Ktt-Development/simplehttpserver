@@ -3,6 +3,7 @@ package simplehttpserver;
 import com.kttdevelopment.simplehttpserver.*;
 import com.kttdevelopment.simplehttpserver.handler.RootHandler;
 import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpServer;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -131,6 +132,16 @@ public final class SimpleHttpServerContextTests {
 
         for(final String root : roots)
             Assert.assertEquals("Context [" + root + "] should correct to \"/\"","/",server.createContext(root).getPath());
+    }
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public final void createDuplicateContext() throws IOException{
+        final SimpleHttpServer server = SimpleHttpServer.create();
+        final String context = server.getRandomContext();
+
+        server.createContext(context);
+        server.createContext(context,HttpExchange::close);
     }
 
 }

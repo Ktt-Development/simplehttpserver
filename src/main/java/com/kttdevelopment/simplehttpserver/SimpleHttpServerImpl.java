@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.*;
 import java.util.concurrent.Executor;
+import java.util.function.BiConsumer;
 
 /**
  * Implementation for {@link SimpleHttpServer}. Applications do not use this class.
@@ -147,7 +148,8 @@ final class SimpleHttpServerImpl extends SimpleHttpServer {
 
     @Override
     public synchronized final HttpContext createContext(final String context, final HttpHandler handler, final Authenticator authenticator){
-        if(!ContextUtil.getContext(context,true,false).equals("/") && handler instanceof RootHandler)
+        final String ct = ContextUtil.getContext(context,true,false);
+        if(!ct.equals("/") && handler instanceof RootHandler)
             throw new IllegalArgumentException("RootHandler can only be used at the root '/' context");
 
         final HttpHandler wrapper = exchange -> {
@@ -155,7 +157,12 @@ final class SimpleHttpServerImpl extends SimpleHttpServer {
             handler.handle(exchange);
         };
 
-        final HttpContext hc = server.createContext(ContextUtil.getContext(context,true,false),wrapper);
+
+        for(final HttpContext httpContext : contexts.keySet())
+            if(httpContext.getPath().equals(ct))
+                throw new IllegalArgumentException("The context '" + ct + "' is already occupied");
+
+        final HttpContext hc = server.createContext(ct,wrapper);
         contexts.put(hc,handler);
 
         if(authenticator != null)
