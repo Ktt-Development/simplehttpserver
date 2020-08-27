@@ -157,12 +157,9 @@ final class SimpleHttpServerImpl extends SimpleHttpServer {
             handler.handle(exchange);
         };
 
+        final HttpContext hc = server.createContext(ct);
 
-        for(final HttpContext httpContext : contexts.keySet())
-            if(httpContext.getPath().equals(ct))
-                throw new IllegalArgumentException("The context '" + ct + "' is already occupied");
-
-        final HttpContext hc = server.createContext(ct,wrapper);
+        hc.setHandler(wrapper);
         contexts.put(hc,handler);
 
         if(authenticator != null)
