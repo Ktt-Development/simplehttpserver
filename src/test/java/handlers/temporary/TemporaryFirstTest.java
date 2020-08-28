@@ -11,10 +11,10 @@ import java.net.URI;
 import java.net.http.*;
 import java.util.concurrent.ExecutionException;
 
-public class TemporaryFirstTest {
+public final class TemporaryFirstTest {
 
     @Test
-    public void testFirstConn() throws ExecutionException, InterruptedException, IOException{
+    public final void testFirstConn() throws ExecutionException, InterruptedException, IOException{
         final int port = 8080;
 
         final SimpleHttpServer server = SimpleHttpServer.create(port);
