@@ -13,7 +13,7 @@ import java.util.concurrent.Executor;
  *
  * @see SimpleHttpServer
  * @since 02.00.00
- * @version 03.05.03
+ * @version 03.05.08
  * @author Ktt Development
  */
 @SuppressWarnings("SpellCheckingInspection")
@@ -147,7 +147,8 @@ final class SimpleHttpServerImpl extends SimpleHttpServer {
 
     @Override
     public synchronized final HttpContext createContext(final String context, final HttpHandler handler, final Authenticator authenticator){
-        if(!ContextUtil.getContext(context,true,false).equals("/") && handler instanceof RootHandler)
+        final String ct = ContextUtil.getContext(context,true,false);
+        if(!ct.equals("/") && handler instanceof RootHandler)
             throw new IllegalArgumentException("RootHandler can only be used at the root '/' context");
 
         final HttpHandler wrapper = exchange -> {
@@ -155,7 +156,9 @@ final class SimpleHttpServerImpl extends SimpleHttpServer {
             handler.handle(exchange);
         };
 
-        final HttpContext hc = server.createContext(ContextUtil.getContext(context,true,false),wrapper);
+        final HttpContext hc = server.createContext(ct);
+
+        hc.setHandler(wrapper);
         contexts.put(hc,handler);
 
         if(authenticator != null)

@@ -12,11 +12,11 @@ import java.net.http.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class SimpleHttpExchangeReadTests {
+public final class SimpleHttpExchangeReadTests {
 
     @Test
-    public void read() throws IOException, InterruptedException, ExecutionException{
-        final int port = 20001;
+    public final void read() throws IOException, InterruptedException, ExecutionException{
+        final int port = 8080;
 
         final SimpleHttpServer server = SimpleHttpServer.create(port);
         final AtomicReference<SimpleHttpExchange> exchangeRef = new AtomicReference<>();

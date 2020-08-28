@@ -2,15 +2,16 @@ package simplehttpserver;
 
 import com.kttdevelopment.simplehttpserver.*;
 import com.kttdevelopment.simplehttpserver.handler.RootHandler;
+import com.sun.net.httpserver.HttpExchange;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
 
-public class SimpleHttpServerContextTests {
+public final class SimpleHttpServerContextTests {
 
     @Test
-    public void randContext() throws IOException{
+    public final void randContext() throws IOException{
         final SimpleHttpServer server = SimpleHttpServer.create();
 
         final String initContext = server.getRandomContext();
@@ -21,7 +22,7 @@ public class SimpleHttpServerContextTests {
     }
 
     @Test
-    public void randContextHead() throws IOException{
+    public final void randContextHead() throws IOException{
         final SimpleHttpServer server = SimpleHttpServer.create();
 
         final String head = "/head";
@@ -34,23 +35,22 @@ public class SimpleHttpServerContextTests {
     }
 
     @Test
-    public void removeNullContext() throws IOException{
+    public final void removeNullContext() throws IOException{
         final SimpleHttpServer server = SimpleHttpServer.create();
 
-        Exception exception = null;
-        try{ server.removeContext((String) null);
-        }catch(final NullPointerException e){ exception = e; }
-        Assert.assertNotNull("Null string context should throw NPE", exception);
+        try{
+            server.removeContext((String) null);
+            Assert.fail("Null string context should throw NPE");
+        }catch(final NullPointerException ignored){ }
 
-        String context = "";
-        exception = null;
-        try{ server.removeContext(context);
-        }catch(final IllegalArgumentException e){ exception = e; }
-        Assert.assertNotNull("Server should throw IllegalArgumentException when removing a context that doesn't exist", exception);
+        try{
+            server.removeContext("");
+            Assert.fail("Server should throw IllegalArgumentException when removing a context that doesn't exist");
+        }catch(final IllegalArgumentException ignored){ }
     }
 
     @Test
-    public void removeContext() throws IOException{
+    public final void removeContext() throws IOException{
         final SimpleHttpServer server = SimpleHttpServer.create();
 
         final String context = "";
@@ -67,7 +67,7 @@ public class SimpleHttpServerContextTests {
     }
 
     @Test
-    public void removeNativeContext() throws IOException{
+    public final void removeNativeContext() throws IOException{
         final SimpleHttpServer server = SimpleHttpServer.create();
         String context = "/";
 
@@ -105,35 +105,42 @@ public class SimpleHttpServerContextTests {
     }
 
     @Test
-    public void createRootContext() throws IOException{
-        final SimpleHttpServer server = SimpleHttpServer.create();
-        final RootHandler handler = new RootHandler((SimpleHttpHandler) SimpleHttpExchange::close, (SimpleHttpHandler) SimpleHttpExchange::close);
+    public final void createRootContext() throws IOException{
+        final SimpleHttpServer server   = SimpleHttpServer.create();
+        final RootHandler handler       = new RootHandler(HttpExchange::close,HttpExchange::close);
 
         String context = server.getRandomContext();
-        Exception exception = null;
         try{
             server.createContext(context,handler);
-        }catch(final IllegalArgumentException e){ exception = e; }
-        Assert.assertNotNull("Server should throw IllegalArgumentException when adding RootHandler to non-root context",exception);
+            Assert.fail("Server should throw IllegalArgumentException when adding RootHandler to non-root context");
+        }catch(final IllegalArgumentException ignored){ }
 
         final String[] testRoots = {"/","\\",""};
 
-        for(final String testRoot : testRoots){
-            try{
-                server.removeContext(server.createContext(testRoot, handler));
-            }catch(final IllegalArgumentException e){
+        for(final String testRoot : testRoots)
+            try{ server.removeContext(server.createContext(testRoot, handler));
+            }catch(final IllegalArgumentException ignored){
                 Assert.fail("Server threw IllegalArgumentException for allowed context [" + testRoot + "] for RootHandler");
             }
-        }
     }
 
     @Test
-    public void createSlashedContext() throws IOException{
+    public final void createSlashedContext() throws IOException{
         final SimpleHttpServer server = SimpleHttpServer.create();
         final String[] roots = {"/","\\",""};
 
         for(final String root : roots)
             Assert.assertEquals("Context [" + root + "] should correct to \"/\"","/",server.createContext(root).getPath());
+    }
+
+
+    @Test// (expected = IllegalArgumentException.class)
+    public final void createDuplicateContext() throws IOException{
+        final SimpleHttpServer server = SimpleHttpServer.create();
+        final String context = "duplicate";
+
+        server.createContext(context);
+        server.createContext(context,HttpExchange::close);
     }
 
 }

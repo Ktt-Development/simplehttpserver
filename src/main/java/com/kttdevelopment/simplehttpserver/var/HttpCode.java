@@ -7,7 +7,7 @@ package com.kttdevelopment.simplehttpserver.var;
  * @version 01.00.00
  * @author Ktt Development
  */
-@SuppressWarnings({"unused", "SpellCheckingInspection"})
+@SuppressWarnings({"unused", "SpellCheckingInspection", "RedundantSuppression"})
 public abstract class HttpCode {
 
     public static final int HTTP_Continue = 100;

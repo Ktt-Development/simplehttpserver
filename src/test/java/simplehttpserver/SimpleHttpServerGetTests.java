@@ -6,12 +6,12 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-public class SimpleHttpServerReadTests {
+public final class SimpleHttpServerGetTests {
 
     @SuppressWarnings("SpellCheckingInspection")
     @Test
-    public void get() throws IOException{
-        final int port = 10005;
+    public final void get() throws IOException{
+        final int port = 8080;
 
         final SimpleHttpServer server = SimpleHttpServer.create();
         Assert.assertNotNull("#getHttpServer() should not be null", server.getHttpServer());
