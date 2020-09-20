@@ -6,7 +6,7 @@
 
     <groupId>com.kttdevelopment</groupId>
     <artifactId>simplehttpserver</artifactId>
-    <version>03.05.08</version>
+    <version>03.06.00</version>
     <packaging>jar</packaging>
 
     <url>https://github.com/Ktt-Development/simplehttpserver</url>
@@ -63,6 +63,39 @@
                 <configuration>
                     <additionalJOption>--no-module-directories</additionalJOption>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>3.0.0-M1</version>
+                <configuration>
+                    <generatePom>true</generatePom>
+                    <pomFile>${project.basedir}/pom.xml</pomFile>
+                    <file>${project.build.directory}/${project.artifactId}-${project.version}.jar</file>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>net.ju-n.maven.plugins</groupId>
+                <artifactId>checksum-maven-plugin</artifactId>
+                <version>1.2</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>artifacts</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <!-- tests -->
