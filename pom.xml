@@ -65,34 +65,42 @@
                 </configuration>
             </plugin>
 
+            <!-- copy resources to target -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-install-plugin</artifactId>
-                <version>3.0.0-M1</version>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.1.0</version>
                 <configuration>
-                    <generatePom>true</generatePom>
-                    <pomFile>${project.basedir}/pom.xml</pomFile>
-                    <file>${project.build.directory}/${project.artifactId}-${project.version}.jar</file>
+                    <outputDirectory>${project.build.directory}</outputDirectory>
                 </configuration>
                 <executions>
                     <execution>
-                        <phase>install</phase>
-                        <goals>
-                            <goal>install-file</goal>
-                        </goals>
+                        <phase>package</phase>
                     </execution>
                 </executions>
             </plugin>
 
+            <!-- generate checksums in target -->
             <plugin>
                 <groupId>net.ju-n.maven.plugins</groupId>
                 <artifactId>checksum-maven-plugin</artifactId>
-                <version>1.2</version>
+                <version>1.4</version>
+                <configuration>
+                    <fileSets>
+                        <fileSet>
+                            <directory>${project.build.directory}</directory>
+                            <includes>
+                                <include>*.jar</include>
+                                <include>pom.xml</include>
+                            </includes>
+                        </fileSet>
+                    </fileSets>
+                </configuration>
                 <executions>
                     <execution>
                         <phase>package</phase>
                         <goals>
-                            <goal>artifacts</goal>
+                            <goal>files</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -110,6 +118,15 @@
                 </configuration>
             </plugin>
         </plugins>
+        <!-- copy resources to target -->
+        <resources>
+            <resource>
+                <directory>${project.basedir}</directory>
+                <includes>
+                    <include>pom.xml</include>
+                </includes>
+            </resource>
+        </resources>
     </build>
 
     <repositories>
