@@ -1,0 +1,29 @@
+name: Compile release
+on:
+  release:
+    types: [published]
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📦 Prepate Git Repo
+        uses: actions/checkout@v2
+
+      - name: ☕ Install OpenJDK
+        uses: AdoptOpenJDK/install-jdk@v1
+        with:
+          version: '11'
+          architecture: x64
+
+      - name: 📦 Build with Maven
+        run: mvn -B package --file pom.xml
+
+      - name: 📦 Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: rexedia
+          path: |
+            target/*.jar
+            target/*.md5
+            target/*.sha1
