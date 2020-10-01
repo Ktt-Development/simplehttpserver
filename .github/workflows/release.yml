@@ -1,4 +1,4 @@
-name: Compile release
+name: Deploy to releases
 on:
   release:
     types: [published]
@@ -27,3 +27,9 @@ jobs:
             target/*.jar
             target/*.md5
             target/*.sha1
+
+      - name: 🚀 Deploy to releases
+        uses: AButler/upload-release-assets@v2.0
+        with:
+          files: 'target/*.jar'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
