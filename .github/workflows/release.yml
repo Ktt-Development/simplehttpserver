@@ -36,4 +36,4 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 🚀 Deploy to Maven
-        run: mvn deploy -Dregistry=https://maven.pkg.github.com/Ktt-Development -Dtoken=${{ secrets.GITHUB_TOKEN }}
+        run: mvn deploy -DskipTests -Dregistry=https://maven.pkg.github.com/Ktt-Development -Dtoken=${{ secrets.GITHUB_TOKEN }}
