@@ -22,7 +22,7 @@
         <repository>
           <id>github</id>
           <name>GitHub Ktt-Development Apache Maven Packages</name>
-          <url>https://maven.pkg.github.com/Ktt-Development/${artifactId</url>
+          <url>https://maven.pkg.github.com/Ktt-Development/${artifactId}</url>
         </repository>
     </distributionManagement>
 
