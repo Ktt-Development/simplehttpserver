@@ -18,6 +18,15 @@
         <tag>HEAD</tag>
     </scm>
 
+
+    <distributionManagement>
+        <repository>
+          <id>github</id>
+          <name>GitHub Ktt-Development Apache Maven Packages</name>
+          <url>https://maven.pkg.github.com/Ktt-Development/${project.artifactId}</url>
+        </repository>
+    </distributionManagement>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
