@@ -29,11 +29,13 @@ jobs:
             **/target/*.md5
             **/target/*.sha1
 
-      - name: 🚀 Deploy to releases
+      - name: 🚀 Deploy to Releases
         uses: AButler/upload-release-assets@v2.0
         with:
           files: 'target/*.jar'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 🚀 Deploy to Maven
-        run: mvn -B -DskipTests deploy -Dregistry=https://maven.pkg.github.com/Ktt-Development -Dtoken=${{ secrets.GITHUB_TOKEN }}
+      - name: 🚀 Deploy to GitHub Packages
+        run: mvn -B -DskipTests deploy -s settings.xml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
