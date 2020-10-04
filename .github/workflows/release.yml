@@ -22,7 +22,7 @@ jobs:
       - name: 📦 Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: rexedia
+          name: simplehttpserver
           path: |
             **/target/pom.xml
             **/target/*.jar
@@ -36,4 +36,4 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 🚀 Deploy to Maven
-        run: mvn deploy -DskipTests -Dregistry=https://maven.pkg.github.com/Ktt-Development -Dtoken=${{ secrets.REPO_AND_PACKAGES }}
+        run: mvn -B deploy -DskipTests
