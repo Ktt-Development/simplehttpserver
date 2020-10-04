@@ -17,7 +17,7 @@ jobs:
           architecture: x64
 
       - name: 📦 Build with Maven
-        run: mvn -B -DskipTests package --file pom.xml
+        run: mvn -B package --file pom.xml
 
       - name: 📦 Upload artifact
         uses: actions/upload-artifact@v2
@@ -34,3 +34,6 @@ jobs:
         with:
           files: 'target/*.jar'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🚀 Deploy to Maven
+        run: mvn deploy -Dregistry=https://maven.pkg.github.com/Ktt-Development -Dtoken=${{ secrets.GITHUB_TOKEN }}
