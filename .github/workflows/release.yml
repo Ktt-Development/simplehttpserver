@@ -1,10 +1,10 @@
-name: Deploy to releases
+name: Deploy
 on:
   release:
     types: [published]
 jobs:
-  build:
-    name: Build
+  deploy:
+    name: Deploy
     runs-on: ubuntu-latest
     steps:
       - name: 📦 Prepate Git Repo
@@ -17,7 +17,7 @@ jobs:
           architecture: x64
 
       - name: 🚀 Deploy to GitHub Packages
-        run: mvn -B -DskipTests -s settings.xml -f pom.xml deploy
+        run: mvn -B -s settings.xml -f pom.xml deploy
         env:
           GITHUB_USERNAME: Katsute
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
