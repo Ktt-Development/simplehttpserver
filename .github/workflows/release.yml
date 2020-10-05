@@ -10,6 +10,12 @@ jobs:
       - name: 📦 Prepate Git Repo
         uses: actions/checkout@v2
 
+      - name: 🔐 Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v3
+        with:
+          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+
       - name: ☕ Install OpenJDK
         uses: AdoptOpenJDK/install-jdk@v1
         with:
@@ -17,12 +23,11 @@ jobs:
           architecture: x64
 
       - name: 🚀 Deploy to Maven
-        uses: samuelmeuli/action-maven-publish@v1
-        with:
-          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-          gpg_passphrase: ${{ secrets.GPG_PASSPHRASE }}
-          nexus_username: ${{ secrets.OSSRH_USERNAME }}
-          nexus_password: ${{ secrets.OSSRH_TOKEN }}
+        runs: mvn -B deploy
+        env:
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
 
       - name: 🚀 Deploy to Releases
         uses: AButler/upload-release-assets@v2.0

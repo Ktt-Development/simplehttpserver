@@ -4,16 +4,51 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <github.organization>Ktt-Development</github.organization>
+
+        <github.repository>simplehttpserver</github.repository>
+        <github.repository.description>📕 SimpleHttpServer :: Simplified implementation of the sun http server :: Simplified handlers to execute complex operations</github.repository.description>
+        <github.repository.license>GPL-2</github.repository.license>
+        <github.repository.head>main</github.repository.head>
+
+        <github.username>Katsute</github.username>
+    </properties>
+
     <groupId>com.kttdevelopment</groupId>
-    <artifactId>simplehttpserver</artifactId>
+    <artifactId>${github.repository}</artifactId>
     <version>03.06.05</version>
 
-    <url>https://github.com/Ktt-Development/simplehttpserver</url>
+    <name>${github.repository}</name>
+    <description>${github.repository.description}</description>
+    <url>https://github.com/${github.organization}/${github.repository}</url>
+
+    <licenses>
+        <license>
+            <name>${github.repository.license}</name>
+            <distribution>repo</distribution>
+            <url>https://github.com/${github.organization}/${github.repository}/blob/${github.repository.head}/LICENSE</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>${github.username}</name>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <url>https://github.com/${github.username}</url>
+            <organization>${github.organization}</organization>
+            <organizationUrl>https://github.com/${github.organization}</organizationUrl>
+        </developer>
+    </developers>
          
     <scm>
-        <url>https://github.com/Ktt-Development/simplehttpserver.git</url>
-        <connection>scm:git:git@github.com:Ktt-Development/simplehttpserver.git</connection>
-        <developerConnection>scm:git:git@github.com:Ktt-Development/simplehttpserver.git</developerConnection>
+        <url>https://github.com/${github.organization}/${github.repository}.git</url>
+        <connection>scm:git:git@github.com:${github.organization}/${github.repository}.git</connection>
+        <developerConnection>scm:git:git@github.com:${github.organization}/${github.repository}.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
 
@@ -27,10 +62,6 @@
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
 
     <build>
         <plugins>
