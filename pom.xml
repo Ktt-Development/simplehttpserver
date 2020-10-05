@@ -6,7 +6,7 @@
 
     <groupId>com.kttdevelopment</groupId>
     <artifactId>simplehttpserver</artifactId>
-    <version>03.06.00</version>
+    <version>03.06.01</version>
     <packaging>jar</packaging>
 
     <url>https://github.com/Ktt-Development/simplehttpserver</url>

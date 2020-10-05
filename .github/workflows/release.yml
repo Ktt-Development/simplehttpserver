@@ -16,17 +16,14 @@ jobs:
           version: '11'
           architecture: x64
 
-      - name: 📦 Build with Maven
-        run: mvn -B package --file pom.xml
+      - name: 🚀 Deploy to GitHub Packages
+        run: mvn -B -DskipTests -s settings.xml -f pom.xml deploy
+        env:
+          GITHUB_USERNAME: Katsute
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 🚀 Deploy to Releases
         uses: AButler/upload-release-assets@v2.0
         with:
           files: 'target/*.jar'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: 🚀 Deploy to GitHub Packages
-        run: mvn -B -DskipTests -s settings.xml deploy
-        env:
-          GITHUB_USERNAME: Katsute
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
