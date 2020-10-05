@@ -10,7 +10,6 @@
         <github.organization>Ktt-Development</github.organization>
 
         <github.repository>simplehttpserver</github.repository>
-        <github.repository.description>📕 SimpleHttpServer :: Simplified implementation of the sun http server :: Simplified handlers to execute complex operations</github.repository.description>
         <github.repository.license>GPL-2</github.repository.license>
         <github.repository.head>main</github.repository.head>
 
@@ -21,8 +20,8 @@
     <artifactId>simplehttpserver</artifactId>
     <version>03.06.05</version>
 
-    <name>${github.repository}</name>
-    <description>${github.repository.description}</description>
+    <name>simplehttpserver</name>
+    <description>📕 SimpleHttpServer :: Simplified implementation of the sun http server :: Simplified handlers to execute complex operations</description>
     <url>https://github.com/${github.organization}/${github.repository}</url>
 
     <licenses>
