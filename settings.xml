@@ -11,6 +11,12 @@
             <id>github</id>
             <repositories>
                 <repository>
+                    <id>central</id>
+                    <url>https://repo1.maven.org/maven2</url>
+                    <releases><enabled>true</enabled></releases>
+                    <snapshots><enabled>false</enabled></snapshots>
+                </repository>
+                <repository>
                     <id>github</id>
                     <name>GitHub Ktt-Development Apache Maven Packages</name>
                     <url>https://maven.pkg.github.com/Ktt-Development</url>
