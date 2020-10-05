@@ -19,16 +19,6 @@ jobs:
       - name: 📦 Build with Maven
         run: mvn -B package --file pom.xml
 
-      - name: 📦 Upload artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: simplehttpserver
-          path: |
-            **/target/pom.xml
-            **/target/*.jar
-            **/target/*.md5
-            **/target/*.sha1
-
       - name: 🚀 Deploy to Releases
         uses: AButler/upload-release-assets@v2.0
         with:
