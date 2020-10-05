@@ -16,11 +16,13 @@ jobs:
           version: '11'
           architecture: x64
 
-      - name: 🚀 Deploy to Maven Central
-        run: mvn -B deploy
-        env:
-          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
+      - name: 🚀 Deploy to Maven
+        uses: samuelmeuli/action-maven-publish@v1
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          gpg_passphrase: ${{ secrets.GPG_PASSPHRASE }}
+          nexus_username: ${{ secrets.OSSRH_USERNAME }}
+          nexus_password: ${{ secrets.OSSRH_TOKEN }}
 
       - name: 🚀 Deploy to Releases
         uses: AButler/upload-release-assets@v2.0
