@@ -16,11 +16,11 @@ jobs:
           version: '11'
           architecture: x64
 
-      - name: 🚀 Deploy to GitHub Packages
-        run: mvn -B -s settings.xml -f pom.xml deploy
+      - name: 🚀 Deploy to Maven Central
+        run: mvn -B deploy
         env:
-          GITHUB_USERNAME: Katsute
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
 
       - name: 🚀 Deploy to Releases
         uses: AButler/upload-release-assets@v2.0
