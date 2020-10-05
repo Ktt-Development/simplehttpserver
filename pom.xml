@@ -17,8 +17,7 @@
         <developerConnection>scm:git:git@github.com:Ktt-Development/simplehttpserver.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
-
-
+    
     <distributionManagement>
         <repository>
           <id>github</id>
