@@ -23,7 +23,7 @@ jobs:
           architecture: x64
 
       - name: 🚀 Deploy to Maven
-        run: mvn -B deploy
+        run: mvn -B deploy -f pom.xml -s settings.xml
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
