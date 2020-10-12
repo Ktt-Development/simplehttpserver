@@ -133,7 +133,6 @@ class DirectoryEntry {
         }
     }
 
-
     private final Map<Path,AtomicBoolean> watchService = new ConcurrentHashMap<>();
 
     private void createWatchService(final Path path, final Consumer<WatchEvent<?>> consumer) throws IOException{

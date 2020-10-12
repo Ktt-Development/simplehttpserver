@@ -243,7 +243,6 @@ final class SimpleHttpsServerImpl extends SimpleHttpsServer {
         return targetContext;
     }
 
-
     //
 
     @Override

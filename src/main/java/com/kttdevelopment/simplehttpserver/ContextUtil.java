@@ -9,7 +9,6 @@ package com.kttdevelopment.simplehttpserver;
  */
 public abstract class ContextUtil {
 
-
     /**
      * Generates a uniform context with forward slashes removing any consecutive slashes.
      *

@@ -151,7 +151,6 @@ public class FileHandler implements SimpleHttpHandler {
         addFile("",file,fileName,loadingOption);
     }
 
-
     /**
      * Adds a file to the handler at a specified context.
      *
@@ -245,7 +244,6 @@ public class FileHandler implements SimpleHttpHandler {
 
     //
 
-
     /**
      * Adds multiple files to the handler.
      *
@@ -277,7 +275,6 @@ public class FileHandler implements SimpleHttpHandler {
     public final void addFiles(final File[] files, final ByteLoadingOption loadingOption){
         addFiles("",files,loadingOption);
     }
-
 
     /**
      * Adds multiple files to the handler at a specified context.

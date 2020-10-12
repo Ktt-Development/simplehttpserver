@@ -133,7 +133,6 @@ public final class SimpleHttpServerContextTests {
             Assert.assertEquals("Context [" + root + "] should correct to \"/\"","/",server.createContext(root).getPath());
     }
 
-
     @Test// (expected = IllegalArgumentException.class)
     public final void createDuplicateContext() throws IOException{
         final SimpleHttpServer server = SimpleHttpServer.create();

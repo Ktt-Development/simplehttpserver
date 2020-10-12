@@ -299,7 +299,6 @@ final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
 
 //
 
-
     @Override
     public final Map<String, String> getCookies(){
         return new HashMap<>(cookies);

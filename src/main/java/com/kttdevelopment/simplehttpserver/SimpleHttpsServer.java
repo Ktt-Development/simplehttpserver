@@ -96,7 +96,6 @@ public abstract class SimpleHttpsServer extends SimpleHttpServer {
     @Override
     public abstract HttpsServer getHttpServer();
 
-
 //
 
     /**
