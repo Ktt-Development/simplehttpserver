@@ -6,48 +6,40 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-        <github.organization>Ktt-Development</github.organization>
-
-        <github.repository>simplehttpserver</github.repository>
-        <github.repository.license>GPL-2</github.repository.license>
-        <github.repository.head>main</github.repository.head>
-
-        <github.username>Katsute</github.username>
     </properties>
 
     <groupId>com.kttdevelopment</groupId>
     <artifactId>simplehttpserver</artifactId>
-    <version>03.06.05</version>
+    <version>4.0.0</version>
 
     <name>simplehttpserver</name>
     <description>📕 SimpleHttpServer :: Simplified implementation of the sun http server :: Simplified handlers to execute complex operations</description>
-    <url>https://github.com/${github.organization}/${github.repository}</url>
+    <url>https://github.com/Ktt-Development/simplehttpserver</url>
 
     <licenses>
         <license>
-            <name>${github.repository.license}</name>
+            <name>GPL-2</name>
             <distribution>repo</distribution>
-            <url>https://github.com/${github.organization}/${github.repository}/blob/${github.repository.head}/LICENSE</url>
+            <url>https://github.com/Ktt-Development/simplehttpserver/blob/main/LICENSE</url>
         </license>
     </licenses>
 
     <developers>
         <developer>
-            <name>${github.username}</name>
+            <name>Katsute</name>
             <roles>
                 <role>developer</role>
             </roles>
-            <url>https://github.com/${github.username}</url>
-            <organization>${github.organization}</organization>
-            <organizationUrl>https://github.com/${github.organization}</organizationUrl>
+            <url>https://github.com/Katsute</url>
+            <organization>Ktt-Development</organization>
+            <organizationUrl>https://github.com/Ktt-Development</organizationUrl>
         </developer>
     </developers>
          
     <scm>
-        <url>https://github.com/${github.organization}/${github.repository}.git</url>
-        <connection>scm:git:git@github.com:${github.organization}/${github.repository}.git</connection>
-        <developerConnection>scm:git:git@github.com:${github.organization}/${github.repository}.git</developerConnection>
+        <url>https://github.com/Ktt-Development/simplehttpserver.git</url>
+        <connection>scm:git:git@github.com:Ktt-Development/simplehttpserver.git</connection>
+        <developerConnection>scm:git:git@github.com:Ktt-Development/simplehttpserver.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
 
