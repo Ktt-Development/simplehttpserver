@@ -178,7 +178,7 @@
         <dependency>
             <groupId>com.kttdevelopment.core</groupId>
             <artifactId>test-util</artifactId>
-            <version>076417be59</version>
+            <version>main-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
 
