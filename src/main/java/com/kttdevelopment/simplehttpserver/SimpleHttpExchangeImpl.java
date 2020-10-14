@@ -6,6 +6,7 @@ import com.kttdevelopment.simplehttpserver.var.*;
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.function.Function;
 import java.util.regex.Matcher;
@@ -17,7 +18,7 @@ import java.util.zip.GZIPOutputStream;
  *
  * @see SimpleHttpExchange
  * @since 02.00.00
- * @version 03.05.00
+ * @version 4.0.0
  * @author Ktt Development
  */
 @SuppressWarnings("SpellCheckingInspection")
@@ -388,6 +389,26 @@ final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
     @Override
     public final void send(final String response, final int responseCode, final boolean gzip) throws IOException{
         send(response.getBytes(StandardCharsets.UTF_8),responseCode,gzip);
+    }
+
+    @Override
+    public final void send(final File file) throws IOException{
+        send(Files.readAllBytes(file.toPath()));
+    }
+
+    @Override
+    public final void send(final File file, final boolean gzip) throws IOException{
+        send(Files.readAllBytes(file.toPath()), true);
+    }
+
+    @Override
+    public final void send(final File file, final int responseCode) throws IOException{
+        send(Files.readAllBytes(file.toPath()),responseCode);
+    }
+
+    @Override
+    public final void send(final File file, final int responseCode, final boolean gzip) throws IOException{
+        send(Files.readAllBytes(file.toPath()),responseCode,gzip);
     }
 
     //
