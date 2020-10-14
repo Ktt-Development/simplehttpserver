@@ -1,6 +1,5 @@
 package com.kttdevelopment.simplehttpserver.handlers.file;
 
-import com.kttdevelopment.core.tests.TestUtil;
 import com.kttdevelopment.simplehttpserver.SimpleHttpServer;
 import com.kttdevelopment.simplehttpserver.handler.ByteLoadingOption;
 import com.kttdevelopment.simplehttpserver.handler.FileHandler;
