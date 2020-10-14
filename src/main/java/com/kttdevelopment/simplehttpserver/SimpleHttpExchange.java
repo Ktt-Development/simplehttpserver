@@ -4,8 +4,7 @@ import com.kttdevelopment.simplehttpserver.var.HttpCode;
 import com.kttdevelopment.simplehttpserver.var.RequestMethod;
 import com.sun.net.httpserver.*;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.util.Map;
@@ -46,7 +45,7 @@ import java.util.Map;
  *
  * @see HttpExchange
  * @since 02.00.00
- * @version 03.04.03
+ * @version 4.0.0
  * @author Ktt Development
  */
 @SuppressWarnings("SpellCheckingInspection")
@@ -386,6 +385,10 @@ public abstract class SimpleHttpExchange {
      * @see #send(String, boolean)
      * @see #send(String, int)
      * @see #send(String, int, boolean)
+     * @see #send(File)
+     * @see #send(File, boolean)
+     * @see #send(File, int)
+     * @see #send(File, int, boolean)
      * @since 02.00.00
      * @author Ktt Development
      */
@@ -406,6 +409,10 @@ public abstract class SimpleHttpExchange {
      * @see #send(String, boolean)
      * @see #send(String, int)
      * @see #send(String, int, boolean)
+     * @see #send(File)
+     * @see #send(File, boolean)
+     * @see #send(File, int)
+     * @see #send(File, int, boolean)
      * @since 02.00.00
      * @author Ktt Development
      */
@@ -427,6 +434,10 @@ public abstract class SimpleHttpExchange {
      * @see #send(String, boolean)
      * @see #send(String, int)
      * @see #send(String, int, boolean)
+     * @see #send(File)
+     * @see #send(File, boolean)
+     * @see #send(File, int)
+     * @see #send(File, int, boolean)
      * @since 02.00.00
      * @author Ktt Development
      */
@@ -448,6 +459,10 @@ public abstract class SimpleHttpExchange {
      * @see #send(String, boolean)
      * @see #send(String, int)
      * @see #send(String, int, boolean)
+     * @see #send(File)
+     * @see #send(File, boolean)
+     * @see #send(File, int)
+     * @see #send(File, int, boolean)
      * @since 02.00.00
      * @author Ktt Development
      */
@@ -470,6 +485,10 @@ public abstract class SimpleHttpExchange {
      * @see #send(String, boolean)
      * @see #send(String, int)
      * @see #send(String, int, boolean)
+     * @see #send(File)
+     * @see #send(File, boolean)
+     * @see #send(File, int)
+     * @see #send(File, int, boolean)
      * @since 02.00.00
      * @author Ktt Development
      */
@@ -490,6 +509,10 @@ public abstract class SimpleHttpExchange {
      * @see #send(String, boolean)
      * @see #send(String, int)
      * @see #send(String, int, boolean)
+     * @see #send(File)
+     * @see #send(File, boolean)
+     * @see #send(File, int)
+     * @see #send(File, int, boolean)
      * @since 02.00.00
      * @author Ktt Development
      */
@@ -511,6 +534,10 @@ public abstract class SimpleHttpExchange {
      * @see #send(String)
      * @see #send(String, int)
      * @see #send(String, int, boolean)
+     * @see #send(File)
+     * @see #send(File, boolean)
+     * @see #send(File, int)
+     * @see #send(File, int, boolean)
      * @since 02.00.00
      * @author Ktt Development
      */
@@ -532,6 +559,10 @@ public abstract class SimpleHttpExchange {
      * @see #send(String)
      * @see #send(String, boolean)
      * @see #send(String, int, boolean)
+     * @see #send(File)
+     * @see #send(File, boolean)
+     * @see #send(File, int)
+     * @see #send(File, int, boolean)
      * @since 02.00.00
      * @author Ktt Development
      */
@@ -554,10 +585,114 @@ public abstract class SimpleHttpExchange {
      * @see #send(String)
      * @see #send(String, boolean)
      * @see #send(String, int)
+     * @see #send(File)
+     * @see #send(File, boolean)
+     * @see #send(File, int)
+     * @see #send(File, int, boolean)
      * @since 02.00.00
      * @author Ktt Development
      */
     public abstract void send(final String response, final int responseCode, final boolean gzip) throws IOException;
+
+    /**
+     * Sends a file  to the client.
+     *
+     * @param file file to send
+     * @throws IOException internal server error or file read error
+     *
+     * @see #sendResponseHeaders(int, long)
+     * @see #send(int)
+     * @see #send(byte[])
+     * @see #send(byte[], boolean)
+     * @see #send(byte[], int)
+     * @see #send(byte[], int, boolean)
+     * @see #send(String)
+     * @see #send(String, boolean)
+     * @see #send(String, int)
+     * @see #send(String, int, boolean)
+     * @see #send(File, boolean)
+     * @see #send(File, int)
+     * @see #send(File, int, boolean)
+     * @since 4.0.0
+     * @author Ktt Development
+     */
+    public abstract void send(final File file) throws IOException;
+
+    /**
+     * Sends a file to the client.
+     *
+     * @param file file to send
+     * @param gzip if the response should be gziped before sending it to the client
+     * @throws IOException internal server error or file read error
+     *
+     * @see #sendResponseHeaders(int, long)
+     * @see #send(int)
+     * @see #send(byte[])
+     * @see #send(byte[], boolean)
+     * @see #send(byte[], int)
+     * @see #send(byte[], int, boolean)
+     * @see #send(String)
+     * @see #send(String, boolean)
+     * @see #send(String, int)
+     * @see #send(String, int, boolean)
+     * @see #send(File)
+     * @see #send(File, int)
+     * @see #send(File, int, boolean)
+     * @since 4.0.0
+     * @author Ktt Development
+     */
+    public abstract void send(final File file, final boolean gzip) throws IOException;
+
+    /**
+     * Sends a file with response code to the client.
+     *
+     * @param file file to send
+     * @param responseCode response code
+     * @throws IOException internal server error or file read error
+     *
+     * @see #sendResponseHeaders(int, long)
+     * @see #send(int)
+     * @see #send(byte[])
+     * @see #send(byte[], boolean)
+     * @see #send(byte[], int)
+     * @see #send(byte[], int, boolean)
+     * @see #send(String)
+     * @see #send(String, boolean)
+     * @see #send(String, int)
+     * @see #send(String, int, boolean)
+     * @see #send(File)
+     * @see #send(File, boolean)
+     * @see #send(File, int, boolean)
+     * @since 4.0.0
+     * @author Ktt Development
+     */
+    public abstract void send(final File file, final int responseCode) throws IOException;
+
+    /**
+     * Sends a file with response code to the client.
+     *
+     * @param file file to send
+     * @param responseCode response code
+     * @param gzip if the response should be gziped before sending it to the client
+     * @throws IOException internal server error or file read error
+     *
+     * @see #sendResponseHeaders(int, long)
+     * @see #send(int)
+     * @see #send(byte[])
+     * @see #send(byte[], boolean)
+     * @see #send(byte[], int)
+     * @see #send(byte[], int, boolean)
+     * @see #send(String)
+     * @see #send(String, boolean)
+     * @see #send(String, int)
+     * @see #send(String, int, boolean)
+     * @see #send(File)
+     * @see #send(File, boolean)
+     * @see #send(File, int)
+     * @since 4.0.0
+     * @author Ktt Development
+     */
+    public abstract void send(final File file, final int responseCode, final boolean gzip) throws IOException;
 
 //
 
