@@ -15,7 +15,7 @@ import java.util.concurrent.ExecutionException;
 public final class FileHandlerAddFilesTest {
 
     @Rule
-    public final TemporaryFolder directory = new TemporaryFolder(new File("src/test/resources"));
+    public final TemporaryFolder directory = new TemporaryFolder(new File("."));
 
 
     @Test

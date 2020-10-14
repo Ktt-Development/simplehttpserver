@@ -16,7 +16,7 @@ import java.util.concurrent.ExecutionException;
 public final class FileHandlerWalkTest {
 
     @Rule
-    public final TemporaryFolder directory = new TemporaryFolder(new File("src/test/resources"));
+    public final TemporaryFolder directory = new TemporaryFolder(new File("."));
 
     @Test
     public final void addDirectoryTestsWalk() throws IOException, InterruptedException{
