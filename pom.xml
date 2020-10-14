@@ -158,22 +158,8 @@
         </plugins>
     </build>
 
-    <repositories>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-    </repositories>
-
     <dependencies>
         <!-- tests -->
-        <dependency>
-            <groupId>com.kttdevelopment.core</groupId>
-            <artifactId>test-util</artifactId>
-            <version>main-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

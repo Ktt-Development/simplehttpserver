@@ -1,11 +1,10 @@
 package com.kttdevelopment.simplehttpserver.handlers.file;
 
-import com.kttdevelopment.core.tests.TestUtil;
 import com.kttdevelopment.simplehttpserver.SimpleHttpServer;
 import com.kttdevelopment.simplehttpserver.handler.ByteLoadingOption;
 import com.kttdevelopment.simplehttpserver.handler.FileHandler;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.*;
+import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +17,9 @@ import java.util.concurrent.ExecutionException;
 
 public final class FileHandlerAddTest {
 
+    @Rule
+    public final TemporaryFolder directory = new TemporaryFolder(new File("."));
+
     @SuppressWarnings("SpellCheckingInspection")
     @Test
     public final void addFileTests() throws IOException{
@@ -26,17 +28,19 @@ public final class FileHandlerAddTest {
         final FileHandler handler     = new FileHandler();
         final String context          = "";
 
-        final File dir = new File("src/test/resources/file");
-
         final Map<File,ByteLoadingOption> files = new HashMap<>();
         for(final ByteLoadingOption blop : ByteLoadingOption.values())
-            files.put(new File(dir, blop.name() + ".txt"),blop);
+            files.put(directory.newFile(blop.name()),blop);
 
         // initial write
-        final String init = String.valueOf(System.currentTimeMillis());
+        final String testContent = String.valueOf(System.currentTimeMillis());
         files.forEach((file, loadingOption) -> {
-            TestUtil.createTestFile(file,init);
-            handler.addFile(file, loadingOption);
+            try{
+                Files.write(file.toPath(),testContent.getBytes());
+                handler.addFile(file, loadingOption);
+            }catch(final IOException e){
+                e.printStackTrace();
+            }
         });
 
         server.createContext(context,handler);
@@ -51,7 +55,7 @@ public final class FileHandlerAddTest {
             try{
                 final String response = HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
                     .thenApply(HttpResponse::body).get();
-                Assert.assertEquals("Client data did not match server data for " + file.getName(),init,response);
+                Assert.assertEquals("Client data did not match server data for " + file.getName(),testContent,response);
             }catch(final InterruptedException | ExecutionException ignored){
                 Assert.fail("Failed to read context of " + file.getName());
             }
@@ -69,7 +73,7 @@ public final class FileHandlerAddTest {
                 final String response = HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
                     .thenApply(HttpResponse::body).get();
 
-                Assert.assertEquals("Client data did not match server data for " + file.getName(),loadingOption == ByteLoadingOption.PRELOAD ? init : after,response);
+                Assert.assertEquals("Client data did not match server data for " + file.getName(),loadingOption == ByteLoadingOption.PRELOAD ? testContent : after,response);
             }catch(final InterruptedException | ExecutionException ignored){
                 Assert.fail("Failed to read context " + file.getName());
             }

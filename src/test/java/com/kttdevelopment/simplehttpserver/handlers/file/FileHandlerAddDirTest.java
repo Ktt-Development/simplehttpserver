@@ -1,18 +1,21 @@
 package com.kttdevelopment.simplehttpserver.handlers.file;
 
-import com.kttdevelopment.core.tests.TestUtil;
 import com.kttdevelopment.simplehttpserver.SimpleHttpServer;
 import com.kttdevelopment.simplehttpserver.handler.FileHandler;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.*;
+import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.*;
+import java.nio.file.Files;
 import java.util.concurrent.ExecutionException;
 
 public final class FileHandlerAddDirTest {
+
+    @Rule
+    public final TemporaryFolder directory = new TemporaryFolder(new File("."));
 
     @SuppressWarnings("SpellCheckingInspection")
     @Test
@@ -24,30 +27,32 @@ public final class FileHandlerAddDirTest {
         final String contextWName       = "altn";
         final String dirNewName         = "dirName";
 
-        final String testRealFile   = "test.txt", testFileContent = "readme";
-        final String noReadDir      = "dirnoread";
-        final String noReadFile     = "innerNoRead.txt";
+        final String fileName = "file";
+        final String testContent = String.valueOf(System.currentTimeMillis());
 
-        final File noWalk = new File("src/test/resources/directory/nowalk");
+        final File dir      = directory.getRoot();
+        final File subdir   = directory.newFolder();
 
-        TestUtil.createTestFile(new File(noWalk,testRealFile),testFileContent);
-        TestUtil.createTestFile(new File(new File(noWalk,noReadDir),noReadFile),testFileContent);
+        final File file = new File(directory.getRoot(),fileName);
+        Files.write(file.toPath(),testContent.getBytes());
+        final File walk = new File(subdir,fileName);
+        Files.write(walk.toPath(),testContent.getBytes());
 
         final String context = "";
 
-        handler.addDirectory(noWalk); // test file & directory read
-        handler.addDirectory(contextNoName,noWalk);
-        handler.addDirectory(noWalk,dirNewName);
-        handler.addDirectory(contextWName,noWalk,dirNewName);
+        handler.addDirectory(dir); // test file & directory read
+        handler.addDirectory(contextNoName,dir);
+        handler.addDirectory(dir,dirNewName);
+        handler.addDirectory(contextWName,dir,dirNewName);
 
         server.createContext(context,handler);
         server.start();
 
         final String[] validPathsToTest = { // valid reads
-            noWalk.getName()    + '/' + testRealFile,
-            contextNoName       + '/' + noWalk.getName()  + '/' + testRealFile,
-            dirNewName          + '/' + testRealFile,
-            contextWName        + '/' + dirNewName + '/' + testRealFile
+            dir.getName()       + '/' + "file",
+            contextNoName       + '/' + dir.getName()   + '/' + fileName,
+            dirNewName          + '/' + fileName,
+            contextWName        + '/' + dirNewName      + '/' + fileName
         };
 
         for(final String path : validPathsToTest){
@@ -57,19 +62,21 @@ public final class FileHandlerAddDirTest {
                 .build();
 
             try{
-                final String response = HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
-                    .thenApply(HttpResponse::body).get();
+                final String response = HttpClient.newHttpClient()
+                    .sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                    .thenApply(HttpResponse::body)
+                    .get();
 
                 Assert.assertNotNull("Client did not find data for " + path, response);
-                Assert.assertEquals("Client data did not match server data for " + path,testFileContent,response);
+                Assert.assertEquals("Client data did not match server data for " + path,testContent,response);
             }catch(final ExecutionException ignored){
                 Assert.fail("Client did not find data for " + path);
             }
         }
 
         final String[] invalidPathsToTest = {
-            noWalk.getName() + '/' + noReadDir,
-            noWalk.getName() + '/' + noReadDir + '/' + noReadFile
+            dir.getName() + '/' + subdir.getName(),
+            dir.getName() + '/' + subdir.getName() + '/' + fileName
         };
 
         for(final String path : invalidPathsToTest){
@@ -80,8 +87,10 @@ public final class FileHandlerAddDirTest {
 
             Exception exception = null;
             try{
-                final String response = HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
-                    .thenApply(HttpResponse::body).get();
+                final String response = HttpClient.newHttpClient()
+                    .sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                    .thenApply(HttpResponse::body)
+                    .get();
 
                 Assert.assertNull("Client found data for blocked path " + path,response);
             }catch(final ExecutionException e){

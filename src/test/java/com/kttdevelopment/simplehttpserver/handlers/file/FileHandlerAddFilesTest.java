@@ -1,11 +1,10 @@
 package com.kttdevelopment.simplehttpserver.handlers.file;
 
-import com.kttdevelopment.core.tests.TestUtil;
 import com.kttdevelopment.simplehttpserver.SimpleHttpServer;
 import com.kttdevelopment.simplehttpserver.handler.FileHandler;
 import com.kttdevelopment.simplehttpserver.handler.FileHandlerAdapter;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.*;
+import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +13,10 @@ import java.net.http.*;
 import java.util.concurrent.ExecutionException;
 
 public final class FileHandlerAddFilesTest {
+
+    @Rule
+    public final TemporaryFolder directory = new TemporaryFolder(new File("."));
+
 
     @Test
     public final void addFilesTests() throws IOException, ExecutionException, InterruptedException{
@@ -35,12 +38,9 @@ public final class FileHandlerAddFilesTest {
         final FileHandler handler = new FileHandler(adapter);
 
         final File[] files = new File[]{
-            new File("src/test/resources/files/test.txt"),
-            new File("src/test/resources/files/test2.txt")
+            directory.newFile(),
+            directory.newFile()
         };
-
-        for(final File file : files)
-            TestUtil.createTestFile(file);
 
         handler.addFiles(files);
         handler.addFiles(altContext,files);
@@ -52,7 +52,7 @@ public final class FileHandlerAddFilesTest {
         for(final File file : files){
             final String url = "http://localhost:" + port + context;
             HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url + "/" + file.getName().substring(0, file.getName().lastIndexOf('.'))))
+                .uri(URI.create(url + '/' + file.getName().substring(0, file.getName().lastIndexOf('.'))))
                 .build();
 
             String response = HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
@@ -64,7 +64,7 @@ public final class FileHandlerAddFilesTest {
 
             final String altUrl = "http://localhost:" + port + altContext;
             request = HttpRequest.newBuilder()
-                .uri(URI.create(altUrl + "/" + file.getName().substring(0,file.getName().lastIndexOf('.'))))
+                .uri(URI.create(altUrl + '/' + file.getName().substring(0,file.getName().lastIndexOf('.'))))
                 .build();
 
             response = HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
@@ -74,7 +74,6 @@ public final class FileHandlerAddFilesTest {
         }
 
         server.stop();
-
     }
 
 }
