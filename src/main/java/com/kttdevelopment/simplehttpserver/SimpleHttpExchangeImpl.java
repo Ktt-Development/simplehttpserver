@@ -177,14 +177,20 @@ final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
                         );
                     }
                 }
-                final Map<String,Record> form_buffer = new HashMap<>();
-                try{ // try to map as file record first
-                    ((Map<String,Map>) postMap_buffer).entrySet().forEach(e -> form_buffer.put(e.getKey(), new FileRecord(e)));
-                }catch(final NullPointerException ignored){
-                    try{ // try to map as standard record next
-                        ((Map<String, Map>) postMap_buffer).entrySet().forEach(e -> form_buffer.put(e.getKey(), new Record(e)));
-                    }catch(final NullPointerException ignored2){ } // assume its not a multipart/form-data in else cases
-                }catch(final ClassCastException ignored){ }
+                Map<String,Record> form_buffer = new HashMap<>();
+                for(final Map.Entry<String,Map> e : ((Map<String, Map>) postMap_buffer).entrySet()){
+                     try{ // try to map as file record first
+                        form_buffer.put(e.getKey(), new FileRecord(e));
+                    }catch(final NullPointerException ignored){
+                        try{ // try to map a standard record next
+                            form_buffer.put(e.getKey(), new Record(e));
+                        }catch(final NullPointerException ignored2){}
+                    }catch(final ClassCastException ignored){
+                        form_buffer = Collections.emptyMap();
+                        break;
+                    }
+                }
+
                 postMap = Collections.unmodifiableMap(postMap_buffer);
                 multipartFormData = form_buffer.isEmpty() ? null : new MultipartFormData(form_buffer);
             }else{

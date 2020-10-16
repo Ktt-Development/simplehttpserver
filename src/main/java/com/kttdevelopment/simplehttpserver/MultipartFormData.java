@@ -42,7 +42,7 @@ public class MultipartFormData {
      * @since 4.0.0
      * @author Ktt Development
      */
-    public final Record get(final String key){
+    public final Record getRecord(final String key){
         return records.get(key);
     }
 
