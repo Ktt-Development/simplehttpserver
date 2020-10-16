@@ -39,7 +39,7 @@ public final class SimpleHttpServerContextTests {
         final SimpleHttpServer server = SimpleHttpServer.create();
 
         Assertions.assertThrows(NullPointerException.class, () -> server.removeContext((String) null), "Null string context should throw NPE");
-        Assertions.assertThrows(NullPointerException.class, () -> server.removeContext(""), "Server should throw IllegalArgumentException when removing a context that doesn't exist");
+        Assertions.assertThrows(IllegalArgumentException.class, () -> server.removeContext(""), "Server should throw IllegalArgumentException when removing a context that doesn't exist");
     }
 
     @Test
@@ -106,7 +106,7 @@ public final class SimpleHttpServerContextTests {
         final String[] roots = {"/","\\",""};
 
         for(final String root : roots)
-            Assertions.assertEquals(server.createContext(root).getPath(), "Context [" + root + "] should correct to \"/\"","/");
+            Assertions.assertEquals("/", server.createContext(root).getPath(), "Context [" + root + "] should correct to \"/\"");
     }
 
     @Test// (expected = IllegalArgumentException.class)

@@ -40,8 +40,8 @@ public final class FileHandlerAddFilesTest {
 
         @SuppressWarnings("DuplicateExpressions") // multiple files needed
         final File[] files = new File[]{
-            new File(dir, UUID.randomUUID().toString()),
-            new File(dir, UUID.randomUUID().toString())
+            new File(dir, UUID.randomUUID().toString() + ".txt"),
+            new File(dir, UUID.randomUUID().toString() + ".txt")
         };
 
         for(final File file : files)

@@ -69,7 +69,7 @@ public final class FileHandlerAddTest {
                 final String response = HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
                     .thenApply(HttpResponse::body).get();
 
-                Assertions.assertEquals("Client data did not match server data for " + file.getName(), loadingOption == ByteLoadingOption.PRELOAD ? testContent : after, response);
+                Assertions.assertEquals( loadingOption == ByteLoadingOption.PRELOAD ? testContent : after, response, "Client data did not match server data for " + file.getName());
             }catch(final InterruptedException | ExecutionException ignored){
                 Assertions.fail("Failed to read context " + file.getName());
             }
