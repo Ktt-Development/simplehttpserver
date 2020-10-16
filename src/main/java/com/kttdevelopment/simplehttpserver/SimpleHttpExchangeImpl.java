@@ -462,26 +462,26 @@ final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
     @Override
     public String toString(){
         return
-                "SimpleHttpExchange" + '{' +
-                "httpServer" + '=' + httpServer + ", " +
-                "httpExchange" + '=' + httpExchange + ", " +
-                "URI" + '=' + URI + ", " +
-                "publicAddress" + '=' + publicAddr + ", " +
-                "localAddress" + '=' + localAddr + ", " +
-                "httpContext" + '=' + httpContext + ", " +
-                "httpPrincipal" + '=' + httpPrincipal + ", " +
-                "protocol" + '=' + protocol + ", " +
-                "requestHeaders" + '=' + requestHeaders + ", " +
-                "requestMethod" + '=' + requestMethod + ", " +
-                "responseHeaders" + '=' + getResponseHeaders() + ", " +
-                "responseCode" + '=' + getResponseCode() + ", " +
-                "rawGet" + '=' + rawGet + ", " +
-                "getMap" + '=' + getMap + ", " +
-                "hasGet" + '=' + hasGet + ", " +
-                "rawPost" + '=' + rawPost + ", " +
-                "postMap" + '=' + postMap + ", " +
-                "hasPost" + '=' + hasPost + ", " +
-                "cookies" + '=' + cookies +
-                '}';
+            "SimpleHttpExchange"    + '{' +
+            "httpServer"            + '=' + httpServer              + ", " +
+            "httpExchange"          + '=' + httpExchange            + ", " +
+            "URI"                   + '=' + URI                     + ", " +
+            "publicAddress"         + '=' + publicAddr              + ", " +
+            "localAddress"          + '=' + localAddr               + ", " +
+            "httpContext"           + '=' + httpContext             + ", " +
+            "httpPrincipal"         + '=' + httpPrincipal           + ", " +
+            "protocol"              + '=' + '\'' + protocol + '\''  + ", " +
+            "requestHeaders"        + '=' + requestHeaders          + ", " +
+            "requestMethod"         + '=' + requestMethod           + ", " +
+            "responseHeaders"       + '=' + getResponseHeaders()    + ", " +
+            "responseCode"          + '=' + getResponseCode()       + ", " +
+            "rawGet"                + '=' + '\'' + rawGet + '\''    + ", " +
+            "getMap"                + '=' + getMap                  + ", " +
+            "hasGet"                + '=' + hasGet                  + ", " +
+            "rawPost"               + '=' + '\'' + rawPost + '\''   + ", " +
+            "postMap"               + '=' + postMap                 + ", " +
+            "hasPost"               + '=' + hasPost                 + ", " +
+            "cookies"               + '=' + cookies +
+            '}';
     }
 }

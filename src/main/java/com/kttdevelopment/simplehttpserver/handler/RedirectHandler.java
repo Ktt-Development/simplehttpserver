@@ -50,7 +50,7 @@ public class RedirectHandler implements SimpleHttpHandler {
     public String toString(){
         return
             "RedirectHandler"   + '{' +
-            "link"              + '=' +     link +
+            "link"              + '=' + '\'' + link + '\'' +
             '}';
     }
 

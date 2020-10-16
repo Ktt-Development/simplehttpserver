@@ -97,15 +97,15 @@ public class SimpleHttpCookie {
     public String toString(){
         return
             "SimpleHttpCookie"  + '{' +
-            "name"              + '=' +     name        + ", " +
-            "value"             + '=' +     value       + ", " +
-            "expires"           + '=' +     expires     + ", " +
-            "maxAge"            + '=' +     maxAge      + ", " +
-            "domain"            + '=' +     domain      + ", " +
-            "path"              + '=' +     path        + ", " +
-            "secure"            + '=' +     secure      + ", " +
-            "httpOnly"          + '=' +     httpOnly    + ", " +
-            "sameSite"          + '=' +     sameSite    +
+            "name"              + '=' + '\'' + name + '\''      + ", " +
+            "value"             + '=' + '\'' + value + '\''     + ", " +
+            "expires"           + '=' + expires                 + ", " +
+            "maxAge"            + '=' + maxAge                  + ", " +
+            "domain"            + '=' + '\'' + domain + '\''    + ", " +
+            "path"              + '=' + '\'' + path + '\''      + ", " +
+            "secure"            + '=' + secure                  + ", " +
+            "httpOnly"          + '=' + httpOnly                + ", " +
+            "sameSite"          + '=' + '\'' + sameSite + '\''  +
             '}';
     }
 
