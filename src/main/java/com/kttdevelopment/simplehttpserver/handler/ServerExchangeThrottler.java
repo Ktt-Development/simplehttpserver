@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class ServerExchangeThrottler extends ConnectionThrottler {
 
-    private final Map<InetAddress, AtomicInteger> connections = new ConcurrentHashMap<>();
+    private final Map<InetAddress,AtomicInteger> connections = new ConcurrentHashMap<>();
 
     private final AtomicInteger uConn = new AtomicInteger(0);
     private final AtomicInteger uConnMax = new AtomicInteger(-1);

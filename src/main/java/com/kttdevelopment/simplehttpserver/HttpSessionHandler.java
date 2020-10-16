@@ -14,7 +14,7 @@ import java.util.*;
  */
 public class HttpSessionHandler {
 
-    private final Map<String, HttpSession> sessions = Collections.synchronizedMap(new HashMap<>());
+    private final Map<String,HttpSession> sessions = Collections.synchronizedMap(new HashMap<>());
 
     private final String cookie;
 
@@ -79,7 +79,7 @@ public class HttpSessionHandler {
 
         @SuppressWarnings("SpellCheckingInspection")
         final String rcookies = exchange.getRequestHeaders().getFirst("Cookie");
-        final Map<String, String> cookies = new HashMap<>();
+        final Map<String,String> cookies = new HashMap<>();
 
         if(rcookies != null && !rcookies.isEmpty()){
             final String[] pairs = rcookies.split("; ");

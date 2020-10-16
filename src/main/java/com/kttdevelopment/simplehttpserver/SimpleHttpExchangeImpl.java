@@ -38,7 +38,7 @@ final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
     private final RequestMethod requestMethod;
 
     private final String rawGet;
-    private final Map<String, String> getMap;
+    private final Map<String,String> getMap;
     private final boolean hasGet;
 
     private final String rawPost;
@@ -46,13 +46,13 @@ final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
     private final Map postMap;
     private final boolean hasPost;
 
-    private final Map<String, String> cookies;
+    private final Map<String,String> cookies;
 
     private final OutputStream outputStream;
 
     @SuppressWarnings("FieldCanBeLocal")
-    private final Function<String, Map<String, String>> parseWwwFormEnc = s -> {
-        final LinkedHashMap<String, String> OUT = new LinkedHashMap<>();
+    private final Function<String,Map<String,String>> parseWwwFormEnc = s -> {
+        final LinkedHashMap<String,String> OUT = new LinkedHashMap<>();
         final String[] pairs = s.split("&");
 
         for(final String pair : pairs){
@@ -145,13 +145,13 @@ final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
                 postMap = new HashMap<>();
                 final String[] pairs = OUT.replace(endBoundary,"").split(Pattern.quote(startBoundary));
                 for(String pair : pairs){
-                    final Map<String, Map> postHeaders = new HashMap<>();
+                    final Map<String,Map> postHeaders = new HashMap<>();
                     if(pair.contains("\r\n\r\n")){
                         final String[] headers = pair.substring(0, pair.indexOf("\r\n\r\n")).split("\r\n");
 
                         for (String header : headers) {
                             final Map headerMap = new HashMap<>();
-                            final Map<String, String> val = new HashMap<>();
+                            final Map<String,String> val = new HashMap<>();
 
                             final Matcher headerMatcher = boundaryHeaderPattern.matcher(header);
                             if (headerMatcher.find()) {
@@ -171,7 +171,7 @@ final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
                         row.put("value", pair.substring(pair.indexOf("\r\n\r\n")+4, pair.lastIndexOf("\r\n")));
 
                         postMap.put(
-                            ((HashMap<String, String>) postHeaders.get("Content-Disposition").get("parameters")).get("name"),
+                            ((HashMap<String,String>) postHeaders.get("Content-Disposition").get("parameters")).get("name"),
                             row
                         );
                     }
@@ -260,7 +260,7 @@ final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
     }
 
     @Override
-    public final Map<String, String> getGetMap(){
+    public final Map<String,String> getGetMap(){
         return getMap;
     }
 
@@ -301,7 +301,7 @@ final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
 //
 
     @Override
-    public final Map<String, String> getCookies(){
+    public final Map<String,String> getCookies(){
         return new HashMap<>(cookies);
     }
 

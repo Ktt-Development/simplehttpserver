@@ -23,7 +23,7 @@ final class SimpleHttpServerImpl extends SimpleHttpServer {
 
     private HttpSessionHandler sessionHandler;
 
-    private final Map<HttpContext, HttpHandler> contexts = new HashMap<>();
+    private final Map<HttpContext,HttpHandler> contexts = new HashMap<>();
 
     private boolean running = false;
 
@@ -196,7 +196,7 @@ final class SimpleHttpServerImpl extends SimpleHttpServer {
 
     @Override
     public final HttpHandler getContextHandler(final String context){
-        for(final Map.Entry<HttpContext, HttpHandler> entry : contexts.entrySet())
+        for(final Map.Entry<HttpContext,HttpHandler> entry : contexts.entrySet())
             if(entry.getKey().getPath().equals(ContextUtil.getContext(context, true, false)))
                 return entry.getValue();
         return null;
@@ -208,7 +208,7 @@ final class SimpleHttpServerImpl extends SimpleHttpServer {
     }
 
     @Override
-    public final Map<HttpContext, HttpHandler> getContexts(){
+    public final Map<HttpContext,HttpHandler> getContexts(){
         return new HashMap<>(contexts);
     }
 

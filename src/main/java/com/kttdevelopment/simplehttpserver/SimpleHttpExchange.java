@@ -220,7 +220,7 @@ public abstract class SimpleHttpExchange {
      * @since 02.00.00
      * @author Ktt Development
      */
-    public abstract Map<String, String> getGetMap();
+    public abstract Map<String,String> getGetMap();
 
     /**
      * Returns if there is a GET request.
@@ -312,7 +312,7 @@ public abstract class SimpleHttpExchange {
      * @since 02.00.00
      * @author Ktt Development
      */
-    public abstract Map<String, String> getCookies();
+    public abstract Map<String,String> getCookies();
 
     /**
      * Sets a cookie in the response header.

@@ -28,7 +28,7 @@ public final class FileHandlerAddTest {
         final FileHandler handler     = new FileHandler();
         final String context          = "";
 
-        final Map<File, ByteLoadingOption> files = new HashMap<>();
+        final Map<File,ByteLoadingOption> files = new HashMap<>();
         for(final ByteLoadingOption blop : ByteLoadingOption.values())
             files.put(new File(dir, blop.name()), blop);
 

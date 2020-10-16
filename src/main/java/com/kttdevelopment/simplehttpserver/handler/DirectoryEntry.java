@@ -29,7 +29,7 @@ class DirectoryEntry {
     private final ByteLoadingOption loadingOption;
     private final boolean isWalkthrough;
 
-    private final Map<String, FileEntry> preloadedFiles = new ConcurrentHashMap<>(); // preload/watch-load only
+    private final Map<String,FileEntry> preloadedFiles = new ConcurrentHashMap<>(); // preload/watch-load only
     private final Path directoryPath;
 
     /**
@@ -133,7 +133,7 @@ class DirectoryEntry {
         }
     }
 
-    private final Map<Path, AtomicBoolean> watchService = new ConcurrentHashMap<>();
+    private final Map<Path,AtomicBoolean> watchService = new ConcurrentHashMap<>();
 
     private void createWatchService(final Path path, final Consumer<WatchEvent<?>> consumer) throws IOException{
         final WatchService service = FileSystems.getDefault().newWatchService();
@@ -220,7 +220,7 @@ class DirectoryEntry {
      * @since 02.00.00
      * @author Ktt Development
      */
-    public Map<String, FileEntry> getPreloadedFiles(){
+    public Map<String,FileEntry> getPreloadedFiles(){
         return Collections.unmodifiableMap(preloadedFiles);
     }
 

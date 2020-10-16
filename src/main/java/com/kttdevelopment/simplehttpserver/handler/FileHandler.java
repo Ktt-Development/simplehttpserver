@@ -31,8 +31,8 @@ public class FileHandler implements SimpleHttpHandler {
 
     private final FileHandlerAdapter adapter;
 
-    private final Map<String, FileEntry> files = new ConcurrentHashMap<>();
-    private final Map<String, DirectoryEntry> directories = new ConcurrentHashMap<>();
+    private final Map<String,FileEntry> files = new ConcurrentHashMap<>();
+    private final Map<String,DirectoryEntry> directories = new ConcurrentHashMap<>();
 
     /**
      * Creates a file handler without a {@link FileHandlerAdapter}. This will use the files name and bytes.

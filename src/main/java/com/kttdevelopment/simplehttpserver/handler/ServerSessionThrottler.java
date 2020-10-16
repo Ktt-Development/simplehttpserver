@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ServerSessionThrottler extends ConnectionThrottler{
 
     private final HttpSessionHandler sessionHandler;
-    private final Map<HttpSession, AtomicInteger> connections = new ConcurrentHashMap<>();
+    private final Map<HttpSession,AtomicInteger> connections = new ConcurrentHashMap<>();
 
     private final AtomicInteger uConn = new AtomicInteger(0);
     private final AtomicInteger uConnMax = new AtomicInteger(-1);

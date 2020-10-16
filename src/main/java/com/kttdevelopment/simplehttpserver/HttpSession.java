@@ -13,7 +13,7 @@ import java.util.HashMap;
  */
 public abstract class HttpSession {
 
-    static final HashMap<String, HttpSession> sessions = new HashMap<>();
+    static final HashMap<String,HttpSession> sessions = new HashMap<>();
 
     /**
      * Creates an empty {@link HttpSession}. Sessions are usually created by {@link HttpSessionHandler#getSession(HttpExchange)}.
