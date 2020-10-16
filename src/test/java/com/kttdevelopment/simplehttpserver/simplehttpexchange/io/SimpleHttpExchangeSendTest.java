@@ -3,21 +3,23 @@ package com.kttdevelopment.simplehttpserver.simplehttpexchange.io;
 import com.kttdevelopment.simplehttpserver.SimpleHttpHandler;
 import com.kttdevelopment.simplehttpserver.SimpleHttpServer;
 import com.kttdevelopment.simplehttpserver.var.HttpCode;
-import org.junit.*;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.*;
 import java.nio.file.Files;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 @SuppressWarnings("OptionalGetWithoutIsPresent")
 public class SimpleHttpExchangeSendTest {
 
-    @Rule
-    public final TemporaryFolder directory = new TemporaryFolder(new File("."));
+    @TempDir
+    public final File dir = new File(UUID.randomUUID().toString());
 
     @Test
     public final void sendTest() throws IOException{
@@ -37,7 +39,7 @@ public class SimpleHttpExchangeSendTest {
         server.createContext("string", (SimpleHttpHandler) exchange -> exchange.send(testContent));
         server.createContext("string/gzip", (SimpleHttpHandler) exchange -> exchange.send(testContent,true));
 
-        final File testFile = directory.newFile();
+        final File testFile = new File(dir, UUID.randomUUID().toString());
         Files.write(testFile.toPath(),testContent.getBytes());
         server.createContext("file", (SimpleHttpHandler) exchange -> exchange.send(testFile));
         server.createContext("file/gzip", (SimpleHttpHandler) exchange -> exchange.send(testFile,true));
@@ -55,9 +57,9 @@ public class SimpleHttpExchangeSendTest {
                 final int response = HttpClient.newHttpClient()
                     .sendAsync(request, HttpResponse.BodyHandlers.ofString())
                     .thenApply(HttpResponse::statusCode).get();
-                Assert.assertEquals("Client data did not match server data for " + url, testCode, response);
+                Assertions.assertEquals(testCode, response, "Client data did not match server data for " + url);
             }catch(final InterruptedException | ExecutionException ignored){
-                Assert.fail("Failed to read context for " + url);
+                Assertions.fail("Failed to read context for " + url);
             }
         }
 
@@ -72,9 +74,9 @@ public class SimpleHttpExchangeSendTest {
                 final String response = HttpClient.newHttpClient()
                     .sendAsync(request, HttpResponse.BodyHandlers.ofString())
                     .thenApply(HttpResponse::body).get();
-                Assert.assertEquals("Client data did not match server data for " + url, testContent, response);
+                Assertions.assertEquals( testContent, response, "Client data did not match server data for " + url);
             }catch(final InterruptedException | ExecutionException ignored){
-                Assert.fail("Failed to read context for " + url);
+                Assertions.fail("Failed to read context for " + url);
             }
         }
 
@@ -90,9 +92,9 @@ public class SimpleHttpExchangeSendTest {
                 final HttpHeaders response = HttpClient.newHttpClient()
                     .sendAsync(request, HttpResponse.BodyHandlers.ofString())
                     .thenApply(HttpResponse::headers).get();
-                Assert.assertEquals("Client data did not match server data for " + url, "gzip", response.firstValue("Content-Encoding").get());
+                Assertions.assertEquals("gzip", response.firstValue("Content-Encoding").get(), "Client data did not match server data for " + url);
             }catch(final InterruptedException | ExecutionException ignored){
-                Assert.fail("Failed to read context for " + url);
+                Assertions.fail("Failed to read context for " + url);
             }
         }
 
@@ -107,9 +109,9 @@ public class SimpleHttpExchangeSendTest {
                 final String response = HttpClient.newHttpClient()
                     .sendAsync(request, HttpResponse.BodyHandlers.ofString())
                     .thenApply(HttpResponse::body).get();
-                Assert.assertEquals("Client data did not match server data for " + url, testContent, response);
+                Assertions.assertEquals(testContent, response, "Client data did not match server data for " + url);
             }catch(final InterruptedException | ExecutionException ignored){
-                Assert.fail("Failed to read context for " + url);
+                Assertions.fail("Failed to read context for " + url);
             }
         }
 
@@ -125,9 +127,9 @@ public class SimpleHttpExchangeSendTest {
                 final HttpHeaders response = HttpClient.newHttpClient()
                     .sendAsync(request, HttpResponse.BodyHandlers.ofString())
                     .thenApply(HttpResponse::headers).get();
-                Assert.assertEquals("Client data did not match server data for " + url, "gzip", response.firstValue("Content-Encoding").get());
+                Assertions.assertEquals( "gzip", response.firstValue("Content-Encoding").get(), "Client data did not match server data for " + url);
             }catch(final InterruptedException | ExecutionException ignored){
-                Assert.fail("Failed to read context for " + url);
+                Assertions.fail("Failed to read context for " + url);
             }
         }
 
@@ -142,9 +144,9 @@ public class SimpleHttpExchangeSendTest {
                 final String response = HttpClient.newHttpClient()
                     .sendAsync(request, HttpResponse.BodyHandlers.ofString())
                     .thenApply(HttpResponse::body).get();
-                Assert.assertEquals("Client data did not match server data for " + url, testContent, response);
+                Assertions.assertEquals(testContent, response, "Client data did not match server data for " + url);
             }catch(final InterruptedException | ExecutionException ignored){
-                Assert.fail("Failed to read context for " + url);
+                Assertions.fail("Failed to read context for " + url);
             }
         }
 
@@ -159,9 +161,9 @@ public class SimpleHttpExchangeSendTest {
                 final HttpHeaders response = HttpClient.newHttpClient()
                     .sendAsync(request, HttpResponse.BodyHandlers.ofString())
                     .thenApply(HttpResponse::headers).get();
-                Assert.assertEquals("Client data did not match server data for " + url, "gzip", response.firstValue("Content-Encoding").get());
+                Assertions.assertEquals( "gzip", response.firstValue("Content-Encoding").get(), "Client data did not match server data for " + url);
             }catch(final InterruptedException | ExecutionException ignored){
-                Assert.fail("Failed to read context for " + url);
+                Assertions.fail("Failed to read context for " + url);
             }
         }
 

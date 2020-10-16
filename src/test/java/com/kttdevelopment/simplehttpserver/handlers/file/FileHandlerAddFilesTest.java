@@ -5,18 +5,19 @@ import com.kttdevelopment.simplehttpserver.handler.FileHandler;
 import com.kttdevelopment.simplehttpserver.handler.FileHandlerAdapter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.*;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 public final class FileHandlerAddFilesTest {
 
-    @Rule
-    public final TemporaryFolder directory = new TemporaryFolder(new File("."));
-
+    @TempDir
+    public final File dir = new File(UUID.randomUUID().toString());
 
     @Test
     public final void addFilesTests() throws IOException, ExecutionException, InterruptedException{
@@ -37,10 +38,14 @@ public final class FileHandlerAddFilesTest {
         };
         final FileHandler handler = new FileHandler(adapter);
 
+        @SuppressWarnings("DuplicateExpressions") // multiple files needed
         final File[] files = new File[]{
-            directory.newFile(),
-            directory.newFile()
+            new File(dir, UUID.randomUUID().toString()),
+            new File(dir, UUID.randomUUID().toString())
         };
+
+        for(final File file : files)
+            Assertions.assertTrue(file.createNewFile());
 
         handler.addFiles(files);
         handler.addFiles(altContext,files);

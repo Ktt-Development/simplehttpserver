@@ -2,22 +2,22 @@ package com.kttdevelopment.simplehttpserver.handlers.file;
 
 import com.kttdevelopment.simplehttpserver.SimpleHttpServer;
 import com.kttdevelopment.simplehttpserver.handler.FileHandler;
-import org.junit.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.*;
 import java.nio.file.Files;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 public final class FileHandlerAddDirTest {
 
-    @Rule
-    public final TemporaryFolder directory = new TemporaryFolder(new File("."));
+    @TempDir
+    public final File dir = new File(UUID.randomUUID().toString());
 
     @SuppressWarnings("SpellCheckingInspection")
     @Test
@@ -32,10 +32,10 @@ public final class FileHandlerAddDirTest {
         final String fileName = "file";
         final String testContent = String.valueOf(System.currentTimeMillis());
 
-        final File dir      = directory.getRoot();
-        final File subdir   = directory.newFolder();
+        final File subdir   = new File(dir, UUID.randomUUID().toString());
+        Assertions.assertTrue(subdir.exists() || subdir.mkdirs());
 
-        final File file = new File(directory.getRoot(),fileName);
+        final File file = new File(dir,fileName);
         Files.write(file.toPath(),testContent.getBytes());
         final File walk = new File(subdir,fileName);
         Files.write(walk.toPath(),testContent.getBytes());
@@ -98,7 +98,7 @@ public final class FileHandlerAddDirTest {
             }catch(final ExecutionException e){
                 exception = e;
             }
-            Assertions.assertNotNull("Client found data for blocked path",exception);
+            Assertions.assertNotNull(exception, "Client found data for blocked path");
         }
 
         server.stop();
