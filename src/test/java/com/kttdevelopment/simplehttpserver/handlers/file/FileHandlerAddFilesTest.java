@@ -38,7 +38,7 @@ public final class FileHandlerAddFilesTest {
         };
         final FileHandler handler = new FileHandler(adapter);
 
-        @SuppressWarnings("DuplicateExpressions") // multiple files needed
+        @SuppressWarnings({"DuplicateExpressions", "RedundantSuppression"}) // multiple unique files needed
         final File[] files = new File[]{
             new File(dir, UUID.randomUUID().toString() + ".txt"),
             new File(dir, UUID.randomUUID().toString() + ".txt")

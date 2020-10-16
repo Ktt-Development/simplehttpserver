@@ -44,6 +44,7 @@ final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
     private final String rawPost;
     @SuppressWarnings("rawtypes")
     private final Map postMap;
+    private final MultipartFormData multipartFormData;
     private final boolean hasPost;
 
     private final Map<String,String> cookies;
@@ -119,7 +120,7 @@ final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
         }
     //
         hasGet = (rawGet = URI.getQuery()) != null;
-        getMap = hasGet ? parseWwwFormEnc.apply(rawGet) : new HashMap<>();
+        getMap = hasGet ? Collections.unmodifiableMap(parseWwwFormEnc.apply(rawGet)) : new HashMap<>();
 
     //
         String OUT;
@@ -142,19 +143,19 @@ final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
                 final String startBoundary = "--" + webkitBoundary + "\r\n";
                 final String endBoundary = "--" + webkitBoundary + "--\r\n"; // the final boundary in the request
 
-                postMap = new HashMap<>();
+                final Map postMap_buffer = new HashMap<>();
                 final String[] pairs = OUT.replace(endBoundary,"").split(Pattern.quote(startBoundary));
                 for(String pair : pairs){
                     final Map<String,Map> postHeaders = new HashMap<>();
                     if(pair.contains("\r\n\r\n")){
                         final String[] headers = pair.substring(0, pair.indexOf("\r\n\r\n")).split("\r\n");
 
-                        for (String header : headers) {
+                        for(String header : headers){
                             final Map headerMap = new HashMap<>();
                             final Map<String,String> val = new HashMap<>();
 
                             final Matcher headerMatcher = boundaryHeaderPattern.matcher(header);
-                            if (headerMatcher.find()) {
+                            if(headerMatcher.find()){
                                 final Matcher contentDispositionKVPMatcher = contentDispositionKVPPattern.matcher(headerMatcher.group(3));
                                 while (contentDispositionKVPMatcher.find())
                                     val.put(contentDispositionKVPMatcher.group(1), contentDispositionKVPMatcher.group(2));
@@ -170,29 +171,47 @@ final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
                         row.put("headers", postHeaders);
                         row.put("value", pair.substring(pair.indexOf("\r\n\r\n")+4, pair.lastIndexOf("\r\n")));
 
-                        postMap.put(
-                            ((HashMap<String,String>) postHeaders.get("Content-Disposition").get("parameters")).get("name"),
+                        postMap_buffer.put(
+                            ((Map<String,String>) postHeaders.get("Content-Disposition").get("parameters")).get("name"),
                             row
                         );
                     }
                 }
+                Map<String,Record> form_buffer = new HashMap<>();
+                for(final Map.Entry<String,Map> e : ((Map<String, Map>) postMap_buffer).entrySet()){
+                     try{ // try to map as file record first
+                        form_buffer.put(e.getKey(), new FileRecord(e));
+                    }catch(final NullPointerException ignored){
+                        try{ // try to map a standard record next
+                            form_buffer.put(e.getKey(), new Record(e));
+                        }catch(final NullPointerException ignored2){}
+                    }catch(final ClassCastException ignored){
+                        form_buffer = Collections.emptyMap();
+                        break;
+                    }
+                }
+
+                postMap = Collections.unmodifiableMap(postMap_buffer);
+                multipartFormData = form_buffer.isEmpty() ? null : new MultipartFormData(form_buffer);
             }else{
-                postMap = parseWwwFormEnc.apply(rawPost);
+                postMap = Collections.unmodifiableMap(parseWwwFormEnc.apply(rawPost));
+                multipartFormData = null;
             }
         }else{
-            postMap = new HashMap();
+            postMap = Collections.emptyMap();
+            multipartFormData = null;
         }
 
         final String rawCookie = requestHeaders.getFirst("Cookie");
-        cookies = new HashMap<>();
+        final Map<String,String> cookie_buffer = new HashMap<>();
         if(rawCookie != null && !rawCookie.isEmpty()){
             final String[] cookedCookie = rawCookie.split("; "); // pair
             for(final String pair : cookedCookie){
                 String[] value = pair.split("=");
-                cookies.put(value[0], value[1]);
+                cookie_buffer.put(value[0], value[1]);
             }
         }
-
+        cookies = Collections.unmodifiableMap(cookie_buffer);
         outputStream = exchange.getResponseBody();
     }
 
@@ -282,6 +301,11 @@ final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
     }
 
     @Override
+    public final MultipartFormData getMultipartFormData(){
+        return multipartFormData;
+    }
+
+    @Override
     public final boolean hasPost(){
         return hasPost;
     }
@@ -302,7 +326,7 @@ final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
 
     @Override
     public final Map<String,String> getCookies(){
-        return new HashMap<>(cookies);
+        return cookies;
     }
 
     @Override
@@ -438,26 +462,26 @@ final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
     @Override
     public String toString(){
         return
-            "SimpleHttpExchange"    + '{' +
-            "httpServer"            + '=' +     httpServer              + ", " +
-            "httpExchange"          + '=' +     httpExchange            + ", " +
-            "URI"                   + '=' +     URI                     + ", " +
-            "publicAddress"         + '=' +     publicAddr              + ", " +
-            "localAddress"          + '=' +     localAddr               + ", " +
-            "httpContext"           + '=' +     httpContext             + ", " +
-            "httpPrincipal"         + '=' +     httpPrincipal           + ", " +
-            "protocol"              + '=' +     protocol                + ", " +
-            "requestHeaders"        + '=' +     requestHeaders          + ", " +
-            "requestMethod"         + '=' +     requestMethod           + ", " +
-            "responseHeaders"       + '=' +     getResponseHeaders()    + ", " +
-            "responseCode"          + '=' +     getResponseCode()       + ", " +
-            "rawGet"                + '=' +     rawGet                  + ", " +
-            "getMap"                + '=' +     getMap                  + ", " +
-            "hasGet"                + '=' +     hasGet                  + ", " +
-            "rawPost"               + '=' +     rawPost                 + ", " +
-            "postMap"               + '=' +     postMap                 + ", " +
-            "hasPost"               + '=' +     hasPost                 + ", " +
-            "cookies"               + '=' +     cookies                 +
-            '}';
+                "SimpleHttpExchange" + '{' +
+                "httpServer" + '=' + httpServer + ", " +
+                "httpExchange" + '=' + httpExchange + ", " +
+                "URI" + '=' + URI + ", " +
+                "publicAddress" + '=' + publicAddr + ", " +
+                "localAddress" + '=' + localAddr + ", " +
+                "httpContext" + '=' + httpContext + ", " +
+                "httpPrincipal" + '=' + httpPrincipal + ", " +
+                "protocol" + '=' + protocol + ", " +
+                "requestHeaders" + '=' + requestHeaders + ", " +
+                "requestMethod" + '=' + requestMethod + ", " +
+                "responseHeaders" + '=' + getResponseHeaders() + ", " +
+                "responseCode" + '=' + getResponseCode() + ", " +
+                "rawGet" + '=' + rawGet + ", " +
+                "getMap" + '=' + getMap + ", " +
+                "hasGet" + '=' + hasGet + ", " +
+                "rawPost" + '=' + rawPost + ", " +
+                "postMap" + '=' + postMap + ", " +
+                "hasPost" + '=' + hasPost + ", " +
+                "cookies" + '=' + cookies +
+                '}';
     }
 }

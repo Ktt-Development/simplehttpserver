@@ -242,7 +242,8 @@ public abstract class SimpleHttpExchange {
      * @return POST request as a string
      *
      * @see HttpExchange#getRequestBody()
-     * @see #getPostMap()
+     * @see #getPostMap(
+     * @see #getMultipartFormData()
      * @see #hasPost()
      * @since 02.00.00
      * @author Ktt Development
@@ -255,6 +256,7 @@ public abstract class SimpleHttpExchange {
      * @return POST request as a map
      *
      * @see #getRawPost()
+     * @see #getMultipartFormData()
      * @see #hasPost()
      * @since 02.00.00
      * @author Ktt Development
@@ -263,12 +265,27 @@ public abstract class SimpleHttpExchange {
     public abstract Map getPostMap();
 
     /**
+     * Returns a multipart/form-data as an object or null if there is none.
+     *
+     * @return POST request as a multipart/form-data
+     *
+     * @see MultipartFormData
+     * @see #getRawPost()
+     * @see #getPostMap()
+     * @see #hasPost()
+     * @since 4.0.0
+     * @author Ktt Development
+     */
+    public abstract MultipartFormData getMultipartFormData();
+
+    /**
      * Returns if there is a POST request.
      *
      * @return if POST request exists
      *
      * @see #getRawPost()
      * @see #getPostMap()
+     * @see #getMultipartFormData()
      * @since 02.00.00
      * @author Ktt Development
      */
