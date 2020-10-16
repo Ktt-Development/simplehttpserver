@@ -3,8 +3,8 @@ package com.kttdevelopment.simplehttpserver.simplehttpexchange;
 import com.kttdevelopment.simplehttpserver.*;
 import com.kttdevelopment.simplehttpserver.var.HttpCode;
 import com.sun.net.httpserver.HttpContext;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.URI;
@@ -29,7 +29,7 @@ public final class SimpleHttpExchangeReadTests {
 
         final String context = "/";
         final AtomicReference<HttpContext> contextRef = new AtomicReference<>();
-        contextRef.set(server.createContext(context,handler));
+        contextRef.set(server.createContext(context, handler));
         server.start();
 
         String url = "http://localhost:" + port + context;
@@ -37,37 +37,37 @@ public final class SimpleHttpExchangeReadTests {
         final String headerKey = "header_key", headerValue = "header_value";
         HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create(url))
-            .header(headerKey,headerValue)
+            .header(headerKey, headerValue)
             .build();
 
         String response = HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
             .thenApply(HttpResponse::body).get();
 
-        Assert.assertEquals("Response body did not match response sent",exchangeResponse.get(),response);
+        Assertions.assertEquals(response, exchangeResponse.get(), "Response body did not match response sent");
 
         // exchange
         final SimpleHttpExchange exchange = exchangeRef.get();
 
-        Assert.assertEquals("Server from exchange was not equal to server issuing request",server.getHttpServer(),exchange.getHttpServer());
-        Assert.assertNotNull("Native http exchange should not be null",exchange.getHttpExchange());
+        Assertions.assertEquals(server.getHttpServer(), exchange.getHttpServer(), "Server from exchange was not equal to server issuing request");
+        Assertions.assertNotNull(exchange.getHttpExchange(), "Native http exchange should not be null");
 
-        Assert.assertEquals("Request context was not equal to handler context",context,exchange.getURI().getPath());
+        Assertions.assertEquals(context, exchange.getURI().getPath(), "Request context was not equal to handler context");
 
-        Assert.assertNotNull("Client issuing request should not be null",exchange.getPublicAddress());
-        Assert.assertNotNull("Local address should be local address",exchange.getLocalAddress());
+        Assertions.assertNotNull(exchange.getPublicAddress(), "Client issuing request should not be null");
+        Assertions.assertNotNull(exchange.getLocalAddress(), "Local address should be local address");
 
-        Assert.assertEquals("HttpContext from handler should be same as request", contextRef.get(),exchange.getHttpContext());
+        Assertions.assertEquals(contextRef.get(), exchange.getHttpContext(), "HttpContext from handler should be same as request");
 
-        Assert.assertEquals("HttpProtocol should've been HTTP/1.1 for this request","HTTP/1.1",exchange.getProtocol());
+        Assertions.assertEquals("HTTP/1.1", exchange.getProtocol(), "HttpProtocol should've been HTTP/1.1 for this request");
 
-        Assert.assertEquals("Client header did not match exchange header",headerValue,exchange.getRequestHeaders().getFirst(headerKey));
+        Assertions.assertEquals(headerValue, exchange.getRequestHeaders().getFirst(headerKey), "Client header did not match exchange header");
 
-        Assert.assertFalse("Client did not send a GET request",exchange.hasGet());
-        Assert.assertFalse("Client did not send a POST request",exchange.hasPost());
+        Assertions.assertFalse(exchange.hasGet(), "Client did not send a GET request");
+        Assertions.assertFalse(exchange.hasPost(), "Client did not send a POST request");
 
-        Assert.assertEquals("Successful exchange should've sent 200 HTTP OK", HttpCode.HTTP_OK,exchange.getResponseCode());
+        Assertions.assertEquals(HttpCode.HTTP_OK, exchange.getResponseCode(), "Successful exchange should've sent 200 HTTP OK");
 
-        Assert.assertTrue("Client did not send any cookies",exchange.getCookies().isEmpty());
+        Assertions.assertTrue(exchange.getCookies().isEmpty(), "Client did not send any cookies");
 
         server.stop();
     }

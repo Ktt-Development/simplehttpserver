@@ -2,7 +2,8 @@ package com.kttdevelopment.simplehttpserver.handlers;
 
 import com.kttdevelopment.simplehttpserver.SimpleHttpServer;
 import com.kttdevelopment.simplehttpserver.handler.SSEHandler;
-import org.junit.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.*;
 import java.net.URI;
@@ -21,7 +22,7 @@ public final class SSEHandlerTests {
         String context = "";
 
         final SSEHandler handler = new SSEHandler();
-        server.createContext(context,handler);
+        server.createContext(context, handler);
         server.start();
 
         HttpRequest request = HttpRequest.newBuilder()
@@ -43,13 +44,11 @@ public final class SSEHandlerTests {
         final Future<String> future = executor.submit(new Callable() {
             @Override
             public final String call(){
-                String ln;
-                try{
+                Assertions.assertDoesNotThrow(() -> {
+                    String ln;
                     while((ln = IN.readLine()) != null)
                         OUT.append(ln).append('\n');
-                }catch(final IOException ignored){
-                    Assert.fail("Unable to read input stream from client");
-                }
+                }, "Unable to read input stream from client");
                 return OUT.toString();
             }
         });
@@ -61,7 +60,7 @@ public final class SSEHandlerTests {
             future.cancel(true);
         }
 
-        Assert.assertTrue("Client event stream did not match server event",OUT.toString().contains("id: 0\ndata: " + result));
+        Assertions.assertTrue(OUT.toString().contains("id: 0\ndata: " + result), "Client event stream did not match server event");
 
         server.stop();
     }

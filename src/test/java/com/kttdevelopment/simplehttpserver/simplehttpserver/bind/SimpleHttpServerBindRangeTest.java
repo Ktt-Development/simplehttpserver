@@ -1,8 +1,8 @@
 package com.kttdevelopment.simplehttpserver.simplehttpserver.bind;
 
 import com.kttdevelopment.simplehttpserver.SimpleHttpServer;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
@@ -13,24 +13,14 @@ public final class SimpleHttpServerBindRangeTest {
         final int port = 8080;
 
         final SimpleHttpServer server = SimpleHttpServer.create();
+        
+        Assertions.assertThrows(IllegalArgumentException.class, () -> server.bind(-1), "Bind server to bad port (-1) should throw an exception");
+        Assertions.assertThrows(IllegalArgumentException.class, () -> server.bind(65536), "Bind server to bad port (65536) should throw an exception");
 
-        Exception exception = null;
-        try{ server.bind(-1);
-        }catch(final IllegalArgumentException | IOException e){ exception = e; }
-        Assert.assertTrue("Bind server to bad port (-1) should throw an exception", exception instanceof IllegalArgumentException);
+        Assertions.assertDoesNotThrow(() -> server.bind(port),"Bind server to valid port (" + port + ") should not throw an exception");
 
-        exception = null;
-        try{ server.bind(65536);
-        }catch(final IllegalArgumentException | IOException e){ exception = e; }
-        Assert.assertTrue("Bind server to bad port (65536) should throw an exception", exception instanceof IllegalArgumentException);
-
-        exception = null;
-        try{ server.bind(port);
-        }catch(final IllegalArgumentException | IOException e){ exception = e; }
-        Assert.assertNull("Bind server to valid port (" + port + ") should not throw an exception",exception);
-
-        Assert.assertNotNull("Server address should not be null for successful bind",server.getAddress());
-        Assert.assertEquals("Server bind port should equal address port",port,server.getAddress().getPort());
+        Assertions.assertNotNull(server.getAddress(), "Server address should not be null for successful bind");
+        Assertions.assertEquals(port, server.getAddress().getPort(), "Server bind port should equal address port");
     }
 
 }

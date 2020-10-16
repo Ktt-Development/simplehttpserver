@@ -2,21 +2,23 @@ package com.kttdevelopment.simplehttpserver.handlers.file;
 
 import com.kttdevelopment.simplehttpserver.SimpleHttpServer;
 import com.kttdevelopment.simplehttpserver.handler.FileHandler;
-import org.junit.*;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.*;
 import java.nio.file.Files;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 @SuppressWarnings("SpellCheckingInspection")
 public final class FileHandlerWalkTest {
 
-    @Rule
-    public final TemporaryFolder directory = new TemporaryFolder(new File("."));
+    @TempDir
+    public final File dir = new File(UUID.randomUUID().toString());
 
     @Test
     public final void addDirectoryTestsWalk() throws IOException, InterruptedException{
@@ -27,19 +29,19 @@ public final class FileHandlerWalkTest {
         final String fileName       = "file";
         final String testContent    = String.valueOf(System.currentTimeMillis());
 
-        final File dir      = directory.getRoot();
-        final File subdir   = directory.newFolder();
+        final File subdir   = new File(dir, UUID.randomUUID().toString());
+        Assertions.assertTrue(subdir.exists() || subdir.mkdirs());
 
-        final File file = new File(directory.getRoot(),fileName);
+        final File file = new File(dir, fileName);
         Files.write(file.toPath(), testContent.getBytes());
-        final File walk = new File(subdir,fileName);
-        Files.write(walk.toPath(),testContent.getBytes());
+        final File walk = new File(subdir, fileName);
+        Files.write(walk.toPath(), testContent.getBytes());
 
         final String context = "";
 
-        handler.addDirectory(dir,true);
+        handler.addDirectory(dir, true);
 
-        server.createContext(context,handler);
+        server.createContext(context, handler);
         server.start();
 
         final String[] validPathsToTest = { // valid reads
@@ -59,10 +61,10 @@ public final class FileHandlerWalkTest {
                     .thenApply(HttpResponse::body)
                     .get();
 
-                Assert.assertNotNull("Client did not find data for " + path,response);
-                Assert.assertEquals("Client data did not match server data for " + path,testContent,response);
+                Assertions.assertNotNull(response, "Client did not find data for " + path);
+                Assertions.assertEquals(testContent, response, "Client data did not match server data for " + path);
             }catch(final ExecutionException ignored){
-                Assert.fail("Client did not find data for " + path);
+                Assertions.fail("Client did not find data for " + path);
             }
         }
 
@@ -83,11 +85,11 @@ public final class FileHandlerWalkTest {
                     .thenApply(HttpResponse::body)
                     .get();
 
-                Assert.assertNull("Client found data for blocked path " + path,response);
+                Assertions.assertNull(response, "Client found data for blocked path " + path);
             }catch(final ExecutionException e){
                 exception = e;
             }
-            Assert.assertNotNull("Client found data for blocked path",exception);
+            Assertions.assertNotNull(exception, "Client found data for blocked path");
         }
 
         server.stop();

@@ -14,7 +14,7 @@ import java.util.*;
  */
 public class HttpSessionHandler {
 
-    private final Map<String,HttpSession> sessions = Collections.synchronizedMap(new HashMap<>());
+    private final Map<String, HttpSession> sessions = Collections.synchronizedMap(new HashMap<>());
 
     private final String cookie;
 
@@ -60,7 +60,7 @@ public class HttpSessionHandler {
         if(headers.containsKey("Set-Cookie"))
            for(final String value : headers.get("Set-Cookie"))
                if(value.startsWith(cookie + "="))
-                   return value.substring(cookie.length() + 1,value.indexOf(";"));
+                   return value.substring(cookie.length() + 1, value.indexOf(";"));
        return null;
     }
 
@@ -79,13 +79,13 @@ public class HttpSessionHandler {
 
         @SuppressWarnings("SpellCheckingInspection")
         final String rcookies = exchange.getRequestHeaders().getFirst("Cookie");
-        final Map<String,String> cookies = new HashMap<>();
+        final Map<String, String> cookies = new HashMap<>();
 
         if(rcookies != null && !rcookies.isEmpty()){
             final String[] pairs = rcookies.split("; ");
             for(final String pair : pairs){
                 final String[] value = pair.split("=");
-                cookies.put(value[0],value[1]);
+                cookies.put(value[0], value[1]);
             }
         }
 

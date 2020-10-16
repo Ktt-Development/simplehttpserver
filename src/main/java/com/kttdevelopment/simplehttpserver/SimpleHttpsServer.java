@@ -79,7 +79,7 @@ public abstract class SimpleHttpsServer extends SimpleHttpServer {
     * @author Ktt Development
     */
    public static SimpleHttpsServer create(final int port, final int backlog) throws IOException {
-       return SimpleHttpsServerImpl.createSimpleHttpsServer(port,backlog);
+       return SimpleHttpsServerImpl.createSimpleHttpsServer(port, backlog);
    }
 
 //

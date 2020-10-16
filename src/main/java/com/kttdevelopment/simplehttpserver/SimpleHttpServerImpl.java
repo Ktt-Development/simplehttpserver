@@ -23,7 +23,7 @@ final class SimpleHttpServerImpl extends SimpleHttpServer {
 
     private HttpSessionHandler sessionHandler;
 
-    private final Map<HttpContext,HttpHandler> contexts = new HashMap<>();
+    private final Map<HttpContext, HttpHandler> contexts = new HashMap<>();
 
     private boolean running = false;
 
@@ -41,12 +41,12 @@ final class SimpleHttpServerImpl extends SimpleHttpServer {
      * @author Ktt Development
      */
     static SimpleHttpServer createHttpServer(final Integer port, final Integer backlog) throws IOException{
-        return new SimpleHttpServerImpl(port,backlog);
+        return new SimpleHttpServerImpl(port, backlog);
     }
 
     SimpleHttpServerImpl(final Integer port, final Integer backlog) throws IOException{
         if(port != null)
-            server.bind(new InetSocketAddress(port),backlog != null ? backlog : 0);
+            server.bind(new InetSocketAddress(port), backlog != null ? backlog : 0);
     }
 
     private void handle(final HttpExchange exchange){
@@ -79,12 +79,12 @@ final class SimpleHttpServerImpl extends SimpleHttpServer {
 
     @Override
     public synchronized final void bind(final InetSocketAddress addr) throws IOException{
-        server.bind(addr,0);
+        server.bind(addr, 0);
     }
 
     @Override
     public synchronized final void bind(final InetSocketAddress addr, final int backlog) throws IOException{
-        server.bind(addr,backlog);
+        server.bind(addr, backlog);
     }
 
 //
@@ -130,24 +130,24 @@ final class SimpleHttpServerImpl extends SimpleHttpServer {
 
     @Override
     public synchronized final HttpContext createContext(final String context){
-        return createContext(context,HttpExchange::close,null);
+        return createContext(context, HttpExchange::close, null);
     }
 
     @Override
     public synchronized final HttpContext createContext(final String context, final HttpHandler handler){
-        return createContext(context,handler,null);
+        return createContext(context, handler, null);
     }
 
     //
 
     @Override
     public synchronized final HttpContext createContext(final String context, final Authenticator authenticator){
-        return createContext(context,HttpExchange::close,authenticator);
+        return createContext(context, HttpExchange::close, authenticator);
     }
 
     @Override
     public synchronized final HttpContext createContext(final String context, final HttpHandler handler, final Authenticator authenticator){
-        final String ct = ContextUtil.getContext(context,true,false);
+        final String ct = ContextUtil.getContext(context, true, false);
         if(!ct.equals("/") && handler instanceof RootHandler)
             throw new IllegalArgumentException("RootHandler can only be used at the root '/' context");
 
@@ -159,7 +159,7 @@ final class SimpleHttpServerImpl extends SimpleHttpServer {
         final HttpContext hc = server.createContext(ct);
 
         hc.setHandler(wrapper);
-        contexts.put(hc,handler);
+        contexts.put(hc, handler);
 
         if(authenticator != null)
             hc.setAuthenticator(authenticator);
@@ -173,12 +173,12 @@ final class SimpleHttpServerImpl extends SimpleHttpServer {
     @Override
     public synchronized final void removeContext(final String context){
         try{
-            server.removeContext(ContextUtil.getContext(context,true,false));
+            server.removeContext(ContextUtil.getContext(context, true, false));
         }catch(final IllegalArgumentException e){
             throw e;
         }finally{
             for(final HttpContext hc : contexts.keySet()){
-                if(hc.getPath().equalsIgnoreCase(ContextUtil.getContext(context,true,false))){
+                if(hc.getPath().equalsIgnoreCase(ContextUtil.getContext(context, true, false))){
                     contexts.remove(hc);
                     break;
                 }
@@ -197,7 +197,7 @@ final class SimpleHttpServerImpl extends SimpleHttpServer {
     @Override
     public final HttpHandler getContextHandler(final String context){
         for(final Map.Entry<HttpContext, HttpHandler> entry : contexts.entrySet())
-            if(entry.getKey().getPath().equals(ContextUtil.getContext(context,true,false)))
+            if(entry.getKey().getPath().equals(ContextUtil.getContext(context, true, false)))
                 return entry.getValue();
         return null;
     }
@@ -223,9 +223,9 @@ final class SimpleHttpServerImpl extends SimpleHttpServer {
     public synchronized final String getRandomContext(final String context){
         String targetContext;
 
-        final String head = context.isEmpty() ? "" : ContextUtil.getContext(context,true,false);
+        final String head = context.isEmpty() ? "" : ContextUtil.getContext(context, true, false);
 
-        do targetContext = head + ContextUtil.getContext(UUID.randomUUID().toString(),true,false);
+        do targetContext = head + ContextUtil.getContext(UUID.randomUUID().toString(), true, false);
             while(getContextHandler(targetContext) != null);
 
         return targetContext;

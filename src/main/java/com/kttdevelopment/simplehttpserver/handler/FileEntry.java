@@ -35,7 +35,7 @@ class FileEntry {
      * @author Ktt Development
      */
     FileEntry(final File file, final FileBytesAdapter bytesAdapter, final ByteLoadingOption loadingOption){
-        this(file,bytesAdapter,loadingOption,false);
+        this(file, bytesAdapter, loadingOption, false);
     }
 
     /**
@@ -64,7 +64,7 @@ class FileEntry {
                         final WatchService service = FileSystems.getDefault().newWatchService();
                         final Path target = file.toPath();
                         final Path path = file.getParentFile().toPath();
-                        path.register(service,StandardWatchEventKinds.ENTRY_CREATE,StandardWatchEventKinds.ENTRY_DELETE,StandardWatchEventKinds.ENTRY_MODIFY);
+                        path.register(service, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_DELETE, StandardWatchEventKinds.ENTRY_MODIFY);
 
                         new Thread(() -> {
                             WatchKey key;
@@ -75,7 +75,7 @@ class FileEntry {
                                             final Path modified = path.resolve((Path) event.context());
                                             try{
                                                 if(!modified.toFile().isDirectory() && Files.isSameFile(target, modified))
-                                                    preloadedBytes = adapter.getBytes(file,Files.readAllBytes(target));
+                                                    preloadedBytes = adapter.getBytes(file, Files.readAllBytes(target));
                                             }catch(final IOException ignored){ } // don't overwrite if corrupt
                                         }catch(final ClassCastException ignored){ }
                                     }
@@ -88,7 +88,7 @@ class FileEntry {
                     }
             case PRELOAD:
                 try{
-                    preloadedBytes = adapter.getBytes(file,Files.readAllBytes(file.toPath()));
+                    preloadedBytes = adapter.getBytes(file, Files.readAllBytes(file.toPath()));
                 }catch(final Exception ignored){
                     preloadedBytes = null;
                 }
@@ -119,7 +119,7 @@ class FileEntry {
     public final void reloadBytes(){
         if(loadingOption != ByteLoadingOption.LIVELOAD)
             try{
-                preloadedBytes = adapter.getBytes(file,Files.readAllBytes(file.toPath()));
+                preloadedBytes = adapter.getBytes(file, Files.readAllBytes(file.toPath()));
             }catch(final IOException e){
                 preloadedBytes = null;
             }
@@ -139,7 +139,7 @@ class FileEntry {
             return preloadedBytes; // adapter determined preloaded bytes
         else
             try{
-                return adapter.getBytes(file,Files.readAllBytes(file.toPath())); // read and adapt bytes
+                return adapter.getBytes(file, Files.readAllBytes(file.toPath())); // read and adapt bytes
             }catch(final IOException e){
                 return null;
             }

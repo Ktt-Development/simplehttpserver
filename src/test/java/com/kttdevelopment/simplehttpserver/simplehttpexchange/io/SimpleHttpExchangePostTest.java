@@ -3,8 +3,8 @@ package com.kttdevelopment.simplehttpserver.simplehttpexchange.io;
 import com.kttdevelopment.simplehttpserver.*;
 import com.kttdevelopment.simplehttpserver.var.RequestMethod;
 import com.sun.net.httpserver.HttpContext;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.URI;
@@ -29,7 +29,7 @@ public final class SimpleHttpExchangePostTest {
 
         final String context = "";
         final AtomicReference<HttpContext> contextRef = new AtomicReference<>();
-        contextRef.set(server.createContext(context,handler));
+        contextRef.set(server.createContext(context, handler));
         server.start();
 
         final String queryKey = "test", queryValue = "value";
@@ -46,9 +46,9 @@ public final class SimpleHttpExchangePostTest {
         // exchange
         final SimpleHttpExchange exchange = exchangeRef.get();
 
-        Assert.assertEquals("Client request method did not match exchange request method (POST)", RequestMethod.POST, exchange.getRequestMethod());
-        Assert.assertTrue("Exchange was missing client POST map", exchange.hasPost());
-        Assert.assertEquals("Exchange POST did not match client POST", queryValue, exchange.getPostMap().get(queryKey));
+        Assertions.assertEquals(RequestMethod.POST, exchange.getRequestMethod(), "Client request method did not match exchange request method (POST)");
+        Assertions.assertTrue(exchange.hasPost(), "Exchange was missing client POST map");
+        Assertions.assertEquals(queryValue, exchange.getPostMap().get(queryKey), "Exchange POST did not match client POST");
 
         server.stop();
     }

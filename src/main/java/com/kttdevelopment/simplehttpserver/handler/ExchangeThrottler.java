@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class ExchangeThrottler extends ConnectionThrottler {
 
-    private final Map<InetAddress,AtomicInteger> connections = new ConcurrentHashMap<>();
+    private final Map<InetAddress, AtomicInteger> connections = new ConcurrentHashMap<>();
 
     /**
      * Creates a throttler with limits on each exchange.
@@ -38,7 +38,7 @@ public class ExchangeThrottler extends ConnectionThrottler {
         final int maxConn = getMaxConnections(exchange);
 
         if(!connections.containsKey(address))
-            connections.put(address,new AtomicInteger(0));
+            connections.put(address, new AtomicInteger(0));
 
         final AtomicInteger conn = connections.get(address);
 

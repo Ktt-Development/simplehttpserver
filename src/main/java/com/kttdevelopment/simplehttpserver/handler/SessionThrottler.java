@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class SessionThrottler extends ConnectionThrottler {
 
     private final HttpSessionHandler sessionHandler;
-    private final Map<HttpSession,AtomicInteger> connections = new ConcurrentHashMap<>();
+    private final Map<HttpSession, AtomicInteger> connections = new ConcurrentHashMap<>();
     
     /**
      * Creates a throttler that allows no connections.
@@ -42,10 +42,10 @@ public class SessionThrottler extends ConnectionThrottler {
     @Override
     final boolean addConnection(final HttpExchange exchange){
         final HttpSession session = sessionHandler.getSession(exchange);
-        final int maxConn = getMaxConnections(session,exchange);
+        final int maxConn = getMaxConnections(session, exchange);
 
         if(!connections.containsKey(session))
-            connections.put(session,new AtomicInteger(0));
+            connections.put(session, new AtomicInteger(0));
 
         final AtomicInteger conn = connections.get(session);
 
@@ -71,7 +71,7 @@ public class SessionThrottler extends ConnectionThrottler {
 
     @Override
     public final int getMaxConnections(final HttpExchange exchange){
-        return getMaxConnections(sessionHandler.getSession(exchange),exchange);
+        return getMaxConnections(sessionHandler.getSession(exchange), exchange);
     }
 
     /**

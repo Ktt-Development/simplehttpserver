@@ -3,22 +3,22 @@ package com.kttdevelopment.simplehttpserver.handlers.file;
 import com.kttdevelopment.simplehttpserver.SimpleHttpServer;
 import com.kttdevelopment.simplehttpserver.handler.ByteLoadingOption;
 import com.kttdevelopment.simplehttpserver.handler.FileHandler;
-import org.junit.*;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.*;
 import java.nio.file.Files;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 public final class FileHandlerAddTest {
 
-    @Rule
-    public final TemporaryFolder directory = new TemporaryFolder(new File("."));
+    @TempDir
+    public final File dir = new File(UUID.randomUUID().toString());
 
     @SuppressWarnings("SpellCheckingInspection")
     @Test
@@ -28,22 +28,22 @@ public final class FileHandlerAddTest {
         final FileHandler handler     = new FileHandler();
         final String context          = "";
 
-        final Map<File,ByteLoadingOption> files = new HashMap<>();
+        final Map<File, ByteLoadingOption> files = new HashMap<>();
         for(final ByteLoadingOption blop : ByteLoadingOption.values())
-            files.put(directory.newFile(blop.name()),blop);
+            files.put(new File(dir, blop.name()), blop);
 
         // initial write
         final String testContent = String.valueOf(System.currentTimeMillis());
         files.forEach((file, loadingOption) -> {
             try{
-                Files.write(file.toPath(),testContent.getBytes());
+                Files.write(file.toPath(), testContent.getBytes());
                 handler.addFile(file, loadingOption);
             }catch(final IOException e){
                 e.printStackTrace();
             }
         });
 
-        server.createContext(context,handler);
+        server.createContext(context, handler);
         server.start();
 
         files.forEach((file, loadingOption) -> {
@@ -55,27 +55,23 @@ public final class FileHandlerAddTest {
             try{
                 final String response = HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
                     .thenApply(HttpResponse::body).get();
-                Assert.assertEquals("Client data did not match server data for " + file.getName(),testContent,response);
+                Assertions.assertEquals(testContent, response, "Client data did not match server data for " + file.getName());
             }catch(final InterruptedException | ExecutionException ignored){
-                Assert.fail("Failed to read context of " + file.getName());
+                Assertions.fail("Failed to read context of " + file.getName());
             }
 
             // second write
 
             final String after = String.valueOf(System.currentTimeMillis());
-            try{
-                Files.write(file.toPath(), after.getBytes());
-            }catch(final Throwable ignored){
-                Assert.fail("Failed to second write file " + file.getPath());
-            }
+            Assertions.assertDoesNotThrow(() -> Files.write(file.toPath(), after.getBytes()), "Failed to second write file " + file.getPath());
 
             try{
                 final String response = HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
                     .thenApply(HttpResponse::body).get();
 
-                Assert.assertEquals("Client data did not match server data for " + file.getName(),loadingOption == ByteLoadingOption.PRELOAD ? testContent : after,response);
+                Assertions.assertEquals( loadingOption == ByteLoadingOption.PRELOAD ? testContent : after, response, "Client data did not match server data for " + file.getName());
             }catch(final InterruptedException | ExecutionException ignored){
-                Assert.fail("Failed to read context " + file.getName());
+                Assertions.fail("Failed to read context " + file.getName());
             }
         });
 

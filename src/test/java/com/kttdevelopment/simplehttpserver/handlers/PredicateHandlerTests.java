@@ -3,8 +3,8 @@ package com.kttdevelopment.simplehttpserver.handlers;
 import com.kttdevelopment.simplehttpserver.SimpleHttpHandler;
 import com.kttdevelopment.simplehttpserver.SimpleHttpServer;
 import com.kttdevelopment.simplehttpserver.handler.PredicateHandler;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.URI;
@@ -22,10 +22,10 @@ public final class PredicateHandlerTests {
         final boolean condition = System.currentTimeMillis() % 2 == 1;
 
         final String context = "";
-        server.createContext(context,new PredicateHandler((SimpleHttpHandler) exchange -> exchange.send("A"), (SimpleHttpHandler) exchange -> exchange.send("B"), exchange -> condition));
+        server.createContext(context, new PredicateHandler((SimpleHttpHandler) exchange -> exchange.send("A"), (SimpleHttpHandler) exchange -> exchange.send("B"), exchange -> condition));
         server.start();
 
-        Assert.assertFalse("Server did not contain a temporary context", server.getContexts().isEmpty());
+        Assertions.assertFalse(server.getContexts().isEmpty(), "Server did not contain a temporary context");
 
         final String url = "http://localhost:" + port + context;
 
@@ -36,7 +36,7 @@ public final class PredicateHandlerTests {
         final String response = HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
             .thenApply(HttpResponse::body).get();
 
-        Assert.assertEquals("Server response did not match client response", condition ? "A" : "B", response);
+        Assertions.assertEquals(condition ? "A" : "B", response, "Server response did not match client response");
 
         server.stop();
     }
