@@ -269,6 +269,7 @@ public abstract class SimpleHttpExchange {
      *
      * @return POST request as a multipart/form-data
      *
+     * @see MultipartFormData
      * @see #getRawPost()
      * @see #getPostMap()
      * @see #hasPost()
