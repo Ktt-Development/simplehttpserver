@@ -3,8 +3,8 @@ package com.kttdevelopment.simplehttpserver.handlers.file;
 import com.kttdevelopment.simplehttpserver.SimpleHttpServer;
 import com.kttdevelopment.simplehttpserver.handler.FileHandler;
 import com.kttdevelopment.simplehttpserver.handler.FileHandlerAdapter;
-import org.junit.*;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -58,7 +58,7 @@ public final class FileHandlerAddFilesTest {
             String response = HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenApply(HttpResponse::body).get();
 
-            Assert.assertEquals("Adapter bytes did not match client received bytes", override, response);
+            Assertions.assertEquals(override, response, "Adapter bytes did not match client received bytes");
 
             // alt
 
@@ -70,7 +70,7 @@ public final class FileHandlerAddFilesTest {
             response = HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenApply(HttpResponse::body).get();
 
-            Assert.assertEquals("Adapter alt context bytes did not match client received bytes",override,response);
+            Assertions.assertEquals(override, response, "Adapter alt context bytes did not match client received bytes");
         }
 
         server.stop();

@@ -3,8 +3,8 @@ package com.kttdevelopment.simplehttpserver.handlers.predicate;
 import com.kttdevelopment.simplehttpserver.SimpleHttpHandler;
 import com.kttdevelopment.simplehttpserver.SimpleHttpServer;
 import com.kttdevelopment.simplehttpserver.handler.RootHandler;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.URI;
@@ -22,7 +22,7 @@ public final class RootHandlerTest {
         server.createContext(context,new RootHandler((SimpleHttpHandler) exchange -> exchange.send("A"), (SimpleHttpHandler) exchange -> exchange.send("B")));
         server.start();
 
-        Assert.assertFalse("Server did not contain a temporary context", server.getContexts().isEmpty());
+        Assertions.assertFalse(server.getContexts().isEmpty(), "Server did not contain a temporary context");
 
         final String url = "http://localhost:" + port;
 
@@ -33,7 +33,7 @@ public final class RootHandlerTest {
         String response = HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
             .thenApply(HttpResponse::body).get();
 
-        Assert.assertEquals("Server root response did not match client root response","A",response);
+        Assertions.assertEquals("A",response, "Server root response did not match client root response");
 
         request = HttpRequest.newBuilder()
             .uri(URI.create(url + server.getRandomContext()))
@@ -42,7 +42,7 @@ public final class RootHandlerTest {
         response = HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
             .thenApply(HttpResponse::body).get();
 
-        Assert.assertEquals("Server else response did not match client else response","B",response);
+        Assertions.assertEquals("B",response, "Server else response did not match client else response");
 
         server.stop();
     }

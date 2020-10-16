@@ -3,8 +3,8 @@ package com.kttdevelopment.simplehttpserver.handlers.temporary;
 import com.kttdevelopment.simplehttpserver.*;
 import com.kttdevelopment.simplehttpserver.handler.TemporaryHandler;
 import com.sun.net.httpserver.HttpExchange;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.URI;
@@ -23,7 +23,7 @@ public final class TemporaryTimeTest {
         server.createContext(context,new TemporaryHandler(server, HttpExchange::close, 1000));
         server.start();
 
-        Assert.assertFalse("Server did not contain a temporary context", server.getContexts().isEmpty());
+        Assertions.assertFalse(server.getContexts().isEmpty(), "Server did not contain a temporary context");
 
         Thread.sleep(2000);
 
@@ -36,7 +36,7 @@ public final class TemporaryTimeTest {
         HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
             .thenApply(HttpResponse::statusCode).get();
 
-        Assert.assertTrue("Server did not remove temporary context", server.getContexts().isEmpty());
+        Assertions.assertTrue(server.getContexts().isEmpty(), "Server did not remove temporary context");
 
         server.stop();
     }

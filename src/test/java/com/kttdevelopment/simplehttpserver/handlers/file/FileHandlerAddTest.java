@@ -4,6 +4,8 @@ import com.kttdevelopment.simplehttpserver.SimpleHttpServer;
 import com.kttdevelopment.simplehttpserver.handler.ByteLoadingOption;
 import com.kttdevelopment.simplehttpserver.handler.FileHandler;
 import org.junit.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
@@ -55,27 +57,22 @@ public final class FileHandlerAddTest {
             try{
                 final String response = HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
                     .thenApply(HttpResponse::body).get();
-                Assert.assertEquals("Client data did not match server data for " + file.getName(),testContent,response);
+                Assertions.assertEquals(testContent, response, "Client data did not match server data for " + file.getName());
             }catch(final InterruptedException | ExecutionException ignored){
-                Assert.fail("Failed to read context of " + file.getName());
+                Assertions.fail("Failed to read context of " + file.getName());
             }
 
             // second write
 
-            final String after = String.valueOf(System.currentTimeMillis());
-            try{
-                Files.write(file.toPath(), after.getBytes());
-            }catch(final Throwable ignored){
-                Assert.fail("Failed to second write file " + file.getPath());
-            }
+            Assertions.assertDoesNotThrow(() -> Files.write(file.toPath(), after.getBytes()), "Failed to second write file " + file.getPath());
 
             try{
                 final String response = HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
                     .thenApply(HttpResponse::body).get();
 
-                Assert.assertEquals("Client data did not match server data for " + file.getName(),loadingOption == ByteLoadingOption.PRELOAD ? testContent : after,response);
+                Assertions.assertEquals("Client data did not match server data for " + file.getName(),loadingOption == ByteLoadingOption.PRELOAD ? testContent : after,response);
             }catch(final InterruptedException | ExecutionException ignored){
-                Assert.fail("Failed to read context " + file.getName());
+                Assertions.fail("Failed to read context " + file.getName());
             }
         });
 

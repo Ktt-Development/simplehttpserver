@@ -4,6 +4,8 @@ import com.kttdevelopment.simplehttpserver.SimpleHttpServer;
 import com.kttdevelopment.simplehttpserver.handler.FileHandler;
 import com.kttdevelopment.simplehttpserver.handler.FileHandlerAdapter;
 import org.junit.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
@@ -80,10 +82,10 @@ public final class FileHandlerNoWalkTest {
                     .thenApply(HttpResponse::body)
                     .get();
 
-                Assert.assertNotNull("Client did not find data for " + path, response);
-                Assert.assertEquals("Client data did not match server data for " + path,testContent,response);
+                Assertions.assertNotNull(response, "Client did not find data for " + path);
+                Assertions.assertEquals(testContent, response, "Client data did not match server data for " + path);
             }catch(final ExecutionException ignored){
-                Assert.fail("Client did not find data for " + path);
+                Assertions.fail("Client did not find data for " + path);
             }
         }
 
@@ -105,11 +107,11 @@ public final class FileHandlerNoWalkTest {
                     .thenApply(HttpResponse::body)
                     .get();
 
-                Assert.assertNull("Client found data for blocked path " + path,response);
+                Assertions.assertNull(response, "Client found data for blocked path " + path);
             }catch(final ExecutionException e){
                 exception = e;
             }
-            Assert.assertNotNull("Client found data for blocked path",exception);
+            Assertions.assertNotNull(exception, "Client found data for blocked path");
         }
 
         server.stop();

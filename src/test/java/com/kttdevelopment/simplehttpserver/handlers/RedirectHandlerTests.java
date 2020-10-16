@@ -3,8 +3,8 @@ package com.kttdevelopment.simplehttpserver.handlers;
 import com.kttdevelopment.simplehttpserver.*;
 import com.kttdevelopment.simplehttpserver.handler.RedirectHandler;
 import com.kttdevelopment.simplehttpserver.var.HttpCode;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.URI;
@@ -23,7 +23,7 @@ public final class RedirectHandlerTests {
         server.createContext(context,new RedirectHandler("https://www.google.com/"));
         server.start();
 
-        Assert.assertFalse("Server did not contain a temporary context", server.getContexts().isEmpty());
+        Assertions.assertFalse(server.getContexts().isEmpty(), "Server did not contain a temporary context");
 
         final String url = "http://localhost:" + port + context;
 
@@ -36,7 +36,7 @@ public final class RedirectHandlerTests {
         final int response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
             .thenApply(HttpResponse::statusCode).get();
 
-        Assert.assertEquals("Client responded with redirect code (302 HTTP FOUND) not 200 HTTP OK",HttpCode.HTTP_OK, response);
+        Assertions.assertEquals(HttpCode.HTTP_OK, response, "Client responded with redirect code (302 HTTP FOUND) not 200 HTTP OK");
 
         server.stop();
     }

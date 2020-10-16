@@ -3,8 +3,8 @@ package com.kttdevelopment.simplehttpserver.simplehttpexchange.io;
 import com.kttdevelopment.simplehttpserver.*;
 import com.kttdevelopment.simplehttpserver.var.RequestMethod;
 import com.sun.net.httpserver.HttpContext;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.URI;
@@ -43,14 +43,14 @@ public final class SimpleHttpExchangeGetTest {
         final String response = HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
             .thenApply(HttpResponse::body).get();
 
-        Assert.assertEquals("Response body did not match response sent", exchangeResponse.get(), response);
+        Assertions.assertEquals(exchangeResponse.get(), response, "Response body did not match response sent");
 
         // exchange
         final SimpleHttpExchange exchange = exchangeRef.get();
 
-        Assert.assertEquals("Client request method did not match exchange request method (GET)", RequestMethod.GET, exchange.getRequestMethod());
-        Assert.assertTrue("Exchange was missing client GET map", exchange.hasGet());
-        Assert.assertEquals("Exchange GET did not match client GET", queryValue, exchange.getGetMap().get(queryKey));
+        Assertions.assertEquals(RequestMethod.GET, exchange.getRequestMethod(), "Client request method did not match exchange request method (GET)");
+        Assertions.assertTrue(exchange.hasGet(), "Exchange was missing client GET map");
+        Assertions.assertEquals( queryValue, exchange.getGetMap().get(queryKey), "Exchange GET did not match client GET");
     }
 
 }

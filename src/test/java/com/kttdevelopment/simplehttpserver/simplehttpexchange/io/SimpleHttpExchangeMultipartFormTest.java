@@ -2,8 +2,8 @@ package com.kttdevelopment.simplehttpserver.simplehttpexchange.io;
 
 import com.kttdevelopment.simplehttpserver.*;
 import com.kttdevelopment.simplehttpserver.var.RequestMethod;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.URI;
@@ -62,12 +62,12 @@ public final class SimpleHttpExchangeMultipartFormTest {
         // exchange
         final SimpleHttpExchange exchange = exchangeRef.get();
 
-        Assert.assertEquals("Client request method did not match exchange request method (POST)", RequestMethod.POST,exchange.getRequestMethod());
-        Assert.assertTrue("Exchange was missing client POST map", exchange.hasPost());
+        Assertions.assertEquals(RequestMethod.POST, exchange.getRequestMethod(), "Client request method did not match exchange request method (POST)");
+        Assertions.assertTrue(exchange.hasPost(), "Exchange was missing client POST map");
 
-        Assert.assertEquals("Client form value did not match server value",value, ((Map) exchange.getPostMap().get(key)).get("value"));
-        Assert.assertEquals("Client file name did not match server value",filename, ((Map) ((Map) ((Map) ((Map) exchange.getPostMap().get(fkey)).get("headers")).get("Content-Disposition")).get("parameters")).get("filename"));
-        Assert.assertEquals("Client file value did not match server value",fvalue, ((Map) exchange.getPostMap().get(fkey)).get("value"));
+        Assertions.assertEquals(value, ((Map) exchange.getPostMap().get(key)).get("value"), "Client form value did not match server value");
+        Assertions.assertEquals(filename, ((Map) ((Map) ((Map) ((Map) exchange.getPostMap().get(fkey)).get("headers")).get("Content-Disposition")).get("parameters")).get("filename"), "Client file name did not match server value");
+        Assertions.assertEquals(fvalue, ((Map) exchange.getPostMap().get(fkey)).get("value"), "Client file value did not match server value");
 
         server.stop();
     }

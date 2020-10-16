@@ -3,7 +3,8 @@ package com.kttdevelopment.simplehttpserver.handlers.throttler;
 import com.kttdevelopment.simplehttpserver.*;
 import com.kttdevelopment.simplehttpserver.handler.*;
 import com.sun.net.httpserver.HttpExchange;
-import org.junit.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.URI;
@@ -52,15 +53,8 @@ public final class ServerExchangeThrottlerTest {
             }catch(final InterruptedException | ExecutionException ignored){ }
         }).start();
 
-        Exception exception = null;
-        try{
-            HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
-                .thenApply(HttpResponse::statusCode).get();
-        }catch(final InterruptedException | ExecutionException e){ // JDK failure to recognize HttpTimeoutException as valid catch
-            exception = e;
-        }
-        Assert.assertTrue("Second request returned a result for a throttled thread (connection not allowed)",exception instanceof ExecutionException);
-
+        Assertions.assertThrows(ExecutionException.class, () -> HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenApply(HttpResponse::statusCode).get(), "Second request returned a result for a throttled thread (connection not allowed)");
         server.stop();
     }
 

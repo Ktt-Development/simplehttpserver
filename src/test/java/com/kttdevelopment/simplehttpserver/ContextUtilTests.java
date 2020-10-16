@@ -1,8 +1,7 @@
 package com.kttdevelopment.simplehttpserver;
 
-import com.kttdevelopment.simplehttpserver.ContextUtil;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
@@ -44,7 +43,7 @@ public final class ContextUtilTests {
         };
 
         for(final test test : tests)
-            Assert.assertEquals(String.format("Incorrect context for #(\"%s\", %s, %s)", test.context,test.leadingSlash,test.trailingSlash),test.expected,ContextUtil.getContext(test.context,test.leadingSlash,test.trailingSlash));
+            Assertions.assertEquals( test.expected, ContextUtil.getContext(test.context, test.leadingSlash, test.trailingSlash), String.format("Incorrect context for #(\"%s\", %s, %s)", test.context, test.leadingSlash, test.trailingSlash));
     }
 
     //
@@ -88,7 +87,7 @@ public final class ContextUtilTests {
         };
 
         for(final testJoin test : tests)
-            Assert.assertEquals(String.format("Incorrect context for #(%s, %s, %s)", test.leadingSlash, test.trailingSlash, Arrays.toString(test.contexts)), test.expected, ContextUtil.joinContexts(test.leadingSlash, test.trailingSlash, test.contexts));
+            Assertions.assertEquals(test.expected, ContextUtil.joinContexts(test.leadingSlash, test.trailingSlash, test.contexts), String.format("Incorrect context for #(%s, %s, %s)", test.leadingSlash, test.trailingSlash, Arrays.toString(test.contexts)));
     }
 
 }

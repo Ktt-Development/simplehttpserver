@@ -1,8 +1,8 @@
 package com.kttdevelopment.simplehttpserver.simplehttpserver;
 
 import com.kttdevelopment.simplehttpserver.SimpleHttpServer;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
@@ -14,15 +14,15 @@ public final class SimpleHttpServerGetTests {
         final int port = 8080;
 
         final SimpleHttpServer server = SimpleHttpServer.create();
-        Assert.assertNotNull("#getHttpServer() should not be null", server.getHttpServer());
+        Assertions.assertNotNull(server.getHttpServer(), "#getHttpServer() should not be null");;
 
-        Assert.assertNull("#getAddress() should be null for unbinded server",server.getAddress());
+        Assertions.assertNull(server.getAddress(), "#getAddress() should be null for unbinded server");;
         server.bind(port);
-        Assert.assertTrue("#getAddress() should be the local address of the server running it",server.getAddress().getAddress().isAnyLocalAddress());
+        Assertions.assertTrue(server.getAddress().getAddress().isAnyLocalAddress(), "#getAddress() should be the local address of the server running it");;
 
-        Assert.assertNull("#getExecutor() should initially be null",server.getExecutor());
-        Assert.assertNull("#getHttpSessionHandler() should initially be null",server.getHttpSessionHandler());
-        Assert.assertTrue("#getContexts() should initially be empty on server instantiation",server.getContexts().isEmpty());
+        Assertions.assertNull(server.getExecutor(), "#getExecutor() should initially be null");;
+        Assertions.assertNull(server.getHttpSessionHandler(), "#getHttpSessionHandler() should initially be null");;
+        Assertions.assertTrue(server.getContexts().isEmpty(), "#getContexts() should initially be empty on server instantiation");;
     }
 
 }

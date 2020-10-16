@@ -2,8 +2,8 @@ package com.kttdevelopment.simplehttpserver.simplehttpexchange;
 
 import com.kttdevelopment.simplehttpserver.*;
 import com.sun.net.httpserver.HttpContext;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.CookieManager;
@@ -52,13 +52,13 @@ public final class SimpleHttpExchangeCookieSessionTests {
 
         final SimpleHttpExchange exchange = exchangeRef.get();
 
-        Assert.assertNotNull("Client was not assigned a http session",server.getHttpSession(exchange));
+        Assertions.assertNotNull( server.getHttpSession(exchange), "Client was not assigned a http session");
         final String sessionId = server.getHttpSession(exchange).getSessionID();
-        Assert.assertEquals("Http Session ID did not match cookie session id",sessionId,cookies.getCookieStore().get(URI.create(url)).get(0).getValue());
+        Assertions.assertEquals(sessionId,cookies.getCookieStore().get(URI.create(url)).get(0).getValue(), "Http Session ID did not match cookie session id");
 
         final HttpSession session = server.getHttpSession(exchange);
-        Assert.assertTrue("Client session creation time was in the future",session.getCreationTime() < System.currentTimeMillis());
-        Assert.assertTrue("Client session last access time was in the future",session.getLastAccessTime() < System.currentTimeMillis());
+        Assertions.assertTrue(session.getCreationTime() < System.currentTimeMillis(), "Client session creation time was in the future");
+        Assertions.assertTrue(session.getLastAccessTime() < System.currentTimeMillis(), "Client session last access time was in the future");
 
         server.stop();
     }
