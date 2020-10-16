@@ -33,7 +33,7 @@ public final class FileHandlerAddFilesTest {
 
             @Override
             public final String getName(final File file){
-                return file.getName().substring(0,file.getName().lastIndexOf('.'));
+                return file.getName().substring(0, file.getName().lastIndexOf('.'));
             }
         };
         final FileHandler handler = new FileHandler(adapter);
@@ -48,9 +48,9 @@ public final class FileHandlerAddFilesTest {
             Assertions.assertTrue(file.createNewFile());
 
         handler.addFiles(files);
-        handler.addFiles(altContext,files);
+        handler.addFiles(altContext, files);
 
-        server.createContext(context,handler);
+        server.createContext(context, handler);
 
         server.start();
 
@@ -69,7 +69,7 @@ public final class FileHandlerAddFilesTest {
 
             final String altUrl = "http://localhost:" + port + altContext;
             request = HttpRequest.newBuilder()
-                .uri(URI.create(altUrl + '/' + file.getName().substring(0,file.getName().lastIndexOf('.'))))
+                .uri(URI.create(altUrl + '/' + file.getName().substring(0, file.getName().lastIndexOf('.'))))
                 .build();
 
             response = HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())

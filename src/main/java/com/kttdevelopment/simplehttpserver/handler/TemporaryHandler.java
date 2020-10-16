@@ -66,7 +66,7 @@ public class TemporaryHandler implements HttpHandler {
      * @author Ktt Development
      */
     public TemporaryHandler(final HttpHandler handler, final long maxTime){
-        this(null,handler,maxTime);
+        this(null, handler, maxTime);
     }
 
     /**

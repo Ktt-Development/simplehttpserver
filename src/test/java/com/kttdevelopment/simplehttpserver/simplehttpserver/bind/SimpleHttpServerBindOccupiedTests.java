@@ -1,7 +1,6 @@
 package com.kttdevelopment.simplehttpserver.simplehttpserver.bind;
 
 import com.kttdevelopment.simplehttpserver.SimpleHttpServer;
-import org.junit.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

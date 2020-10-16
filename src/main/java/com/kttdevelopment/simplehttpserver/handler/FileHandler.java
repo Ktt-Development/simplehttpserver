@@ -31,8 +31,8 @@ public class FileHandler implements SimpleHttpHandler {
 
     private final FileHandlerAdapter adapter;
 
-    private final Map<String,FileEntry> files = new ConcurrentHashMap<>();
-    private final Map<String,DirectoryEntry> directories = new ConcurrentHashMap<>();
+    private final Map<String, FileEntry> files = new ConcurrentHashMap<>();
+    private final Map<String, DirectoryEntry> directories = new ConcurrentHashMap<>();
 
     /**
      * Creates a file handler without a {@link FileHandlerAdapter}. This will use the files name and bytes.
@@ -85,7 +85,7 @@ public class FileHandler implements SimpleHttpHandler {
      * @author Ktt Development
      */
     public final void addFile(final File file){
-        addFile("",file,adapter.getName(file),ByteLoadingOption.LIVELOAD);
+        addFile("", file, adapter.getName(file), ByteLoadingOption.LIVELOAD);
     }
 
     /**
@@ -106,7 +106,7 @@ public class FileHandler implements SimpleHttpHandler {
      * @author Ktt Development
      */
     public final void addFile(final File file, final ByteLoadingOption loadingOption){
-        addFile("",file,adapter.getName(file),loadingOption);
+        addFile("", file, adapter.getName(file), loadingOption);
     }
 
     /**
@@ -126,7 +126,7 @@ public class FileHandler implements SimpleHttpHandler {
      * @author Ktt Development
      */
     public final void addFile(final File file, final String fileName){
-        addFile("",file,fileName,ByteLoadingOption.LIVELOAD);
+        addFile("", file, fileName, ByteLoadingOption.LIVELOAD);
     }
 
     /**
@@ -148,7 +148,7 @@ public class FileHandler implements SimpleHttpHandler {
      * @author Ktt Development
      */
     public final void addFile(final File file, final String fileName, final ByteLoadingOption loadingOption){
-        addFile("",file,fileName,loadingOption);
+        addFile("", file, fileName, loadingOption);
     }
 
     /**
@@ -168,7 +168,7 @@ public class FileHandler implements SimpleHttpHandler {
      * @author Ktt Development
      */
     public final void addFile(final String context, final File file){
-        addFile(context,file,adapter.getName(file),ByteLoadingOption.LIVELOAD);
+        addFile(context, file, adapter.getName(file), ByteLoadingOption.LIVELOAD);
     }
 
     /**
@@ -190,7 +190,7 @@ public class FileHandler implements SimpleHttpHandler {
      * @author Ktt Development
      */
     public final void addFile(final String context, final File file, final ByteLoadingOption loadingOption){
-        addFile(context,file,adapter.getName(file),loadingOption);
+        addFile(context, file, adapter.getName(file), loadingOption);
     }
 
     /**
@@ -211,7 +211,7 @@ public class FileHandler implements SimpleHttpHandler {
      * @author Ktt Development
      */
     public final void addFile(final String context, final File file, final String fileName){
-        addFile(context,file,fileName,ByteLoadingOption.LIVELOAD);
+        addFile(context, file, fileName, ByteLoadingOption.LIVELOAD);
     }
 
     /**
@@ -236,7 +236,7 @@ public class FileHandler implements SimpleHttpHandler {
     public final void addFile(final String context, final File file, final String fileName, final ByteLoadingOption loadingOption){
         try{
             files.put(
-                ContextUtil.joinContexts(true,false,context,fileName),
+                ContextUtil.joinContexts(true, false, context, fileName),
                 new FileEntry(file, adapter, loadingOption)
             );
         }catch(final UncheckedIOException ignored){ }
@@ -256,7 +256,7 @@ public class FileHandler implements SimpleHttpHandler {
      * @author Ktt Development
      */
     public final void addFiles(final File[] files){
-        addFiles("",files,ByteLoadingOption.LIVELOAD);
+        addFiles("", files, ByteLoadingOption.LIVELOAD);
     }
 
     /**
@@ -273,7 +273,7 @@ public class FileHandler implements SimpleHttpHandler {
      * @author Ktt Development
      */
     public final void addFiles(final File[] files, final ByteLoadingOption loadingOption){
-        addFiles("",files,loadingOption);
+        addFiles("", files, loadingOption);
     }
 
     /**
@@ -289,7 +289,7 @@ public class FileHandler implements SimpleHttpHandler {
      * @author Ktt Development
      */
     public final void addFiles(final String context, final File[] files){
-        addFiles(context,files,ByteLoadingOption.LIVELOAD);
+        addFiles(context, files, ByteLoadingOption.LIVELOAD);
     }
 
     /**
@@ -308,7 +308,7 @@ public class FileHandler implements SimpleHttpHandler {
      */
     public final void addFiles(final String context, final File[] files, final ByteLoadingOption loadingOption){
         for(final File file : files)
-            addFile(context,file,loadingOption);
+            addFile(context, file, loadingOption);
     }
 
     //
@@ -337,7 +337,7 @@ public class FileHandler implements SimpleHttpHandler {
      * @author Ktt Development
      */
     public final void addDirectory(final File directory){
-        addDirectory("",directory,getName(directory),ByteLoadingOption.LIVELOAD,false);
+        addDirectory("", directory, getName(directory), ByteLoadingOption.LIVELOAD, false);
     }
 
     /**
@@ -365,7 +365,7 @@ public class FileHandler implements SimpleHttpHandler {
      * @author Ktt Development
      */
     public final void addDirectory(final File directory, final boolean walk){
-        addDirectory("",directory,getName(directory),ByteLoadingOption.LIVELOAD,walk);
+        addDirectory("", directory, getName(directory), ByteLoadingOption.LIVELOAD, walk);
     }
 
     /**
@@ -394,7 +394,7 @@ public class FileHandler implements SimpleHttpHandler {
      * @author Ktt Development
      */
     public final void addDirectory(final File directory, final ByteLoadingOption loadingOption){
-        addDirectory("",directory,getName(directory),loadingOption,false);
+        addDirectory("", directory, getName(directory), loadingOption, false);
     }
 
     /**
@@ -424,7 +424,7 @@ public class FileHandler implements SimpleHttpHandler {
      * @author Ktt Development
      */
     public final void addDirectory(final File directory, final ByteLoadingOption loadingOption, final boolean walk){
-        addDirectory("",directory,getName(directory),loadingOption,walk);
+        addDirectory("", directory, getName(directory), loadingOption, walk);
     }
 
     /**
@@ -452,7 +452,7 @@ public class FileHandler implements SimpleHttpHandler {
      * @author Ktt Development
      */
     public final void addDirectory(final File directory, final String directoryName){
-        addDirectory("",directory,directoryName,ByteLoadingOption.LIVELOAD,false);
+        addDirectory("", directory, directoryName, ByteLoadingOption.LIVELOAD, false);
     }
 
     /**
@@ -481,7 +481,7 @@ public class FileHandler implements SimpleHttpHandler {
      * @author Ktt Development
      */
     public final void addDirectory(final File directory, final String directoryName, final boolean walk){
-        addDirectory("",directory,directoryName,ByteLoadingOption.LIVELOAD,walk);
+        addDirectory("", directory, directoryName, ByteLoadingOption.LIVELOAD, walk);
     }
 
     /**
@@ -511,7 +511,7 @@ public class FileHandler implements SimpleHttpHandler {
      * @author Ktt Development
      */
     public final void addDirectory(final File directory, final String directoryName, final ByteLoadingOption loadingOption){
-        addDirectory("",directory,directoryName,loadingOption,false);
+        addDirectory("", directory, directoryName, loadingOption, false);
     }
 
     /**
@@ -542,7 +542,7 @@ public class FileHandler implements SimpleHttpHandler {
      * @author Ktt Development
      */
     public final void addDirectory(final File directory, final String directoryName, final ByteLoadingOption loadingOption, final boolean walk){
-        addDirectory("",directory,directoryName,loadingOption,walk);
+        addDirectory("", directory, directoryName, loadingOption, walk);
     }
 
     /**
@@ -570,7 +570,7 @@ public class FileHandler implements SimpleHttpHandler {
      * @author Ktt Development
      */
     public final void addDirectory(final String context, final File directory){
-        addDirectory(context,directory,getName(directory),ByteLoadingOption.LIVELOAD,false);
+        addDirectory(context, directory, getName(directory), ByteLoadingOption.LIVELOAD, false);
     }
 
     /**
@@ -597,7 +597,7 @@ public class FileHandler implements SimpleHttpHandler {
      * @see #addDirectory(String, File, String, ByteLoadingOption, boolean)
      */
     public final void addDirectory(final String context, final File directory, final boolean walk){
-        addDirectory(context,directory,getName(directory),ByteLoadingOption.LIVELOAD,walk);
+        addDirectory(context, directory, getName(directory), ByteLoadingOption.LIVELOAD, walk);
     }
 
     /**
@@ -627,7 +627,7 @@ public class FileHandler implements SimpleHttpHandler {
      * @author Ktt Development
      */
     public final void addDirectory(final String context, final File directory, final ByteLoadingOption loadingOption){
-        addDirectory(context,directory,getName(directory),loadingOption,false);
+        addDirectory(context, directory, getName(directory), loadingOption, false);
     }
 
     /**
@@ -658,7 +658,7 @@ public class FileHandler implements SimpleHttpHandler {
      * @author Ktt Development
      */
     public final void addDirectory(final String context, final File directory, final ByteLoadingOption loadingOption, final boolean walk){
-        addDirectory(context,directory,getName(directory),loadingOption,walk);
+        addDirectory(context, directory, getName(directory), loadingOption, walk);
     }
 
     /**
@@ -687,7 +687,7 @@ public class FileHandler implements SimpleHttpHandler {
      * @author Ktt Development
      */
     public final void addDirectory(final String context, final File directory, final String directoryName){
-        addDirectory(context,directory,directoryName,ByteLoadingOption.LIVELOAD,false);
+        addDirectory(context, directory, directoryName, ByteLoadingOption.LIVELOAD, false);
     }
 
     /**
@@ -717,7 +717,7 @@ public class FileHandler implements SimpleHttpHandler {
      * @author Ktt Development
      */
     public final void addDirectory(final String context, final File directory, final String directoryName, final boolean walk){
-        addDirectory(context,directory,directoryName,ByteLoadingOption.LIVELOAD,walk);
+        addDirectory(context, directory, directoryName, ByteLoadingOption.LIVELOAD, walk);
     }
 
     /**
@@ -748,7 +748,7 @@ public class FileHandler implements SimpleHttpHandler {
      * @author Ktt Development
      */
     public final void addDirectory(final String context, final File directory, final String directoryName, final ByteLoadingOption loadingOption){
-        addDirectory(context,directory,directoryName,loadingOption,false);
+        addDirectory(context, directory, directoryName, loadingOption, false);
     }
 
     /**
@@ -781,10 +781,10 @@ public class FileHandler implements SimpleHttpHandler {
      */
     public final void addDirectory(final String context, final File directory, final String directoryName, final ByteLoadingOption loadingOption, final boolean walk){
         try{
-            final String target = ContextUtil.joinContexts(true,false,context,directoryName);
+            final String target = ContextUtil.joinContexts(true, false, context, directoryName);
             directories.put(
                 target,
-                new DirectoryEntry(directory, adapter,loadingOption,walk)
+                new DirectoryEntry(directory, adapter, loadingOption, walk)
             );
         }catch(final UncheckedIOException ignored){}
     }
@@ -799,11 +799,11 @@ public class FileHandler implements SimpleHttpHandler {
 
     @Override
     public final void handle(final SimpleHttpExchange exchange) throws IOException{
-        final String context = URLDecoder.decode(ContextUtil.getContext(exchange.getURI().getPath().substring(exchange.getHttpContext().getPath().length()),true,false), StandardCharsets.UTF_8);
+        final String context = URLDecoder.decode(ContextUtil.getContext(exchange.getURI().getPath().substring(exchange.getHttpContext().getPath().length()), true, false), StandardCharsets.UTF_8);
 
         if(files.containsKey(context)){ // exact file match
             final FileEntry entry = files.get(context);
-            handle(exchange,entry.getFile(),entry.getBytes());
+            handle(exchange, entry.getFile(), entry.getBytes());
         }else{ // leading directory match
             String match = "";
             for(final String key : directories.keySet())
@@ -811,13 +811,13 @@ public class FileHandler implements SimpleHttpHandler {
                     match = key;
 
             if(match.isEmpty()){ // no match
-                handle(exchange,null,null);
+                handle(exchange, null, null);
             }else{ // get file from matching directory
                 final DirectoryEntry entry = directories.get(match);
                 String rel = context.substring(match.length());
 
                 final File file = entry.getFile(rel);
-                handle(exchange,file,entry.getBytes(rel));
+                handle(exchange, file, entry.getBytes(rel));
             }
         }
         exchange.close();

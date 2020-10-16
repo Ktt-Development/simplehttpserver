@@ -43,7 +43,7 @@ public final class ContextUtilTests {
         };
 
         for(final test test : tests)
-            Assertions.assertEquals( test.expected, ContextUtil.getContext(test.context, test.leadingSlash, test.trailingSlash), String.format("Incorrect context for #(\"%s\", %s, %s)", test.context, test.leadingSlash, test.trailingSlash));
+            Assertions.assertEquals(test.expected, ContextUtil.getContext(test.context, test.leadingSlash, test.trailingSlash), String.format("Incorrect context for #(\"%s\", %s, %s)", test.context, test.leadingSlash, test.trailingSlash));
     }
 
     //
@@ -66,12 +66,12 @@ public final class ContextUtilTests {
     @Test
     public final void testJoin(){
         final testJoin[] tests = {
-            new testJoin("testBlank"            ,false  ,false  ,"testBlank",""),
-            new testJoin("/testBlank/"          ,true   ,true   ,"testBlank",""),
-            new testJoin("testBlank"            ,false  ,false  ,"","testBlank"),
-            new testJoin("/testBlank/"          ,true   ,true   ,"","testBlank"),
-            new testJoin(""                     ,false  ,false  ,"",""),
-            new testJoin("/"                    ,true   ,true   ,"",""),
+            new testJoin("testBlank"            , false  , false  ,"testBlank",""),
+            new testJoin("/testBlank/"          , true   , true   ,"testBlank",""),
+            new testJoin("testBlank"            , false  , false  ,"","testBlank"),
+            new testJoin("/testBlank/"          , true   , true   ,"","testBlank"),
+            new testJoin(""                     , false  , false  ,"",""),
+            new testJoin("/"                    , true   , true   ,"",""),
             new testJoin("trailing/slash"       , false , false ,"trailing/","slash/"),
             new testJoin("/trailing/slash/"     , true  , true  ,"trailing/","slash/"),
             new testJoin("leading/slash"        , false , false ,"leading/","slash/"),

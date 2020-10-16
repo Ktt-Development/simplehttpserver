@@ -20,7 +20,7 @@ public final class RedirectHandlerTests {
         final SimpleHttpServer server = SimpleHttpServer.create(port);
 
         final String context = "";
-        server.createContext(context,new RedirectHandler("https://www.google.com/"));
+        server.createContext(context, new RedirectHandler("https://www.google.com/"));
         server.start();
 
         Assertions.assertFalse(server.getContexts().isEmpty(), "Server did not contain a temporary context");

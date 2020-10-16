@@ -20,7 +20,7 @@ public final class TemporaryFirstTest {
         final SimpleHttpServer server = SimpleHttpServer.create(port);
 
         final String context = "";
-        server.createContext(context,new TemporaryHandler(server, HttpExchange::close));
+        server.createContext(context, new TemporaryHandler(server, HttpExchange::close));
         server.start();
 
         Assertions.assertFalse(server.getContexts().isEmpty(), "Server did not contain a temporary context");

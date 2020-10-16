@@ -42,7 +42,7 @@ public class SSEHandler implements SimpleHttpHandler {
         exchange.getResponseHeaders().add("Cache-Control","no-cache");
 
         if(exchange.getRequestMethod() == RequestMethod.OPTIONS){
-            exchange.sendResponseHeaders(HttpCode.HTTP_OK,0);
+            exchange.sendResponseHeaders(HttpCode.HTTP_OK, 0);
             return;
         }
 
@@ -53,7 +53,7 @@ public class SSEHandler implements SimpleHttpHandler {
             latest = Integer.parseInt(exchange.getRequestHeaders().getFirst("Last_Event-ID"));
         }catch(final NumberFormatException | NullPointerException ignored){ }
 
-        exchange.sendResponseHeaders(200,0);
+        exchange.sendResponseHeaders(200, 0);
         for(int index = latest; index < queue.size(); index++){
             exchange.getOutputStream().write(queue.get(index).toString(eventId.get()).getBytes(StandardCharsets.UTF_8));
             exchange.getOutputStream().flush();
@@ -72,7 +72,7 @@ public class SSEHandler implements SimpleHttpHandler {
      * @author Ktt Development
      */
     public synchronized final void push(final String data){
-        push(data,0,"");
+        push(data, 0,"");
     }
 
     /**
@@ -88,7 +88,7 @@ public class SSEHandler implements SimpleHttpHandler {
      */
     public synchronized final void push(final String data, final int retry, final String event){
         eventId.addAndGet(1);
-        final EventStreamRecord record = new EventStreamRecord(retry,event,data);
+        final EventStreamRecord record = new EventStreamRecord(retry, event, data);
         queue.add(record);
         listeners.forEach(stream -> {
             try{

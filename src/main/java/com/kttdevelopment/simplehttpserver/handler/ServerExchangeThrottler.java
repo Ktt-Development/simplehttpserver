@@ -54,7 +54,7 @@ public class ServerExchangeThrottler extends ConnectionThrottler {
         final int maxConn = getMaxConnections(exchange);
 
         if(!connections.containsKey(address))
-            connections.put(address,new AtomicInteger(0));
+            connections.put(address, new AtomicInteger(0));
 
         final AtomicInteger conn = connections.get(address);
         final boolean exempt = canIgnoreConnectionLimit(exchange);

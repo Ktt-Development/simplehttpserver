@@ -82,7 +82,7 @@ public abstract class SimpleHttpServer {
      * @author Ktt Development
      */
     public static SimpleHttpServer create(final int port, final int backlog) throws IOException {
-        return SimpleHttpServerImpl.createHttpServer(port,backlog);
+        return SimpleHttpServerImpl.createHttpServer(port, backlog);
     }
 
 //
@@ -414,7 +414,7 @@ public abstract class SimpleHttpServer {
      * @since 02.00.00
      * @author Ktt Development
      */
-    public abstract Map<HttpContext,HttpHandler> getContexts();
+    public abstract Map<HttpContext, HttpHandler> getContexts();
 
     //
 

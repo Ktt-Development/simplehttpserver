@@ -38,7 +38,7 @@ final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
     private final RequestMethod requestMethod;
 
     private final String rawGet;
-    private final Map<String,String> getMap;
+    private final Map<String, String> getMap;
     private final boolean hasGet;
 
     private final String rawPost;
@@ -46,21 +46,21 @@ final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
     private final Map postMap;
     private final boolean hasPost;
 
-    private final Map<String,String> cookies;
+    private final Map<String, String> cookies;
 
     private final OutputStream outputStream;
 
     @SuppressWarnings("FieldCanBeLocal")
-    private final Function<String,Map<String,String>> parseWwwFormEnc = s -> {
-        final LinkedHashMap<String,String> OUT = new LinkedHashMap<>();
+    private final Function<String, Map<String, String>> parseWwwFormEnc = s -> {
+        final LinkedHashMap<String, String> OUT = new LinkedHashMap<>();
         final String[] pairs = s.split("&");
 
         for(final String pair : pairs){
             if(pair.contains("=")){
                 final String[] kv = pair.split("=");
                 OUT.put(
-                    URLDecoder.decode(kv[0],StandardCharsets.UTF_8),
-                    kv.length == 2 ? URLDecoder.decode(kv[1],StandardCharsets.UTF_8) : null
+                    URLDecoder.decode(kv[0], StandardCharsets.UTF_8),
+                    kv.length == 2 ? URLDecoder.decode(kv[1], StandardCharsets.UTF_8) : null
                 );
             }
         }
@@ -167,8 +167,8 @@ final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
                         }
 
                         final Map row = new HashMap();
-                        row.put("headers",postHeaders);
-                        row.put("value",pair.substring(pair.indexOf("\r\n\r\n")+4,pair.lastIndexOf("\r\n")));
+                        row.put("headers", postHeaders);
+                        row.put("value", pair.substring(pair.indexOf("\r\n\r\n")+4, pair.lastIndexOf("\r\n")));
 
                         postMap.put(
                             ((HashMap<String, String>) postHeaders.get("Content-Disposition").get("parameters")).get("name"),
@@ -189,7 +189,7 @@ final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
             final String[] cookedCookie = rawCookie.split("; "); // pair
             for(final String pair : cookedCookie){
                 String[] value = pair.split("=");
-                cookies.put(value[0],value[1]);
+                cookies.put(value[0], value[1]);
             }
         }
 
@@ -307,13 +307,13 @@ final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
 
     @Override
     public synchronized final void setCookie(final String key, final String value){
-        setCookie(new SimpleHttpCookie.Builder(key,value).build());
+        setCookie(new SimpleHttpCookie.Builder(key, value).build());
     }
 
     @Override
     public synchronized final void setCookie(final SimpleHttpCookie cookie){
         final String cstring = cookie.toCookieHeaderString();
-        getResponseHeaders().add("Set-Cookie",cstring);
+        getResponseHeaders().add("Set-Cookie", cstring);
     }
 
 //
@@ -332,7 +332,7 @@ final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
 
     @Override
     public synchronized final void send(final int responseCode) throws IOException{
-        sendResponseHeaders(responseCode,0);
+        sendResponseHeaders(responseCode, 0);
     }
 
     @Override
@@ -347,7 +347,7 @@ final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
 
     @Override
     public synchronized final void send(final byte[] response, final int responseCode) throws IOException {
-        send(response,responseCode,false);
+        send(response, responseCode, false);
     }
 
     @Override
@@ -363,7 +363,7 @@ final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
                 OUT.flush();
             }
         }else{
-            sendResponseHeaders(responseCode,response.length);
+            sendResponseHeaders(responseCode, response.length);
             try(final OutputStream OUT = httpExchange.getResponseBody()){
                 OUT.write(response);
                 OUT.flush();
@@ -383,12 +383,12 @@ final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
 
     @Override
     public synchronized final void send(final String response, final int responseCode) throws IOException{
-        send(response.getBytes(StandardCharsets.UTF_8),responseCode,false);
+        send(response.getBytes(StandardCharsets.UTF_8), responseCode, false);
     }
 
     @Override
     public final void send(final String response, final int responseCode, final boolean gzip) throws IOException{
-        send(response.getBytes(StandardCharsets.UTF_8),responseCode,gzip);
+        send(response.getBytes(StandardCharsets.UTF_8), responseCode, gzip);
     }
 
     @Override
@@ -403,12 +403,12 @@ final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
 
     @Override
     public final void send(final File file, final int responseCode) throws IOException{
-        send(Files.readAllBytes(file.toPath()),responseCode);
+        send(Files.readAllBytes(file.toPath()), responseCode);
     }
 
     @Override
     public final void send(final File file, final int responseCode, final boolean gzip) throws IOException{
-        send(Files.readAllBytes(file.toPath()),responseCode,gzip);
+        send(Files.readAllBytes(file.toPath()), responseCode, gzip);
     }
 
     //

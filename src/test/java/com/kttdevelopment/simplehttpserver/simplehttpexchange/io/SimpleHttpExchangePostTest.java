@@ -29,7 +29,7 @@ public final class SimpleHttpExchangePostTest {
 
         final String context = "";
         final AtomicReference<HttpContext> contextRef = new AtomicReference<>();
-        contextRef.set(server.createContext(context,handler));
+        contextRef.set(server.createContext(context, handler));
         server.start();
 
         final String queryKey = "test", queryValue = "value";

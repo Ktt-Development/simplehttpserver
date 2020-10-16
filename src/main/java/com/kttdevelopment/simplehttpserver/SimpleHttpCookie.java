@@ -383,7 +383,7 @@ public class SimpleHttpCookie {
          * @author Ktt Development
          */
         public final SimpleHttpCookie build(){
-            return new SimpleHttpCookie(name,value,domain,path,sameSite,expires,maxAge,secure,httpOnly);
+            return new SimpleHttpCookie(name, value, domain, path, sameSite, expires, maxAge, secure, httpOnly);
         }
 
     }

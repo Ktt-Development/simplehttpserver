@@ -32,16 +32,16 @@ public final class FileHandlerWalkTest {
         final File subdir   = new File(dir, UUID.randomUUID().toString());
         Assertions.assertTrue(subdir.exists() || subdir.mkdirs());
 
-        final File file = new File(dir,fileName);
+        final File file = new File(dir, fileName);
         Files.write(file.toPath(), testContent.getBytes());
-        final File walk = new File(subdir,fileName);
-        Files.write(walk.toPath(),testContent.getBytes());
+        final File walk = new File(subdir, fileName);
+        Files.write(walk.toPath(), testContent.getBytes());
 
         final String context = "";
 
-        handler.addDirectory(dir,true);
+        handler.addDirectory(dir, true);
 
-        server.createContext(context,handler);
+        server.createContext(context, handler);
         server.start();
 
         final String[] validPathsToTest = { // valid reads

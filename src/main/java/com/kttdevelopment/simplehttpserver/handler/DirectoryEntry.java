@@ -29,7 +29,7 @@ class DirectoryEntry {
     private final ByteLoadingOption loadingOption;
     private final boolean isWalkthrough;
 
-    private final Map<String,FileEntry> preloadedFiles = new ConcurrentHashMap<>(); // preload/watch-load only
+    private final Map<String, FileEntry> preloadedFiles = new ConcurrentHashMap<>(); // preload/watch-load only
     private final Path directoryPath;
 
     /**
@@ -60,7 +60,7 @@ class DirectoryEntry {
                     if(!file.isDirectory()) // File#isFile does not work
                         try{
                             preloadedFiles.put(
-                                ContextUtil.getContext(adapter.getName(file),true,false),
+                                ContextUtil.getContext(adapter.getName(file), true, false),
                                 new FileEntry(file, adapter, ByteLoadingOption.WATCHLOAD, true)
                             );
                         }catch(final UncheckedIOException ignored){ }
@@ -85,7 +85,7 @@ class DirectoryEntry {
 
                             try{
                                 preloadedFiles.put(
-                                   ContextUtil.joinContexts(true,false,relative, adapter.getName(file)),
+                                   ContextUtil.joinContexts(true, false, relative, adapter.getName(file)),
                                     new FileEntry(file, adapter, loadingOption, true)
                                 );
                             }catch(final UncheckedIOException ignored){ }
@@ -104,7 +104,7 @@ class DirectoryEntry {
                     if(!file.isDirectory())
                         try{
                             preloadedFiles.put(
-                                ContextUtil.getContext(adapter.getName(file),true,false),
+                                ContextUtil.getContext(adapter.getName(file), true, false),
                                 new FileEntry(file, adapter, ByteLoadingOption.PRELOAD)
                             );
                         }catch(final UncheckedIOException ignored){ }
@@ -118,7 +118,7 @@ class DirectoryEntry {
 
                             try{
                                 preloadedFiles.put(
-                                    ContextUtil.joinContexts(true,false,relative,adapter.getName(file)),
+                                    ContextUtil.joinContexts(true, false, relative, adapter.getName(file)),
                                     new FileEntry(file, adapter, ByteLoadingOption.PRELOAD)
                                 );
                             }catch(final RuntimeException ignored){ }
@@ -133,11 +133,11 @@ class DirectoryEntry {
         }
     }
 
-    private final Map<Path,AtomicBoolean> watchService = new ConcurrentHashMap<>();
+    private final Map<Path, AtomicBoolean> watchService = new ConcurrentHashMap<>();
 
     private void createWatchService(final Path path, final Consumer<WatchEvent<?>> consumer) throws IOException{
         final WatchService service = FileSystems.getDefault().newWatchService();
-        path.register(service,ENTRY_CREATE,ENTRY_DELETE,ENTRY_MODIFY);
+        path.register(service, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
 
         final AtomicBoolean stop = new AtomicBoolean(false);
 
@@ -154,7 +154,7 @@ class DirectoryEntry {
             }catch(final InterruptedException ignored){ }
         }).start();
 
-        watchService.put(path,stop);
+        watchService.put(path, stop);
     }
 
     @SuppressWarnings({"StatementWithEmptyBody", "SpellCheckingInspection"})
@@ -165,14 +165,14 @@ class DirectoryEntry {
                 final File relFile = relTarg.toFile(); // only the file name (this method if flawed!)
                 final WatchEvent.Kind<?> type = event.kind();
 
-                final String top2sub = ContextUtil.getContext(directoryPath.relativize(path).toString(),true,false); // the relative path between the top level directory and sub directory
-                final String context = ContextUtil.joinContexts(true,false,top2sub,adapter.getName(relFile)); // the file key
-                final File file = new File(ContextUtil.joinContexts(true,false,directoryPath.toString(),top2sub,relFile.getName())); // the actual referable file
+                final String top2sub = ContextUtil.getContext(directoryPath.relativize(path).toString(), true, false); // the relative path between the top level directory and sub directory
+                final String context = ContextUtil.joinContexts(true, false, top2sub, adapter.getName(relFile)); // the file key
+                final File file = new File(ContextUtil.joinContexts(true, false, directoryPath.toString(), top2sub, relFile.getName())); // the actual referable file
                 final Path target = file.toPath();
 
                 if(!file.isDirectory()) // File#isFile does not work
                     if(type == ENTRY_CREATE)
-                        preloadedFiles.put(context, new FileEntry(file,adapter,ByteLoadingOption.WATCHLOAD,true));
+                        preloadedFiles.put(context, new FileEntry(file, adapter, ByteLoadingOption.WATCHLOAD, true));
                     else if(type == ENTRY_DELETE)
                         preloadedFiles.remove(context);
                     else if(type == ENTRY_MODIFY)
@@ -237,7 +237,7 @@ class DirectoryEntry {
      */
     @SuppressWarnings("SpellCheckingInspection")
     public final File getFile(final String path){
-        final String relative = ContextUtil.getContext(path,true,false);
+        final String relative = ContextUtil.getContext(path, true, false);
         if(loadingOption != ByteLoadingOption.LIVELOAD){
             return preloadedFiles.get(relative).getFile();
         }else{ // file is a reference, existence of file does not matter
@@ -248,7 +248,7 @@ class DirectoryEntry {
             // if not top level directory or if not child of directory folder, then return null file
             if(!pabs.equals(dabs) && (!isWalkthrough || !pabs.startsWith(dabs))) return null;
 
-            final File targetFile = Paths.get(dabs,relative).toFile();
+            final File targetFile = Paths.get(dabs, relative).toFile();
             final String fileName = targetFile.getParentFile() == null ? targetFile.getPath() : targetFile.getName();
 
             // for each file in parent directory, run adapter to find file that matches adapted name
@@ -272,13 +272,13 @@ class DirectoryEntry {
      * @author Ktt Development
      */
     public final byte[] getBytes(final String path){
-        final String rel = ContextUtil.getContext(path,true,false);
+        final String rel = ContextUtil.getContext(path, true, false);
         if(loadingOption != ByteLoadingOption.LIVELOAD ){ // find preloaded bytes
             return preloadedFiles.get(rel).getBytes(); // already adapted
         }else{
             try{
                 final File file = Objects.requireNonNull(getFile(path)); // find if file allowed
-                return !file.isDirectory() ? adapter.getBytes(file,Files.readAllBytes(file.toPath())) : null; // adapt bytes here
+                return !file.isDirectory() ? adapter.getBytes(file, Files.readAllBytes(file.toPath())) : null; // adapt bytes here
             }catch(final NullPointerException | IOException ignored){
                 return null;
             }

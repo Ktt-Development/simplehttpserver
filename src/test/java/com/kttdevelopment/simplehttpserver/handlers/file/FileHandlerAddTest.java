@@ -28,7 +28,7 @@ public final class FileHandlerAddTest {
         final FileHandler handler     = new FileHandler();
         final String context          = "";
 
-        final Map<File,ByteLoadingOption> files = new HashMap<>();
+        final Map<File, ByteLoadingOption> files = new HashMap<>();
         for(final ByteLoadingOption blop : ByteLoadingOption.values())
             files.put(new File(dir, blop.name()), blop);
 
@@ -36,14 +36,14 @@ public final class FileHandlerAddTest {
         final String testContent = String.valueOf(System.currentTimeMillis());
         files.forEach((file, loadingOption) -> {
             try{
-                Files.write(file.toPath(),testContent.getBytes());
+                Files.write(file.toPath(), testContent.getBytes());
                 handler.addFile(file, loadingOption);
             }catch(final IOException e){
                 e.printStackTrace();
             }
         });
 
-        server.createContext(context,handler);
+        server.createContext(context, handler);
         server.start();
 
         files.forEach((file, loadingOption) -> {
@@ -69,7 +69,7 @@ public final class FileHandlerAddTest {
                 final String response = HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
                     .thenApply(HttpResponse::body).get();
 
-                Assertions.assertEquals("Client data did not match server data for " + file.getName(),loadingOption == ByteLoadingOption.PRELOAD ? testContent : after,response);
+                Assertions.assertEquals("Client data did not match server data for " + file.getName(), loadingOption == ByteLoadingOption.PRELOAD ? testContent : after, response);
             }catch(final InterruptedException | ExecutionException ignored){
                 Assertions.fail("Failed to read context " + file.getName());
             }

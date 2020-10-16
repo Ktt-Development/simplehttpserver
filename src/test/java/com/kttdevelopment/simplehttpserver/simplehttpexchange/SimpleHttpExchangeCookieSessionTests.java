@@ -29,7 +29,7 @@ public final class SimpleHttpExchangeCookieSessionTests {
 
         final String context = "";
         final AtomicReference<HttpContext> contextRef = new AtomicReference<>();
-        contextRef.set(server.createContext(context,handler));
+        contextRef.set(server.createContext(context, handler));
         final String cookie = "__session-id";
         server.setHttpSessionHandler(new HttpSessionHandler(cookie));
         server.start();
@@ -52,9 +52,9 @@ public final class SimpleHttpExchangeCookieSessionTests {
 
         final SimpleHttpExchange exchange = exchangeRef.get();
 
-        Assertions.assertNotNull( server.getHttpSession(exchange), "Client was not assigned a http session");
+        Assertions.assertNotNull(server.getHttpSession(exchange), "Client was not assigned a http session");
         final String sessionId = server.getHttpSession(exchange).getSessionID();
-        Assertions.assertEquals(sessionId,cookies.getCookieStore().get(URI.create(url)).get(0).getValue(), "Http Session ID did not match cookie session id");
+        Assertions.assertEquals(sessionId, cookies.getCookieStore().get(URI.create(url)).get(0).getValue(), "Http Session ID did not match cookie session id");
 
         final HttpSession session = server.getHttpSession(exchange);
         Assertions.assertTrue(session.getCreationTime() < System.currentTimeMillis(), "Client session creation time was in the future");

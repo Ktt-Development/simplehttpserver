@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ServerSessionThrottler extends ConnectionThrottler{
 
     private final HttpSessionHandler sessionHandler;
-    private final Map<HttpSession,AtomicInteger> connections = new ConcurrentHashMap<>();
+    private final Map<HttpSession, AtomicInteger> connections = new ConcurrentHashMap<>();
 
     private final AtomicInteger uConn = new AtomicInteger(0);
     private final AtomicInteger uConnMax = new AtomicInteger(-1);
@@ -62,13 +62,13 @@ public class ServerSessionThrottler extends ConnectionThrottler{
     @Override
     final boolean addConnection(final HttpExchange exchange){
         final HttpSession session = sessionHandler.getSession(exchange);
-        final int maxConn = getMaxConnections(session,exchange);
+        final int maxConn = getMaxConnections(session, exchange);
 
         if(!connections.containsKey(session))
-            connections.put(session,new AtomicInteger(0));
+            connections.put(session, new AtomicInteger(0));
 
         final AtomicInteger conn = connections.get(session);
-        final boolean exempt = canIgnoreConnectionLimit(session,exchange);
+        final boolean exempt = canIgnoreConnectionLimit(session, exchange);
 
         if(maxConn < 0){
             if(!exempt){
@@ -112,14 +112,14 @@ public class ServerSessionThrottler extends ConnectionThrottler{
         final HttpSession session = sessionHandler.getSession(exchange);
         if(connections.containsKey(session)){
             connections.get(session).decrementAndGet();
-            if(!canIgnoreConnectionLimit(session,exchange))
+            if(!canIgnoreConnectionLimit(session, exchange))
                 uConn.decrementAndGet();
         }
     }
 
     @Override
     public final int getMaxConnections(final HttpExchange exchange){
-        return getMaxConnections(sessionHandler.getSession(exchange),exchange);
+        return getMaxConnections(sessionHandler.getSession(exchange), exchange);
     }
 
     /**

@@ -26,7 +26,7 @@ public abstract class ContextUtil {
         if(linSlash.isBlank() || linSlash.equals("/")) // handle blank or '/' contexts
             return leadingSlash || trailingSlash ? "/" : "";
         final String ltSlash = (!(linSlash.charAt(0) == '/') ? '/' : "") + linSlash + (!(linSlash.charAt(linSlash.length()-1) == '/') ? '/' : "");
-        return ltSlash.substring(leadingSlash ? 0 : 1,ltSlash.length() + (trailingSlash ? 0 : -1));
+        return ltSlash.substring(leadingSlash ? 0 : 1, ltSlash.length() + (trailingSlash ? 0 : -1));
     }
 
     /**
@@ -47,7 +47,7 @@ public abstract class ContextUtil {
         for(final String context : contexts)
             OUT.append(getContext(context, true, false));
 
-        return getContext(OUT.toString(),leadingSlash,trailingSlash);
+        return getContext(OUT.toString(), leadingSlash, trailingSlash);
     }
 
 }

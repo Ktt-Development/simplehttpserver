@@ -29,7 +29,7 @@ public final class SimpleHttpExchangeGetTest {
 
         final String context = "";
         final AtomicReference<HttpContext> contextRef = new AtomicReference<>();
-        contextRef.set(server.createContext(context,handler));
+        contextRef.set(server.createContext(context, handler));
         server.start();
 
         final String queryKey = "test", queryValue = "value";
@@ -50,7 +50,7 @@ public final class SimpleHttpExchangeGetTest {
 
         Assertions.assertEquals(RequestMethod.GET, exchange.getRequestMethod(), "Client request method did not match exchange request method (GET)");
         Assertions.assertTrue(exchange.hasGet(), "Exchange was missing client GET map");
-        Assertions.assertEquals( queryValue, exchange.getGetMap().get(queryKey), "Exchange GET did not match client GET");
+        Assertions.assertEquals(queryValue, exchange.getGetMap().get(queryKey), "Exchange GET did not match client GET");
     }
 
 }

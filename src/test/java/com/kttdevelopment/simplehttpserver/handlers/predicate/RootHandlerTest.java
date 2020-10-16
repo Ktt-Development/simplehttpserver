@@ -19,7 +19,7 @@ public final class RootHandlerTest {
 
         final SimpleHttpServer server = SimpleHttpServer.create(port);
         final String context = "";
-        server.createContext(context,new RootHandler((SimpleHttpHandler) exchange -> exchange.send("A"), (SimpleHttpHandler) exchange -> exchange.send("B")));
+        server.createContext(context, new RootHandler((SimpleHttpHandler) exchange -> exchange.send("A"), (SimpleHttpHandler) exchange -> exchange.send("B")));
         server.start();
 
         Assertions.assertFalse(server.getContexts().isEmpty(), "Server did not contain a temporary context");
@@ -33,7 +33,7 @@ public final class RootHandlerTest {
         String response = HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
             .thenApply(HttpResponse::body).get();
 
-        Assertions.assertEquals("A",response, "Server root response did not match client root response");
+        Assertions.assertEquals("A", response, "Server root response did not match client root response");
 
         request = HttpRequest.newBuilder()
             .uri(URI.create(url + server.getRandomContext()))
@@ -42,7 +42,7 @@ public final class RootHandlerTest {
         response = HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
             .thenApply(HttpResponse::body).get();
 
-        Assertions.assertEquals("B",response, "Server else response did not match client else response");
+        Assertions.assertEquals("B", response, "Server else response did not match client else response");
 
         server.stop();
     }

@@ -15,10 +15,10 @@ public final class SimpleHttpServerContextTests {
         final SimpleHttpServer server = SimpleHttpServer.create();
 
         final String initContext = server.getRandomContext();
-        Assertions.assertNotNull( initContext, "Random context may not be null");
+        Assertions.assertNotNull(initContext, "Random context may not be null");
         server.createContext(initContext);
         for(int i = 0; i < 100; i++)
-            Assertions.assertNotEquals(initContext,server.getRandomContext(), "Random context may not be a duplicate");
+            Assertions.assertNotEquals(initContext, server.getRandomContext(), "Random context may not be a duplicate");
     }
 
     @Test
@@ -31,7 +31,7 @@ public final class SimpleHttpServerContextTests {
         Assertions.assertTrue(initContext.startsWith(head + '/'), "Random context with parameter must have correct head");
         server.createContext(initContext);
         for(int i = 0; i < 100; i++)
-            Assertions.assertNotEquals(initContext,server.getRandomContext(head), "Random context may not be a duplicate");
+            Assertions.assertNotEquals(initContext, server.getRandomContext(head), "Random context may not be a duplicate");
     }
 
     @Test
@@ -71,28 +71,28 @@ public final class SimpleHttpServerContextTests {
         final SimpleHttpServer server = SimpleHttpServer.create();
         String context = "";
 
-        Assertions.assertNotEquals(server.createContext(context).getHandler(),server.getContextHandler(context), "Handler from #createContext(context)#getHandler() should not be the same when retrieving from #getContextHandler(context) because a wrapper handler is used");
-        Assertions.assertEquals(1,server.getContexts().size(), "Server context size should be 1 after 1 added");
+        Assertions.assertNotEquals(server.createContext(context).getHandler(), server.getContextHandler(context), "Handler from #createContext(context)#getHandler() should not be the same when retrieving from #getContextHandler(context) because a wrapper handler is used");
+        Assertions.assertEquals(1, server.getContexts().size(), "Server context size should be 1 after 1 added");
 
         final SimpleHttpHandler handler = SimpleHttpExchange::close;
 
         context = "2";
-        Assertions.assertNotEquals(handler,server.createContext(context,handler).getHandler(), "Handler passed to #createContext(context,handler) should not be the same as #createContext(context,handler)#getHandler() because a wrapper handler is used");
-        Assertions.assertEquals(2,server.getContexts().size(), "Server context size should be 2 after 1 added");
+        Assertions.assertNotEquals(handler, server.createContext(context, handler).getHandler(), "Handler passed to #createContext(context, handler) should not be the same as #createContext(context, handler)#getHandler() because a wrapper handler is used");
+        Assertions.assertEquals(2, server.getContexts().size(), "Server context size should be 2 after 1 added");
 
         context = "3";
-        Assertions.assertEquals(handler,server.getContextHandler(server.createContext(context,handler)), "Handler passed to #createContext(context,handler) should be the same as #getContextHandler(context)");
-        Assertions.assertEquals(3,server.getContexts().size(), "Server context size should be 3 after 1 added");
+        Assertions.assertEquals(handler, server.getContextHandler(server.createContext(context, handler)), "Handler passed to #createContext(context, handler) should be the same as #getContextHandler(context)");
+        Assertions.assertEquals(3, server.getContexts().size(), "Server context size should be 3 after 1 added");
     }
 
     @Test
     public final void createRootContext() throws IOException{
         final SimpleHttpServer server   = SimpleHttpServer.create();
-        final RootHandler handler       = new RootHandler(HttpExchange::close,HttpExchange::close);
+        final RootHandler handler       = new RootHandler(HttpExchange::close, HttpExchange::close);
 
         String context = server.getRandomContext();
 
-        Assertions.assertThrows(IllegalArgumentException.class, () -> server.createContext(context,handler), "Server should throw IllegalArgumentException when adding RootHandler to non-root context");
+        Assertions.assertThrows(IllegalArgumentException.class, () -> server.createContext(context, handler), "Server should throw IllegalArgumentException when adding RootHandler to non-root context");
 
         final String[] testRoots = {"/","\\",""};
 
@@ -115,7 +115,7 @@ public final class SimpleHttpServerContextTests {
         final String context = "duplicate";
 
         server.createContext(context);
-        server.createContext(context,HttpExchange::close);
+        server.createContext(context, HttpExchange::close);
     }
 
 }

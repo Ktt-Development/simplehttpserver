@@ -33,7 +33,7 @@ public final class FileHandlerNoWalkTest {
 
             @Override
             public final String getName(final File file){
-                return file.getName().substring(0,file.getName().lastIndexOf('.'));
+                return file.getName().substring(0, file.getName().lastIndexOf('.'));
             }
         };
         final FileHandler handler           = new FileHandler(adapter);
@@ -48,19 +48,19 @@ public final class FileHandlerNoWalkTest {
         final File subdir   = new File(dir, UUID.randomUUID().toString());
         Assertions.assertTrue(subdir.exists() || subdir.mkdirs());
 
-        final File file = new File(dir,fileName);
+        final File file = new File(dir, fileName);
         Files.write(file.toPath(), testContent.getBytes());
-        final File walk = new File(subdir,fileName);
-        Files.write(walk.toPath(),testContent.getBytes());
+        final File walk = new File(subdir, fileName);
+        Files.write(walk.toPath(), testContent.getBytes());
 
         final String context = "";
 
         handler.addDirectory(dir); // test file & directory read
-        handler.addDirectory(contextNoName,dir);
-        handler.addDirectory(dir,dirNewName);
-        handler.addDirectory(contextWName,dir,dirNewName);
+        handler.addDirectory(contextNoName, dir);
+        handler.addDirectory(dir, dirNewName);
+        handler.addDirectory(contextWName, dir, dirNewName);
 
-        server.createContext(context,handler);
+        server.createContext(context, handler);
         server.start();
 
         final String[] validPathsToTest = { // valid reads

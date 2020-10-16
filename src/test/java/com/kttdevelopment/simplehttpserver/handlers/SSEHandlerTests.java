@@ -22,7 +22,7 @@ public final class SSEHandlerTests {
         String context = "";
 
         final SSEHandler handler = new SSEHandler();
-        server.createContext(context,handler);
+        server.createContext(context, handler);
         server.start();
 
         HttpRequest request = HttpRequest.newBuilder()

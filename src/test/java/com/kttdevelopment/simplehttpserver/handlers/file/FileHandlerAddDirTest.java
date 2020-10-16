@@ -35,19 +35,19 @@ public final class FileHandlerAddDirTest {
         final File subdir   = new File(dir, UUID.randomUUID().toString());
         Assertions.assertTrue(subdir.exists() || subdir.mkdirs());
 
-        final File file = new File(dir,fileName);
-        Files.write(file.toPath(),testContent.getBytes());
-        final File walk = new File(subdir,fileName);
-        Files.write(walk.toPath(),testContent.getBytes());
+        final File file = new File(dir, fileName);
+        Files.write(file.toPath(), testContent.getBytes());
+        final File walk = new File(subdir, fileName);
+        Files.write(walk.toPath(), testContent.getBytes());
 
         final String context = "";
 
         handler.addDirectory(dir); // test file & directory read
-        handler.addDirectory(contextNoName,dir);
-        handler.addDirectory(dir,dirNewName);
-        handler.addDirectory(contextWName,dir,dirNewName);
+        handler.addDirectory(contextNoName, dir);
+        handler.addDirectory(dir, dirNewName);
+        handler.addDirectory(contextWName, dir, dirNewName);
 
-        server.createContext(context,handler);
+        server.createContext(context, handler);
         server.start();
 
         final String[] validPathsToTest = { // valid reads
@@ -70,7 +70,7 @@ public final class FileHandlerAddDirTest {
                     .get();
 
                 Assertions.assertNotNull(response, "Client did not find data for " + path);
-                Assertions.assertEquals(testContent,response, "Client data did not match server data for " + path);
+                Assertions.assertEquals(testContent, response, "Client data did not match server data for " + path);
             }catch(final ExecutionException ignored){
                 Assertions.fail("Client did not find data for " + path);
             }

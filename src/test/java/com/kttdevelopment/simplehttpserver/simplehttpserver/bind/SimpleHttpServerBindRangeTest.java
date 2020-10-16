@@ -20,7 +20,7 @@ public final class SimpleHttpServerBindRangeTest {
         Assertions.assertDoesNotThrow(() -> server.bind(port),"Bind server to valid port (" + port + ") should not throw an exception");
 
         Assertions.assertNotNull(server.getAddress(), "Server address should not be null for successful bind");
-        Assertions.assertEquals(port,server.getAddress().getPort(), "Server bind port should equal address port");
+        Assertions.assertEquals(port, server.getAddress().getPort(), "Server bind port should equal address port");
     }
 
 }
