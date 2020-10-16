@@ -50,6 +50,8 @@ public final class SimpleHttpExchangePostTest {
         Assertions.assertTrue(exchange.hasPost(), "Exchange was missing client POST map");
         Assertions.assertEquals(queryValue, exchange.getPostMap().get(queryKey), "Exchange POST did not match client POST");
 
+        Assertions.assertNull(exchange.getMultipartFormData(), "A non-multipart/form-data POST should not return one");
+
         server.stop();
     }
 
