@@ -33,7 +33,7 @@ public final class FileHandlerNoWalkTest {
 
             @Override
             public final String getName(final File file){
-                return file.getName().substring(0, file.getName().lastIndexOf('.'));
+                return file.getName().substring(0, file.getName().contains(".") ? file.getName().lastIndexOf('.') : file.getName().length());
             }
         };
         final FileHandler handler           = new FileHandler(adapter);

@@ -71,6 +71,7 @@ class DirectoryEntry {
         }
     }
 
+    // top level files
     private void addFile(final File file){
         files.put(
             ContextUtil.getContext(adapter.getName(file), true, false),
@@ -78,6 +79,7 @@ class DirectoryEntry {
         );
     }
 
+    // file in sub directories
     private void addDirectoryFile(final File file){
         final String relative = directoryPath.relativize(file.toPath().getParent()).toString(); // attach the relative path (parent) to the adapted file name
         files.put(
@@ -95,6 +97,7 @@ class DirectoryEntry {
      *
      * @see #getFiles()
      * @see #getFile(String)
+     * @see #getFileEntry(String)
      * @since 02.00.00
      * @author Ktt Development
      */
@@ -109,6 +112,7 @@ class DirectoryEntry {
      *
      * @see #getDirectory()
      * @see #getFile(String)
+     * @see #getFileEntry(String)
      * @since 02.00.00
      * @author Ktt Development
      */
@@ -117,13 +121,14 @@ class DirectoryEntry {
     }
 
     /**
-     * Returns the file at the associated path. <b>Preload only.</b>
+     * Returns the file at the associated path. <b>Doesn't work with LIVELOAD.</b>
      *
      * @param path context to check
      * @return file associated with that context
      *
      * @see #getDirectory()
      * @see #getFiles()
+     * @see #getFileEntry(String)
      * @since 02.00.00
      * @author Ktt Development
      */
@@ -141,13 +146,26 @@ class DirectoryEntry {
         final String fileName = targetFile.getParentFile() == null ? targetFile.getPath() : targetFile.getName();
 
         // for each file in parent directory, run adapter to find file that matches adapted name
-        for(final File file : Objects.requireNonNullElse(parentFile.listFiles(), new File[0]))
-            if(fileName.equals(file.isFile() ? file.getName() : adapter.getName(file))) // use adapter name only if not a directory
+        for(final File file : Objects.requireNonNullElse(parentFile.listFiles(), new File[0])){
+            if(fileName.equals(file.isDirectory() ? file.getName() : adapter.getName(file))) // use adapter name only if not a directory
                 return file;
+        }
         return null;
     }
 
-    private FileEntry getFileEntry(final String path){
+    /**
+     * Returns the file entry at the associated path. <b>Doesn't work with LIVELOAD.</b>
+     *
+     * @param path context to check
+     * @return file entry associated with that context
+     *
+     * @see #getDirectory()
+     * @see #getFiles()
+     * @see #getFile(String)
+     * @since 4.0.0
+     * @author Ktt Development
+     */
+    public final FileEntry getFileEntry(final String path){
         final String context  = ContextUtil.getContext(path, true, false);
         final FileEntry entry = files.get(context);
         if(entry == null){ // add new entry if not already added and file exists

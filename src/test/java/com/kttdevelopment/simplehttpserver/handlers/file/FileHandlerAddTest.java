@@ -29,8 +29,9 @@ public final class FileHandlerAddTest {
         final String context          = "";
 
         final Map<File,ByteLoadingOption> files = new HashMap<>();
-        for(final ByteLoadingOption blop : ByteLoadingOption.values())
-            files.put(new File(dir, blop.name()), blop);
+        Arrays.stream(ByteLoadingOption.values())
+            .filter(o -> o != ByteLoadingOption.CACHELOAD)
+            .forEach(blop -> files.put(new File(dir, blop.name()), blop));
 
         // initial write
         final String testContent = String.valueOf(System.currentTimeMillis());

@@ -24,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @see SimpleHttpHandler
  * @see com.sun.net.httpserver.HttpHandler
  * @since 02.00.00
- * @version 03.05.05
+ * @version 4.0.0
  * @author Ktt Development
  */
 public class FileHandler implements SimpleHttpHandler {
@@ -43,12 +43,12 @@ public class FileHandler implements SimpleHttpHandler {
     public FileHandler(){
         this.adapter = new FileHandlerAdapter() {
             @Override
-            public byte[] getBytes(final File file, final byte[] bytes){
+            public final byte[] getBytes(final File file, final byte[] bytes){
                 return bytes;
             }
 
             @Override
-            public String getName(final File file){
+            public final String getName(final File file){
                 return FileHandler.this.getName(file);
             }
         };
@@ -813,11 +813,16 @@ public class FileHandler implements SimpleHttpHandler {
             if(match.isEmpty()){ // no match
                 handle(exchange, null, null);
             }else{ // get file from matching directory
-                final DirectoryEntry entry = directories.get(match);
+                final DirectoryEntry dir = directories.get(match);
                 String rel = context.substring(match.length());
 
-                final File file = entry.getFile(rel);
-                handle(exchange, file, entry.getBytes(rel));
+                final FileEntry entry = dir.getFileEntry(rel);
+
+                handle(
+                    exchange,
+                    entry == null ? dir.getFile(rel) : entry.getFile(),
+                    entry == null ? dir.getBytes(rel) : entry.getBytes()
+                );
             }
         }
         exchange.close();
