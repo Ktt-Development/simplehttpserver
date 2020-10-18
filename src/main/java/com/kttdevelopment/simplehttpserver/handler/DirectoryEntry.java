@@ -7,10 +7,6 @@ import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Consumer;
-
-import static java.nio.file.StandardWatchEventKinds.*;
 
 /**
  * Represents a directory in the {@link FileHandler}. Applications do not use this class.
@@ -116,7 +112,7 @@ class DirectoryEntry {
      * @since 02.00.00
      * @author Ktt Development
      */
-    public Map<String,FileEntry> getFiles(){
+    public final Map<String,FileEntry> getFiles(){
         return Collections.unmodifiableMap(files);
     }
 
@@ -133,30 +129,37 @@ class DirectoryEntry {
      */
     @SuppressWarnings("SpellCheckingInspection")
     public final File getFile(final String path){
-        final String relative = ContextUtil.getContext(path, true, false);
-        if(loadingOption != ByteLoadingOption.LIVELOAD){
-            // todo: add null check here for mod/cache to determine when to check for new files
-            //  (add method to determine which folder to refresh instead of full tree [more efficient!])
-            return files.get(relative).getFile();
-        }else{ // file is a reference, existence of file does not matter
-            final String dabs       = directory.getAbsolutePath();
-            final File parentFile   = new File(dabs + relative).getParentFile();
-            final String pabs       = parentFile.getAbsolutePath();
+        final String relative   = ContextUtil.getContext(path, true, false);
+        final String dabs       = directory.getAbsolutePath();
+        final File parentFile   = new File(dabs + relative).getParentFile();
+        final String pabs       = parentFile.getAbsolutePath();
 
-            // if not top level directory or if not child of directory folder, then return null file
-            if(!pabs.equals(dabs) && (!isWalkthrough || !pabs.startsWith(dabs))) return null;
+        // if not top level directory or if not child of directory folder, then return null file
+        if(!pabs.equals(dabs) && (!isWalkthrough || !pabs.startsWith(dabs))) return null;
 
-            final File targetFile = Paths.get(dabs, relative).toFile();
-            final String fileName = targetFile.getParentFile() == null ? targetFile.getPath() : targetFile.getName();
+        final File targetFile = Paths.get(dabs, relative).toFile();
+        final String fileName = targetFile.getParentFile() == null ? targetFile.getPath() : targetFile.getName();
 
-            // for each file in parent directory, run adapter to find file that matches adapted name
-            for(final File file : Objects.requireNonNullElse(parentFile.listFiles(), new File[0]))
-                if(
-                   ( !file.isDirectory() && adapter.getName(file).equals(fileName)) || // files use adapter names
-                   (file.isDirectory() && file.getName().equals(fileName)) // directories don't use adapter names
-                )
-                    return file;
+        // for each file in parent directory, run adapter to find file that matches adapted name
+        for(final File file : Objects.requireNonNullElse(parentFile.listFiles(), new File[0]))
+            if(fileName.equals(file.isFile() ? file.getName() : adapter.getName(file))) // use adapter name only if not a directory
+                return file;
+        return null;
+    }
+
+    private FileEntry getFileEntry(final String path){
+        final String context  = ContextUtil.getContext(path, true, false);
+        final FileEntry entry = files.get(context);
+        if(entry == null){ // add new entry if not already added and file exists
+            final File file = getFile(path);
+            return file != null && !file.exists()
+                ? files.put(context, new FileEntry(file, adapter, loadingOption))
+                : null;
+        }else if(!entry.getFile().exists()){ // remove entry if file no longer exists
+            files.remove(context);
             return null;
+        }else{ // return existing if exists
+            return entry;
         }
     }
 
@@ -171,12 +174,12 @@ class DirectoryEntry {
      * @author Ktt Development
      */
     public final byte[] getBytes(final String path){
-        final String rel = ContextUtil.getContext(path, true, false);
         if(loadingOption != ByteLoadingOption.LIVELOAD ){ // find preloaded bytes
-            return files.get(rel).getBytes(); // already adapted
+            final FileEntry entry = getFileEntry(path);
+            return entry != null ? entry.getBytes() : null;
         }else{
             try{
-                final File file = Objects.requireNonNull(getFile(path)); // find if file allowed
+                final File file = Objects.requireNonNull(getFile(path)); // check if file is allowed
                 return !file.isDirectory() ? adapter.getBytes(file, Files.readAllBytes(file.toPath())) : null; // adapt bytes here
             }catch(final NullPointerException | IOException ignored){
                 return null;

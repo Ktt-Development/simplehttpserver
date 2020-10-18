@@ -39,6 +39,9 @@ class FileEntry {
      * @author Ktt Development
      */
     FileEntry(final File file, final FileBytesAdapter bytesAdapter, final ByteLoadingOption loadingOption){
+        if(loadingOption == ByteLoadingOption.CACHELOAD && !(bytesAdapter instanceof CacheFileAdapter))
+            throw new IllegalArgumentException("CacheLoad option must use a cache file adapter");
+
         this.file           = file;
         this.adapter        = bytesAdapter;
         this.loadingOption  = loadingOption;
@@ -79,8 +82,8 @@ class FileEntry {
         if(loadingOption == ByteLoadingOption.PRELOAD || loadingOption == ByteLoadingOption.LIVELOAD)
             throw new UnsupportedOperationException();
         else
-            try{ // todo: cache method must not read bytes every time
-                bytes = adapter.getBytes(file, Files.readAllBytes(file.toPath()));
+            try{
+                bytes = loadingOption == ByteLoadingOption.MODLOAD ? ((CacheFileAdapter) adapter).getBytes(file) : adapter.getBytes(file, Files.readAllBytes(file.toPath()));
             }catch(final Throwable ignored){
                 bytes = null;
             }
