@@ -35,7 +35,7 @@
             <organizationUrl>https://github.com/Ktt-Development</organizationUrl>
         </developer>
     </developers>
-         
+
     <scm>
         <url>https://github.com/Ktt-Development/simplehttpserver.git</url>
         <connection>scm:git:git@github.com:Ktt-Development/simplehttpserver.git</connection>
