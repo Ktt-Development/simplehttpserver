@@ -1,13 +1,17 @@
 package com.kttdevelopment.simplehttpserver.handlers.file;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+import com.kttdevelopment.simplehttpserver.handler.*;
+import org.junit.jupiter.api.*;
+
+import java.io.File;
 
 public class FileHandlerCacheTest {
 
-    @Test @Disabled // todo
+    @Test
     public final void testIllegalArg(){
-        // test CACHELOAD-CACHEAdapter requirement
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new FileHandler(new FileHandlerAdapter() {}).addFile(new File("null"), ByteLoadingOption.CACHELOAD));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new FileHandler(new CacheFileAdapter(0)).addFile(new File("null")));
+        Assertions.assertDoesNotThrow(() -> new FileHandler(new CacheFileAdapter(0)).addFile(new File("null"), ByteLoadingOption.CACHELOAD));
     }
 
     @Test @Disabled

@@ -17,8 +17,6 @@ package com.kttdevelopment.simplehttpserver.handler;
 public enum ByteLoadingOption {
 
     PRELOAD,
-    @Deprecated
-    WATCHLOAD,
     MODLOAD,
     CACHELOAD,
     LIVELOAD

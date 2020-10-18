@@ -31,7 +31,6 @@ class FileEntry {
      * @param file file to represent
      * @param bytesAdapter how to process the bytes in {@link #getBytes()}
      * @param loadingOption how to handle the initial file loading
-     * @throws UncheckedIOException I/O failure to start watch service ({@link ByteLoadingOption#WATCHLOAD} only).
      *
      * @see FileBytesAdapter
      * @see ByteLoadingOption
@@ -41,6 +40,8 @@ class FileEntry {
     FileEntry(final File file, final FileBytesAdapter bytesAdapter, final ByteLoadingOption loadingOption){
         if(loadingOption == ByteLoadingOption.CACHELOAD && !(bytesAdapter instanceof CacheFileAdapter))
             throw new IllegalArgumentException("CacheLoad option must use a cache file adapter");
+        else if(loadingOption != ByteLoadingOption.CACHELOAD && bytesAdapter instanceof CacheFileAdapter)
+            throw new IllegalArgumentException("CacheFileAdapter must be used with CacheLoad");
 
         this.file           = file;
         this.adapter        = bytesAdapter;
@@ -83,8 +84,8 @@ class FileEntry {
             throw new UnsupportedOperationException();
         else
             try{
-                bytes = loadingOption == ByteLoadingOption.MODLOAD ? ((CacheFileAdapter) adapter).getBytes(file) : adapter.getBytes(file, Files.readAllBytes(file.toPath()));
-            }catch(final Throwable ignored){
+                bytes = loadingOption == ByteLoadingOption.CACHELOAD ? ((CacheFileAdapter) adapter).getBytes(file) : adapter.getBytes(file, Files.readAllBytes(file.toPath()));
+            }catch(final Throwable e){
                 bytes = null;
             }
     }

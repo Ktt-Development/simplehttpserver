@@ -67,8 +67,10 @@ public final class FileHandlerAddTest {
             Assertions.assertDoesNotThrow(() -> Files.write(file.toPath(), after.getBytes()), "Failed to second write file " + file.getPath());
 
             try{
-                final String response = HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
-                    .thenApply(HttpResponse::body).get();
+                final String response = HttpClient.newHttpClient()
+                    .sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                    .thenApply(HttpResponse::body)
+                    .get();
 
                 Assertions.assertEquals( loadingOption == ByteLoadingOption.PRELOAD ? testContent : after, response, "Client data did not match server data for " + file.getName());
             }catch(final InterruptedException | ExecutionException ignored){
