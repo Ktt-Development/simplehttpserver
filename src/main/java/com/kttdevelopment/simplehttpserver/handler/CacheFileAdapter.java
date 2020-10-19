@@ -1,6 +1,7 @@
 package com.kttdevelopment.simplehttpserver.handler;
 
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * This class caches file bytes when adding to the {@link FileHandler}.
@@ -14,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 public class CacheFileAdapter implements FileHandlerAdapter {
 
     private final long cacheTimeMillis;
+    private final AtomicLong closestExpiry = new AtomicLong(0);
 
     /**
      * Creates a CacheFileAdapter where files will expire after set milliseconds.
@@ -51,6 +53,34 @@ public class CacheFileAdapter implements FileHandlerAdapter {
      */
     final long getCacheTimeMillis(){
         return cacheTimeMillis;
+    }
+
+    /**
+     * Returns the closest expiry.
+     *
+     * @return closest expiry
+     *
+     * @see #updateClosestExpiry(long)
+     * @since 4.0.0
+     * @author Ktt Development
+     */
+    final long getClosestExpiry(){
+        return closestExpiry.get();
+    }
+
+    /**
+     * Sets the closest expiry if it is less than the current expiry
+     *
+     * @param expiry newest expiry
+     *
+     * @see #getClosestExpiry()
+     * @since 4.0.0
+     * @author Ktt Development
+     */
+    final void updateClosestExpiry(final long expiry){
+        final long was = closestExpiry.get();
+        if(expiry < was || was < System.currentTimeMillis()) // update expiry if new is lower or if expiry has lapsed
+            closestExpiry.set(expiry);
     }
 
     @Override

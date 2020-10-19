@@ -35,27 +35,27 @@ public class FileHandlerCacheTest {
         final String content = UUID.randomUUID().toString();
 
         final FileHandler handler = new FileHandler(new CacheFileAdapter(cacheTime));
-        final File file = new File(dir, UUID.randomUUID().toString());
-        final String filename = file.getName();
-        Files.write(file.toPath(), content.getBytes());
+        final File cache      = new File(dir, UUID.randomUUID().toString());
+        final String filename = cache.getName();
+        Files.write(cache.toPath(), content.getBytes());
 
-        final File file2 = new File(dir, UUID.randomUUID().toString());
+        final File cache2     = new File(dir, UUID.randomUUID().toString());
         final String content2 = UUID.randomUUID().toString();
-        Files.write(file2.toPath(), content2.getBytes());
+        Files.write(cache2.toPath(), content2.getBytes());
 
-        final File file3 = new File(dir, UUID.randomUUID().toString());
-        Assertions.assertTrue(file3.createNewFile());
-        handler.addFile(file, ByteLoadingOption.CACHELOAD);
-        handler.addFile(file3);
+        final File normal = new File(dir, UUID.randomUUID().toString());
+        Assertions.assertTrue(normal.createNewFile());
+        handler.addFile(cache, ByteLoadingOption.CACHELOAD);
+        handler.addFile(normal);
 
         server.createContext("", handler);
         server.start();
 
-        final String check = "bytes=" + Arrays.toString(content.getBytes());
-        final String check2 = "bytes=" + Arrays.toString(content2.getBytes());
+        final String cacheContent = "bytes=" + Arrays.toString(content.getBytes());
+        final String unexpected   = "bytes=" + Arrays.toString(content2.getBytes());
         // access new file
-        Assertions.assertFalse(handler.toString().contains(check));
-        Assertions.assertFalse(handler.toString().contains(check2));
+        Assertions.assertFalse(handler.toString().contains(cacheContent));
+        Assertions.assertFalse(handler.toString().contains(unexpected));
         try{
             final String url = "http://localhost:" + port + '/' + filename;
             final HttpRequest request = HttpRequest.newBuilder()
@@ -72,13 +72,13 @@ public class FileHandlerCacheTest {
         }catch(final ExecutionException ignored){
             Assertions.fail("Client did not find data for " + filename);
         }
-        Assertions.assertTrue(handler.toString().contains(check));
-        Assertions.assertFalse(handler.toString().contains(check2));
+        Assertions.assertTrue(handler.toString().contains(cacheContent));
+        Assertions.assertFalse(handler.toString().contains(unexpected));
 
         // check if file is cleared after expiry
         Thread.sleep(cacheTime + 1000);
         {
-            final String url = "http://localhost:" + port + '/' + file3.getName();
+            final String url = "http://localhost:" + port + '/' + normal.getName();
             final HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .build();
@@ -88,8 +88,8 @@ public class FileHandlerCacheTest {
                 .thenApply(HttpResponse::body)
                 .get();
 
-            Assertions.assertFalse(handler.toString().contains(check));
-            Assertions.assertFalse(handler.toString().contains(check2));
+            Assertions.assertFalse(handler.toString().contains(cacheContent));
+            Assertions.assertFalse(handler.toString().contains(unexpected));
         }
         // access file again
         try{
@@ -108,8 +108,8 @@ public class FileHandlerCacheTest {
         }catch(final ExecutionException ignored){
             Assertions.fail("Client did not find data for " + filename);
         }
-        Assertions.assertTrue(handler.toString().contains(check));
-        Assertions.assertFalse(handler.toString().contains(check2));
+        Assertions.assertTrue(handler.toString().contains(cacheContent));
+        Assertions.assertFalse(handler.toString().contains(unexpected));
     }
 
 }

@@ -830,21 +830,18 @@ public class FileHandler implements SimpleHttpHandler {
         exchange.close();
 
         // cache only
-        if(adapter instanceof CacheFileAdapter && !updatingCache.get()){ // if cached elapsed
-            updatingCache.set(true);
-            final long now = System.currentTimeMillis();
+        final long now;
+        if(adapter instanceof CacheFileAdapter && ((CacheFileAdapter) adapter).getCacheTimeMillis() < (now = System.currentTimeMillis())){ // if lowest cached elapsed
             final Consumer<FileEntry> update = entry -> {
                 if(entry.getLoadingOption() == ByteLoadingOption.CACHELOAD && entry.getExpiry() < now) // clear bytes from files where cache time elapsed
                     entry.clearBytes();
+                ((CacheFileAdapter) adapter).updateClosestExpiry(entry.getExpiry()); // check if lowest expiry needs to be changed
             };
 
             files.values().forEach(update);
             directories.values().forEach(dir -> dir.getFiles().values().forEach(update));
-            updatingCache.set(false);
         }
     }
-
-    private final AtomicBoolean updatingCache = new AtomicBoolean(false); // skip if already iterating
 
     @Override
     public final void handle(final HttpExchange exchange) throws IOException{
