@@ -2,14 +2,18 @@
     <a href="https://github.com/Ktt-Development/simplehttpserver">
         <img src="https://raw.githubusercontent.com/Ktt-Development/simplehttpserver/main/branding/Logo.png" alt="Logo" width="100" height="100">
     </a>
-    <h3>SimpleHttpServer</h3>
-    A simplified implementation of the <a href="https://docs.oracle.com/en/java/javase/11/docs/api/jdk.httpserver/com/sun/net/httpserver/package-summary.html">sun http server</a> for JDK11. This library simplifies complex operations for both the server, exchange, and handlers.
-    <br />
-    <a href="https://docs.kttdevelopment.com/simplehttpserver/">Docs</a>
-    •
-    <a href="https://wiki.kttdevelopment.com/simplehttpserver/">Wiki</a>
-    •
-    <a href="https://github.com/Ktt-Development/simplehttpserver/issues">Issues</a>
+    <h3 align="center">SimpleHttpServer</h3>
+    <p align="center">
+        A simplified implementation of the <a href="https://docs.oracle.com/en/java/javase/11/docs/api/jdk.httpserver/com/sun/net/httpserver/package-summary.html">sun http server</a> for JDK11. 
+        <br />
+        This library simplifies complex operations for both the server, exchange, and handlers.
+        <br />
+        <a href="https://docs.kttdevelopment.com/simplehttpserver/">Docs</a>
+        •
+        <a href="https://wiki.kttdevelopment.com/simplehttpserver/">Wiki</a>
+        •
+        <a href="https://github.com/Ktt-Development/simplehttpserver/issues">Issues</a>
+    </p>
 </p>
 
 [![Deploy](https://github.com/Ktt-Development/simplehttpserver/workflows/Deploy/badge.svg)](https://github.com/orgs/Ktt-Development/packages?repo_name=simplehttpserver)
