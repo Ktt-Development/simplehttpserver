@@ -26,7 +26,7 @@ public class FileHandlerCacheTest {
     @TempDir
     public final File dir = new File(UUID.randomUUID().toString());
 
-    @SuppressWarnings("DuplicateExpressions")
+    @SuppressWarnings({"DuplicateExpressions", "RedundantSuppression"})
     @Test
     public final void testCacheLoad() throws IOException, InterruptedException, ExecutionException{
         final int port = 8080;

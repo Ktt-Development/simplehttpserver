@@ -1,5 +1,9 @@
 <h3 align="center">SimpleHttpServer</h3>
 <p align="center">
+    <a href="https://github.com/Ktt-Development/simplehttpserver">
+        <img src="https://raw.githubusercontent.com/Ktt-Development/simplehttpserver/main/branding/Logo.png" alt="Logo" width="80" height="80">
+    </a>
+
     A simplified implementation of the <a href="https://docs.oracle.com/en/java/javase/11/docs/api/jdk.httpserver/com/sun/net/httpserver/package-summary.html">sun http server</a> for JDK11. This library simplifies complex operations for both the server, exchange, and handlers.
     <br />
     <a href="https://docs.kttdevelopment.com/simplehttpserver/">Docs</a>
