@@ -834,7 +834,7 @@ public class FileHandler implements SimpleHttpHandler {
             updatingCache.set(true);
             final long now = System.currentTimeMillis();
             final Consumer<FileEntry> update = entry -> {
-                if(entry.getExpiry() < now) // clear bytes from files where cache time elapsed
+                if(entry.getLoadingOption() == ByteLoadingOption.CACHELOAD && entry.getExpiry() < now) // clear bytes from files where cache time elapsed
                     entry.clearBytes();
             };
 

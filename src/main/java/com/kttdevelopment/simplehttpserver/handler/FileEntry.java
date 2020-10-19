@@ -41,8 +41,6 @@ class FileEntry {
     FileEntry(final File file, final FileBytesAdapter bytesAdapter, final ByteLoadingOption loadingOption){
         if(loadingOption == ByteLoadingOption.CACHELOAD && !(bytesAdapter instanceof CacheFileAdapter))
             throw new IllegalArgumentException("CacheLoad option must use a cache file adapter");
-        else if(loadingOption != ByteLoadingOption.CACHELOAD && bytesAdapter instanceof CacheFileAdapter)
-            throw new IllegalArgumentException("CacheFileAdapter must be used with CacheLoad");
 
         this.file           = file;
         this.adapter        = bytesAdapter;
@@ -125,7 +123,7 @@ class FileEntry {
             case CACHELOAD:
                 final long now = System.currentTimeMillis();
                 // update the file if it was modified or now exceeds the expiry time
-                if(now > expiry.getAndUpdate(was -> now + cacheTime) || file.lastModified() != lastModified.get())
+                if((loadingOption == ByteLoadingOption.CACHELOAD && now > expiry.getAndUpdate(was -> now + cacheTime)) || file.lastModified() != lastModified.get())
                     reloadBytes();
             case PRELOAD:
                 return bytes;
