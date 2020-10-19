@@ -9,6 +9,8 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 
 /**
  * A request handler that processes files using the {@link FileHandlerAdapter}. <br>
@@ -826,7 +828,23 @@ public class FileHandler implements SimpleHttpHandler {
             }
         }
         exchange.close();
+
+        // cache only
+        if(adapter instanceof CacheFileAdapter && !updatingCache.get()){ // if cached elapsed
+            updatingCache.set(true);
+            final long now = System.currentTimeMillis();
+            final Consumer<FileEntry> update = entry -> {
+                if(entry.getExpiry() < now) // clear bytes from files where cache time elapsed
+                    entry.clearBytes();
+            };
+
+            files.values().forEach(update);
+            directories.values().forEach(dir -> dir.getFiles().values().forEach(update));
+            updatingCache.set(false);
+        }
     }
+
+    private final AtomicBoolean updatingCache = new AtomicBoolean(false); // skip if already iterating
 
     @Override
     public final void handle(final HttpExchange exchange) throws IOException{

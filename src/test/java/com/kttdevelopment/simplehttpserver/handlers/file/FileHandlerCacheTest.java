@@ -14,9 +14,19 @@ public class FileHandlerCacheTest {
         Assertions.assertDoesNotThrow(() -> new FileHandler(new CacheFileAdapter(0)).addFile(new File("null"), ByteLoadingOption.CACHELOAD));
     }
 
-    @Test @Disabled
+    @Test @Disabled // todo
     public final void testCacheLoad(){
-        // test read
+        // init
+
+        // access file
+
+        // check that they are not null
+
+        // wait expiry
+
+        // check that they are all null
+
+        // access file & check that it is not null
     }
 
 }

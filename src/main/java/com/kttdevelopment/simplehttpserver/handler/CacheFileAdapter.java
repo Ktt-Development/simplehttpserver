@@ -1,6 +1,5 @@
 package com.kttdevelopment.simplehttpserver.handler;
 
-import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -43,20 +42,23 @@ public class CacheFileAdapter implements FileHandlerAdapter {
     }
 
     /**
-     * Returns the cached bytes given a file.
+     * Returns how long files should be cached for.
      *
-     * @param file file to read
-     * @return cached file bytes
+     * @return file cache time
      *
-     * @see #getBytes(File, byte[])
      * @since 4.0.0
      * @author Ktt Development
      */
-    // todo
-    final byte[] getBytes(final File file){
-        return getBytes(file, new byte[0]);
+    final long getCacheTimeMillis(){
+        return cacheTimeMillis;
     }
 
-    // todo: toString
+    @Override
+    public String toString(){
+        return
+            "CacheFileAdapter"  + '{' +
+            "cacheTimeMillis"   + '=' + cacheTimeMillis +
+            '}';
+    }
 
 }

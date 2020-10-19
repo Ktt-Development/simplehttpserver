@@ -4,7 +4,6 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Represent a file in the {@link FileHandler}. Applications do not use this class.
@@ -24,6 +23,8 @@ class FileEntry {
     private byte[] bytes = null;
 
     private final AtomicLong lastModified = new AtomicLong();
+    private final AtomicLong expiry = new AtomicLong(0); // cache only
+    private final long cacheTime; // cache only
 
     /**
      * Creates a file entry.
@@ -46,8 +47,9 @@ class FileEntry {
         this.file           = file;
         this.adapter        = bytesAdapter;
         this.loadingOption  = loadingOption;
+        this.cacheTime      = bytesAdapter instanceof CacheFileAdapter ? ((CacheFileAdapter) bytesAdapter).getCacheTimeMillis() : -1;
 
-        if(loadingOption != ByteLoadingOption.LIVELOAD){
+        if(loadingOption != ByteLoadingOption.LIVELOAD && loadingOption != ByteLoadingOption.CACHELOAD){
             try{
                 bytes = adapter.getBytes(file, Files.readAllBytes(file.toPath()));
             }catch(final Throwable ignored){
@@ -74,8 +76,9 @@ class FileEntry {
     }
 
     /**
-     * Reloads the file's preloaded bytes using the {@link FileBytesAdapter}.
+     * Reloads the file's cached bytes.
      *
+     * @see #clearBytes()
      * @since 03.05.00
      * @author Ktt Development
      */
@@ -83,11 +86,28 @@ class FileEntry {
         if(loadingOption == ByteLoadingOption.PRELOAD || loadingOption == ByteLoadingOption.LIVELOAD)
             throw new UnsupportedOperationException();
         else
+            lastModified.set(file.lastModified());
             try{
-                bytes = loadingOption == ByteLoadingOption.CACHELOAD ? ((CacheFileAdapter) adapter).getBytes(file) : adapter.getBytes(file, Files.readAllBytes(file.toPath()));
-            }catch(final Throwable e){
+                bytes = adapter.getBytes(file, Files.readAllBytes(file.toPath()));
+            }catch(final Throwable ignored){
                 bytes = null;
             }
+    }
+
+    /**
+     * Clears the file's cached bytes.
+     *
+     * @see #reloadBytes()
+     * @since 4.0.0
+     * @author Ktt Development
+     */
+    public synchronized final void clearBytes(){
+        if(loadingOption == ByteLoadingOption.PRELOAD || loadingOption == ByteLoadingOption.LIVELOAD)
+            throw new UnsupportedOperationException();
+        else{
+            lastModified.set(0);
+            bytes = null;
+        }
     }
 
     /**
@@ -103,7 +123,9 @@ class FileEntry {
         switch(loadingOption){
             case MODLOAD:
             case CACHELOAD:
-                if(file.lastModified() != lastModified.get())
+                final long now = System.currentTimeMillis();
+                // update the file if it was modified or now exceeds the expiry time
+                if(now > expiry.getAndUpdate(was -> now + cacheTime) || file.lastModified() != lastModified.get())
                     reloadBytes();
             case PRELOAD:
                 return bytes;
@@ -128,6 +150,18 @@ class FileEntry {
      */
     public final ByteLoadingOption getLoadingOption(){
         return loadingOption;
+    }
+
+    /**
+     * Returns when the file should be removed from cache.
+     *
+     * @return when file should be removed from cache
+     *
+     * @since 4.0.0
+     * @author Ktt Development
+     */
+    final long getExpiry(){
+        return expiry.get();
     }
 
 //
