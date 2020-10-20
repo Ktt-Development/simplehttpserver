@@ -77,7 +77,7 @@ public class CacheFileAdapter implements FileHandlerAdapter {
      * @since 4.0.0
      * @author Ktt Development
      */
-    final void updateClosestExpiry(final long expiry){
+    synchronized final void updateClosestExpiry(final long expiry){
         final long was = closestExpiry.get();
         if(expiry < was || was < System.currentTimeMillis()) // update expiry if new is lower or if expiry has lapsed
             closestExpiry.set(expiry);
