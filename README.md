@@ -47,6 +47,10 @@ SimpleHttpHandler handler = new SimpleHttpHandler(){
     @Override
     public void handle(SimpleHttpExchange exchange){
         Map POST = exchange.getPostMap();
+        
+        MultipartFormData form = exchange.getMultipartFormData();
+        Record record = form.getRecord("record");
+        FileRecord file = (FileRecord) form.getRecord("file");
 
         exchange.send(new File("OK.png"), HttpCode.HTTP_OK, true);
     }
