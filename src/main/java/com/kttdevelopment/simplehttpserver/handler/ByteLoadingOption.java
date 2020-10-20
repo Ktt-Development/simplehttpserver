@@ -5,7 +5,7 @@ package com.kttdevelopment.simplehttpserver.handler;
  *
  * <code>PRELOAD</code> - read file when it is added to the handler <br>
  * <code>MODLOAD</code> - read file when it is added and anytime it is updated <br>
- * <code>CACHELOAD</code> - load file when requested and clear from memory when maximum time expires <br>
+ * <code>CACHELOAD</code> - load file when requested and clear from memory when maximum time expires. Requires a {@link CacheFileAdapter}. <br>
  * <code>LIVELOAD</code> - read file each time an exchange happens
  *
  * @see FileHandler

@@ -13,34 +13,7 @@ import java.util.Map;
  * <i>This class is a simplified implementation of {@link HttpExchange}</i>. <br>
  * This class provides methods to process requests from the client and send a response back. The handler will keep executing until a response is sent.<br><br>
  * Get/post type requests for <code>application/x-www-form-urlencoded</code> (default) will be a simple key/value map. <br>
- * Get/post type requests for <code>multipart/form-data</code> will use an expanded map. <br>
- * Example:
- * <pre>
- *      {
- *          "name_of_key" : {
- *              "headers": { },
- *              "value": ""
- *          },
- *          "name_of_file_key": {
- *              "headers": {
- *                  "Content-Disposition": {
- *                      "header-name": "Content-Disposition",
- *                      "header-value": "form-data",
- *                      "parameters": {
- *                          "filename": "file.txt",
- *                          "name": "file"
- *                      }
- *                  },
- *                  "Content-Type": {
- *                      "header-name": "Content-Type",
- *                      "header-value": "text/plain",
- *                      "parameters": {}
- *                  }
- *              },
- *              "value": "value in bytes"
- *          }
- *      }
- * </pre>
+ * Get/post type requests for <code>multipart/form-data</code> will use a {@link MultipartFormData}. <br>
  * If a file is submitted the value will be in bytes unless it is plain text.
  *
  * @see HttpExchange
@@ -242,7 +215,7 @@ public abstract class SimpleHttpExchange {
      * @return POST request as a string
      *
      * @see HttpExchange#getRequestBody()
-     * @see #getPostMap(
+     * @see #getPostMap()
      * @see #getMultipartFormData()
      * @see #hasPost()
      * @since 02.00.00

@@ -4,7 +4,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * This class caches file bytes when adding to the {@link FileHandler}.
+ * This class caches file bytes when adding to the {@link FileHandler}. Only works for files withe the {@link ByteLoadingOption#CACHELOAD} option.
  *
  * @see FileHandlerAdapter
  * @see FileHandler
