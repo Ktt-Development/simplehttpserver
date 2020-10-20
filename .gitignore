@@ -2,12 +2,5 @@
 .idea
 out
 *.iml
-# Project ignore
-.docs
-src/LICENSE.txt
-/src/main/java/_ignore/
-# Gradle
-.gradle
 # Maven
-target
-/test/
+/target

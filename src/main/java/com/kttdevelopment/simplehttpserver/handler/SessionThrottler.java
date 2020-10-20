@@ -25,7 +25,7 @@ public class SessionThrottler extends ConnectionThrottler {
 
     private final HttpSessionHandler sessionHandler;
     private final Map<HttpSession,AtomicInteger> connections = new ConcurrentHashMap<>();
-    
+
     /**
      * Creates a throttler that allows no connections.
      *

@@ -29,8 +29,9 @@ public final class FileHandlerAddTest {
         final String context          = "";
 
         final Map<File,ByteLoadingOption> files = new HashMap<>();
-        for(final ByteLoadingOption blop : ByteLoadingOption.values())
-            files.put(new File(dir, blop.name()), blop);
+        Arrays.stream(ByteLoadingOption.values())
+            .filter(o -> o != ByteLoadingOption.CACHELOAD)
+            .forEach(blop -> files.put(new File(dir, blop.name()), blop));
 
         // initial write
         final String testContent = String.valueOf(System.currentTimeMillis());
@@ -66,8 +67,10 @@ public final class FileHandlerAddTest {
             Assertions.assertDoesNotThrow(() -> Files.write(file.toPath(), after.getBytes()), "Failed to second write file " + file.getPath());
 
             try{
-                final String response = HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString())
-                    .thenApply(HttpResponse::body).get();
+                final String response = HttpClient.newHttpClient()
+                    .sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                    .thenApply(HttpResponse::body)
+                    .get();
 
                 Assertions.assertEquals( loadingOption == ByteLoadingOption.PRELOAD ? testContent : after, response, "Client data did not match server data for " + file.getName());
             }catch(final InterruptedException | ExecutionException ignored){

@@ -13,7 +13,7 @@ public final class SimpleHttpServerBindRangeTest {
         final int port = 8080;
 
         final SimpleHttpServer server = SimpleHttpServer.create();
-        
+
         Assertions.assertThrows(IllegalArgumentException.class, () -> server.bind(-1), "Bind server to bad port (-1) should throw an exception");
         Assertions.assertThrows(IllegalArgumentException.class, () -> server.bind(65536), "Bind server to bad port (65536) should throw an exception");
 
