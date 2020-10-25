@@ -134,9 +134,9 @@ public class HttpSessionHandler {
                     public String toString(){
                         return
                             "HttpSession"       + '{' +
-                            "sessionID"         + '=' +     sessionID       + ", " +
-                            "creationTime"      + '=' +     creationTime    + ", " +
-                            "lastAccessTime"    + '=' +     lastAccessTime  +
+                            "sessionID"         + '=' + '\'' + sessionID + '\'' + ", " +
+                            "creationTime"      + '=' +     creationTime        + ", " +
+                            "lastAccessTime"    + '=' +     lastAccessTime      +
                             '}';
                     }
 
