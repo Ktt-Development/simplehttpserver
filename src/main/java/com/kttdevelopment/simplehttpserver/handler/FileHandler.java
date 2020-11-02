@@ -791,28 +791,90 @@ public class FileHandler implements SimpleHttpHandler {
         }catch(final UncheckedIOException ignored){}
     }
 
+//
+
     /**
-     *  Removes a file from the file handler.
+     * Removes a file from the handler at a specified context.
      *
-     * @param context the context of the file to remove
+     * @param full_context context and file name
      *
+     * @see #removeFile(String, File)
+     * @see #removeFile(File)
      * @since 4.1.0
      * @author Ktt Development
      */
-    public final void removeFile(final String context){
-        files.remove(ContextUtil.joinContexts(true, false, context));
+    public final void removeFile(final String full_context){
+        files.remove(ContextUtil.getContext(full_context, true, false));
     }
 
     /**
-     * Removes a directory from the file handler.
+     * Removes a file from the handler.
      *
-     * @param context the context of the directory to remove
+     * @param file file to remove
      *
+     * @see #removeFile(String)
+     * @see #removeFile(String, File)
+     */
+    public final void removeFile(final File file){
+        removeFile(adapter.getName(file));
+    }
+
+    /**
+     * Removes a file from the handler at a specified context.
+     *
+     * @param context context
+     * @param file file
+     *
+     * @see #removeFile(String)
+     * @see #removeFile(File)
      * @since 4.1.0
      * @author Ktt Development
      */
-    public final void removeDirectory(final String context){
-        directories.remove(ContextUtil.joinContexts(true, false, context));
+    public final void removeFile(final String context, final File file){
+        removeFile(ContextUtil.joinContexts(true, false, context, adapter.getName(file)));
+    }
+
+    /**
+     * Removes a directory from the handler at a specified context.
+     *
+     * @param full_context context and directory name
+     *
+     * @see #removeDirectory(File)
+     * @see #removeDirectory(String, File)
+     * @since 4.1.0
+     * @author Ktt Development
+     */
+    public final void removeDirectory(final String full_context){
+        directories.remove(ContextUtil.getContext(full_context, true, false));
+    }
+
+    /**
+     * Removes a directory from the handler.
+     *
+     * @param directory directory to remove
+     *
+     * @see #removeDirectory(String)
+     * @see #removeDirectory(String, File)
+     * @since 4.1.0
+     * @author Ktt Development
+     */
+    public final void removeDirectory(final File directory){
+        removeDirectory(getName(directory));
+    }
+
+    /**
+     * Removes a directory from the handler at a specified context.
+     *
+     * @param context context
+     * @param directory directory
+     *
+     * @see #removeDirectory(String)
+     * @see #removeDirectory(File)
+     * @since 4.1.0
+     * @author Ktt Development
+     */
+    public final void removeDirectory(final String context, final File directory){
+       removeDirectory(ContextUtil.joinContexts(true, false, context, getName(directory)));
     }
 
 //

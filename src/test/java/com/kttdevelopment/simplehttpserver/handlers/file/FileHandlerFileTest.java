@@ -76,7 +76,7 @@ public final class FileHandlerFileTest {
 
         server.stop();
 
-        files.forEach((file, loadingOption) -> handler.removeFile(file.getName()));
+        files.forEach((file, loadingOption) -> handler.removeFile(file));
         Assertions.assertEquals(empty, handler.toString());
     }
 

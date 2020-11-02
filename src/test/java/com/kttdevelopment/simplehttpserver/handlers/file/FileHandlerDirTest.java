@@ -104,8 +104,8 @@ public final class FileHandlerDirTest {
 
         server.stop();
 
-        handler.removeDirectory(dir.getName()); // test file & directory read
-        handler.removeDirectory(contextNoName + '/' + dir.getName());
+        handler.removeDirectory(dir); // test file & directory read
+        handler.removeDirectory(contextNoName, dir);
         handler.removeDirectory(dirNewName);
         handler.removeDirectory(contextWName + '/' + dirNewName);
         Assertions.assertEquals(empty, handler.toString());

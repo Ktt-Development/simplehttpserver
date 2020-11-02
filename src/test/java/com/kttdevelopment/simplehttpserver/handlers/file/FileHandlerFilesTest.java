@@ -83,8 +83,8 @@ public final class FileHandlerFilesTest {
         server.stop();
 
         for(final File file : files){
-            handler.removeFile(adapter.getName(file));
-            handler.removeFile(altContext + '/' + adapter.getName(file));
+            handler.removeFile(file);
+            handler.removeFile(altContext, file);
         }
 
         Assertions.assertEquals(empty, handler.toString());
