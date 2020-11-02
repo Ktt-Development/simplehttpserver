@@ -26,7 +26,7 @@ import java.util.function.Consumer;
  * @see SimpleHttpHandler
  * @see com.sun.net.httpserver.HttpHandler
  * @since 02.00.00
- * @version 4.0.0
+ * @version 4.1.0
  * @author Ktt Development
  */
 public class FileHandler implements SimpleHttpHandler {
@@ -789,6 +789,30 @@ public class FileHandler implements SimpleHttpHandler {
                 new DirectoryEntry(directory, adapter, loadingOption, walk)
             );
         }catch(final UncheckedIOException ignored){}
+    }
+
+    /**
+     *  Removes a file from the file handler.
+     *
+     * @param context the context of the file to remove
+     *
+     * @since 4.1.0
+     * @author Ktt Development
+     */
+    public final void removeFile(final String context){
+        files.remove(ContextUtil.joinContexts(true, false, context));
+    }
+
+    /**
+     * Removes a directory from the file handler.
+     *
+     * @param context the context of the directory to remove
+     *
+     * @since 4.1.0
+     * @author Ktt Development
+     */
+    public final void removeDirectory(final String context){
+        directories.remove(ContextUtil.joinContexts(true, false, context));
     }
 
 //

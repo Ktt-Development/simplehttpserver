@@ -14,14 +14,14 @@ import java.nio.file.Files;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
-public final class FileHandlerAddDirTest {
+public final class FileHandlerDirTest {
 
     @TempDir
     public final File dir = new File(UUID.randomUUID().toString());
 
     @SuppressWarnings("SpellCheckingInspection")
     @Test
-    public final void addDirectoryTestsNoWalk() throws IOException, InterruptedException{
+    public final void addAndRemoveTest() throws IOException, InterruptedException{
         final int port = 8080;
         final SimpleHttpServer server   = SimpleHttpServer.create(port);
         final FileHandler handler       = new FileHandler();
@@ -41,6 +41,7 @@ public final class FileHandlerAddDirTest {
         Files.write(walk.toPath(), testContent.getBytes());
 
         final String context = "";
+        final String empty = handler.toString();
 
         handler.addDirectory(dir); // test file & directory read
         handler.addDirectory(contextNoName, dir);
@@ -102,6 +103,12 @@ public final class FileHandlerAddDirTest {
         }
 
         server.stop();
+
+        handler.removeDirectory(dir.getName()); // test file & directory read
+        handler.removeDirectory(contextNoName + '/' + dir.getName());
+        handler.removeDirectory(dirNewName);
+        handler.removeDirectory(contextWName + '/' + dirNewName);
+        Assertions.assertEquals(empty, handler.toString());
     }
 
 }

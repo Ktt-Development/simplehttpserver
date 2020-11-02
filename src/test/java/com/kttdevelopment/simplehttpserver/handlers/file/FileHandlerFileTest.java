@@ -15,14 +15,14 @@ import java.nio.file.Files;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 
-public final class FileHandlerAddTest {
+public final class FileHandlerFileTest {
 
     @TempDir
     public final File dir = new File(UUID.randomUUID().toString());
 
     @SuppressWarnings("SpellCheckingInspection")
     @Test
-    public final void addFileTests() throws IOException{
+    public final void addAndRemoveTest() throws IOException{
         final int port = 8080;
         final SimpleHttpServer server = SimpleHttpServer.create(port);
         final FileHandler handler     = new FileHandler();
@@ -32,16 +32,12 @@ public final class FileHandlerAddTest {
         Arrays.stream(ByteLoadingOption.values())
             .filter(o -> o != ByteLoadingOption.CACHELOAD)
             .forEach(blop -> files.put(new File(dir, blop.name()), blop));
-
+        final String empty = handler.toString();
         // initial write
         final String testContent = String.valueOf(System.currentTimeMillis());
         files.forEach((file, loadingOption) -> {
-            try{
-                Files.write(file.toPath(), testContent.getBytes());
-                handler.addFile(file, loadingOption);
-            }catch(final IOException e){
-                e.printStackTrace();
-            }
+            Assertions.assertDoesNotThrow(() ->  Files.write(file.toPath(), testContent.getBytes()));
+            handler.addFile(file, loadingOption);
         });
 
         server.createContext(context, handler);
@@ -79,6 +75,9 @@ public final class FileHandlerAddTest {
         });
 
         server.stop();
+
+        files.forEach((file, loadingOption) -> handler.removeFile(file.getName()));
+        Assertions.assertEquals(empty, handler.toString());
     }
 
 }

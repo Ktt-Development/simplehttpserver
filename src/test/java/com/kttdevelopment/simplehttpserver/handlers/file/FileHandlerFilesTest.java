@@ -14,13 +14,13 @@ import java.net.http.*;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
-public final class FileHandlerAddFilesTest {
+public final class FileHandlerFilesTest {
 
     @TempDir
     public final File dir = new File(UUID.randomUUID().toString());
 
     @Test
-    public final void addFilesTests() throws IOException, ExecutionException, InterruptedException{
+    public final void addAndRemoveTest() throws IOException, ExecutionException, InterruptedException{
         final int port = 8080;
         final SimpleHttpServer server       = SimpleHttpServer.create(port);
         final String override               = "override";
@@ -43,6 +43,8 @@ public final class FileHandlerAddFilesTest {
             new File(dir, UUID.randomUUID().toString() + ".txt"),
             new File(dir, UUID.randomUUID().toString() + ".txt")
         };
+
+        final String empty = handler.toString();
 
         for(final File file : files)
             Assertions.assertTrue(file.createNewFile());
@@ -79,6 +81,13 @@ public final class FileHandlerAddFilesTest {
         }
 
         server.stop();
+
+        for(final File file : files){
+            handler.removeFile(adapter.getName(file));
+            handler.removeFile(altContext + '/' + adapter.getName(file));
+        }
+
+        Assertions.assertEquals(empty, handler.toString());
     }
 
 }
