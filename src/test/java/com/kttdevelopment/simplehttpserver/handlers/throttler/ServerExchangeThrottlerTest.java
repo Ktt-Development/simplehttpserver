@@ -19,6 +19,7 @@ public final class ServerExchangeThrottlerTest {
         final int port = 8080;
 
         final SimpleHttpServer server = SimpleHttpServer.create(port);
+        server.setExecutor(Executors.newCachedThreadPool());
 
         final String context = "";
         server.createContext(

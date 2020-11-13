@@ -11,8 +11,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.http.*;
 import java.time.Duration;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 public final class ServerSessionThrottlerTest {
 
@@ -21,6 +20,7 @@ public final class ServerSessionThrottlerTest {
         final int port = 8080;
 
         final SimpleHttpServer server = SimpleHttpServer.create(port);
+        server.setExecutor(Executors.newCachedThreadPool());
         final HttpSessionHandler sessionHandler = new HttpSessionHandler();
         server.setHttpSessionHandler(sessionHandler);
 
