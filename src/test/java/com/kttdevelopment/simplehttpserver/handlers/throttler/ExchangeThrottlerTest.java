@@ -12,8 +12,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.http.*;
 import java.time.Duration;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 public final class ExchangeThrottlerTest {
 
@@ -22,6 +21,7 @@ public final class ExchangeThrottlerTest {
         final int port = 8080;
 
         final SimpleHttpServer server = SimpleHttpServer.create(port);
+        server.setExecutor(Executors.newCachedThreadPool());
 
         final String context = "";
         server.createContext(
