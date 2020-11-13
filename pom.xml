@@ -10,7 +10,7 @@
 
     <groupId>com.kttdevelopment</groupId>
     <artifactId>simplehttpserver</artifactId>
-    <version>4.1.0</version>
+    <version>4.2.0</version>
 
     <name>simplehttpserver</name>
     <description>📕 SimpleHttpServer :: Simplified implementation of the sun http server :: Simplified handlers to execute complex operations</description>

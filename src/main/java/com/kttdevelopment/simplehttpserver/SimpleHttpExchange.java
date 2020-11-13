@@ -1,6 +1,5 @@
 package com.kttdevelopment.simplehttpserver;
 
-import com.kttdevelopment.simplehttpserver.var.HttpCode;
 import com.kttdevelopment.simplehttpserver.var.RequestMethod;
 import com.sun.net.httpserver.*;
 
@@ -283,7 +282,7 @@ public abstract class SimpleHttpExchange {
      *
      * @return response code
      *
-     * @see HttpCode
+     * @see java.net.HttpURLConnection
      * @see #sendResponseHeaders(int, long)
      * @since 02.00.00
      * @author Ktt Development
@@ -354,7 +353,7 @@ public abstract class SimpleHttpExchange {
      * @throws IOException internal server error
      *
      * @see #getResponseHeaders()
-     * @see HttpCode
+     * @see java.net.HttpURLConnection
      * @since 02.00.00
      * @author Ktt Development
      */

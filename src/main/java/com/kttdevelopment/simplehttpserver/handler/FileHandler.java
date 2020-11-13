@@ -1,15 +1,14 @@
 package com.kttdevelopment.simplehttpserver.handler;
 
 import com.kttdevelopment.simplehttpserver.*;
-import com.kttdevelopment.simplehttpserver.var.HttpCode;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 /**
@@ -946,7 +945,7 @@ public class FileHandler implements SimpleHttpHandler {
      * @author Ktt Development
      */
     public void handle(final SimpleHttpExchange exchange, final File source, final byte[] bytes) throws IOException {
-        exchange.send(bytes, HttpCode.HTTP_OK);
+        exchange.send(bytes, HttpURLConnection.HTTP_OK);
     }
 
 //

@@ -1,12 +1,12 @@
 package com.kttdevelopment.simplehttpserver.simplehttpexchange;
 
 import com.kttdevelopment.simplehttpserver.*;
-import com.kttdevelopment.simplehttpserver.var.HttpCode;
 import com.sun.net.httpserver.HttpContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.http.*;
 import java.util.concurrent.ExecutionException;
@@ -65,7 +65,7 @@ public final class SimpleHttpExchangeReadTests {
         Assertions.assertFalse(exchange.hasGet(), "Client did not send a GET request");
         Assertions.assertFalse(exchange.hasPost(), "Client did not send a POST request");
 
-        Assertions.assertEquals(HttpCode.HTTP_OK, exchange.getResponseCode(), "Successful exchange should've sent 200 HTTP OK");
+        Assertions.assertEquals(HttpURLConnection.HTTP_OK, exchange.getResponseCode(), "Successful exchange should've sent 200 HTTP OK");
 
         Assertions.assertTrue(exchange.getCookies().isEmpty(), "Client did not send any cookies");
 

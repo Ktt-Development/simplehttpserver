@@ -361,12 +361,12 @@ final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
 
     @Override
     public synchronized final void send(final byte[] response) throws IOException{
-        send(response, HttpCode.HTTP_OK, false);
+        send(response, HttpURLConnection.HTTP_OK, false);
     }
 
     @Override
     public final void send(final byte[] response, final boolean gzip) throws IOException{
-        send(response, HttpCode.HTTP_OK, gzip);
+        send(response, HttpURLConnection.HTTP_OK, gzip);
     }
 
     @Override
@@ -397,12 +397,12 @@ final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
 
     @Override
     public synchronized final void send(final String response) throws IOException{
-        send(response.getBytes(StandardCharsets.UTF_8), HttpCode.HTTP_OK, false);
+        send(response.getBytes(StandardCharsets.UTF_8), HttpURLConnection.HTTP_OK, false);
     }
 
     @Override
     public final void send(final String response, final boolean gzip) throws IOException{
-        send(response.getBytes(StandardCharsets.UTF_8), HttpCode.HTTP_OK, gzip);
+        send(response.getBytes(StandardCharsets.UTF_8), HttpURLConnection.HTTP_OK, gzip);
     }
 
     @Override

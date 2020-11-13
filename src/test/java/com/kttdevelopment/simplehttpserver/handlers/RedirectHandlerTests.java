@@ -2,11 +2,11 @@ package com.kttdevelopment.simplehttpserver.handlers;
 
 import com.kttdevelopment.simplehttpserver.*;
 import com.kttdevelopment.simplehttpserver.handler.RedirectHandler;
-import com.kttdevelopment.simplehttpserver.var.HttpCode;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.http.*;
 import java.util.concurrent.ExecutionException;
@@ -36,7 +36,7 @@ public final class RedirectHandlerTests {
         final int response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
             .thenApply(HttpResponse::statusCode).get();
 
-        Assertions.assertEquals(HttpCode.HTTP_OK, response, "Client responded with redirect code (302 HTTP FOUND) not 200 HTTP OK");
+        Assertions.assertEquals(HttpURLConnection.HTTP_OK, response, "Client responded with redirect code (302 HTTP FOUND) not 200 HTTP OK");
 
         server.stop();
     }

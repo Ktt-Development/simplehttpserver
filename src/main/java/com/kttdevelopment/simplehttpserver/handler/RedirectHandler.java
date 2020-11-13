@@ -1,11 +1,11 @@
 package com.kttdevelopment.simplehttpserver.handler;
 
-import com.kttdevelopment.simplehttpserver.var.HttpCode;
 import com.kttdevelopment.simplehttpserver.SimpleHttpExchange;
 import com.kttdevelopment.simplehttpserver.SimpleHttpHandler;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 
 /**
  * A request handler that redirects to a different URL without pushing to the history. The URL may not work correctly if it does not have a valid authority (<code>http</code>/<code>https</code>).
@@ -40,7 +40,7 @@ public class RedirectHandler implements SimpleHttpHandler {
     @Override
     public final void handle(final SimpleHttpExchange exchange) throws IOException{
         exchange.getResponseHeaders().set("Location", link);
-        exchange.send(HttpCode.HTTP_Found);
+        exchange.send(HttpURLConnection.HTTP_OK);
         exchange.close();
     }
 
