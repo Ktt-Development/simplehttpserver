@@ -33,7 +33,8 @@ public final class SimpleHttpExchangeGetTest {
         server.start();
 
         final String queryKey = "test", queryValue = "value";
-        final String url = "http://localhost:" + port + context + '?' + queryKey + '=' + queryValue;
+        final String altKey   = "alt", altValueRaw = "a+?&}", altValueEnc = "a%2B%3F%26%7D";
+        final String url      = "http://localhost:" + port + context + '?' + queryKey + '=' + queryValue + '&' + altKey + '=' + altValueEnc;
 
         HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create(url))
@@ -51,6 +52,7 @@ public final class SimpleHttpExchangeGetTest {
         Assertions.assertEquals(RequestMethod.GET, exchange.getRequestMethod(), "Client request method did not match exchange request method (GET)");
         Assertions.assertTrue(exchange.hasGet(), "Exchange was missing client GET map");
         Assertions.assertEquals(queryValue, exchange.getGetMap().get(queryKey), "Exchange GET did not match client GET");
+        Assertions.assertEquals(altValueRaw, exchange.getGetMap().get(altKey), "Exchange GET did not match client GET");
     }
 
 }
