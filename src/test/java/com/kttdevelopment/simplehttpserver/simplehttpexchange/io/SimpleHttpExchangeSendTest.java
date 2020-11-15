@@ -2,13 +2,13 @@ package com.kttdevelopment.simplehttpserver.simplehttpexchange.io;
 
 import com.kttdevelopment.simplehttpserver.SimpleHttpHandler;
 import com.kttdevelopment.simplehttpserver.SimpleHttpServer;
-import com.kttdevelopment.simplehttpserver.var.HttpCode;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.http.*;
 import java.nio.file.Files;
@@ -27,7 +27,7 @@ public class SimpleHttpExchangeSendTest {
         final SimpleHttpServer server = SimpleHttpServer.create(port);
         final String context          = "";
 
-        final int testCode = HttpCode.HTTP_Accepted;
+        final int testCode = HttpURLConnection.HTTP_ACCEPTED;
         final String testContent = String.valueOf(System.currentTimeMillis());
 
         server.createContext("code", (SimpleHttpHandler) exchange -> {

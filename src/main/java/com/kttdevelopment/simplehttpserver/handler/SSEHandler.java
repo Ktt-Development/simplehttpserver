@@ -2,12 +2,12 @@ package com.kttdevelopment.simplehttpserver.handler;
 
 import com.kttdevelopment.simplehttpserver.SimpleHttpExchange;
 import com.kttdevelopment.simplehttpserver.SimpleHttpHandler;
-import com.kttdevelopment.simplehttpserver.var.HttpCode;
 import com.kttdevelopment.simplehttpserver.var.RequestMethod;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -42,7 +42,7 @@ public class SSEHandler implements SimpleHttpHandler {
         exchange.getResponseHeaders().add("Cache-Control","no-cache");
 
         if(exchange.getRequestMethod() == RequestMethod.OPTIONS){
-            exchange.sendResponseHeaders(HttpCode.HTTP_OK, 0);
+            exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
             return;
         }
 
