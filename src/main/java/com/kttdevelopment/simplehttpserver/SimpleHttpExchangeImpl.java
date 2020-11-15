@@ -18,7 +18,7 @@ import java.util.zip.GZIPOutputStream;
  *
  * @see SimpleHttpExchange
  * @since 02.00.00
- * @version 4.0.0
+ * @version 4.2.0
  * @author Ktt Development
  */
 @SuppressWarnings("SpellCheckingInspection")
@@ -119,7 +119,7 @@ final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
                 requestMethod = RequestMethod.UNSUPPORTED; break;
         }
     //
-        hasGet = (rawGet = URI.getQuery()) != null;
+        hasGet = (rawGet = URI.getRawQuery()) != null;
         getMap = hasGet ? Collections.unmodifiableMap(parseWwwFormEnc.apply(rawGet)) : new HashMap<>();
 
     //
