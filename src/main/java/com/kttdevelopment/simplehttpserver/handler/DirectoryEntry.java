@@ -170,7 +170,7 @@ class DirectoryEntry {
         final FileEntry entry = files.get(context);
         if(entry == null){ // add new entry if not already added and file exists
             final File file = getFile(path);
-            return file != null && !file.exists()
+            return file != null && file.exists()
                 ? files.put(context, new FileEntry(file, adapter, loadingOption))
                 : null;
         }else if(!entry.getFile().exists()){ // remove entry if file no longer exists
