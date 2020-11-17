@@ -35,6 +35,7 @@ public class ThrottledHandler implements HttpHandler {
      * @since 03.03.00
      * @author Ktt Development
      */
+    @SuppressWarnings("ClassEscapesDefinedScope") // class is required for throttler to function, scope is locked to this package only; ignore visibility error
     public ThrottledHandler(final HttpHandler handler, final ConnectionThrottler throttler){
         this.handler = handler;
         this.throttler = throttler;
