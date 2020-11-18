@@ -34,7 +34,7 @@ final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
     private final String protocol;
 
     private final Headers requestHeaders;
-    private final RequestMethod requestMethod;
+    private final String requestMethod;
 
     private final String rawGet;
     private final Map<String,String> getMap;
@@ -95,28 +95,7 @@ final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
         protocol    = httpExchange.getProtocol();
     //
         requestHeaders = httpExchange.getRequestHeaders();
-        switch(exchange.getRequestMethod()){
-            case "GET":
-                requestMethod = RequestMethod.GET; break;
-            case "HEAD":
-                requestMethod = RequestMethod.HEAD; break;
-            case "POST":
-                requestMethod = RequestMethod.POST; break;
-            case "PUT":
-                requestMethod = RequestMethod.PUT; break;
-            case "DELETE":
-                requestMethod = RequestMethod.DELETE; break;
-            case "CONNECT":
-                requestMethod = RequestMethod.CONNECT; break;
-            case "OPTIONS":
-                requestMethod = RequestMethod.OPTIONS; break;
-            case "TRACE":
-                requestMethod = RequestMethod.TRACE; break;
-            case "PATCH":
-                requestMethod = RequestMethod.PATCH; break;
-            default:
-                requestMethod = RequestMethod.UNSUPPORTED; break;
-        }
+        requestMethod  = exchange.getRequestMethod().toUpperCase();
     //
         hasGet = (rawGet = URI.getRawQuery()) != null;
         getMap = hasGet ? Collections.unmodifiableMap(parseWwwFormEnc.apply(rawGet)) : new HashMap<>();
@@ -266,7 +245,7 @@ final class SimpleHttpExchangeImpl extends SimpleHttpExchange {
     }
 
     @Override
-    public final RequestMethod getRequestMethod(){
+    public final String getRequestMethod(){
         return requestMethod;
     }
 

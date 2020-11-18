@@ -1,7 +1,7 @@
 package com.kttdevelopment.simplehttpserver.simplehttpexchange.io;
 
 import com.kttdevelopment.simplehttpserver.*;
-import com.kttdevelopment.simplehttpserver.RequestMethod;
+import com.kttdevelopment.simplehttpserver.HttpRequestMethod;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -62,7 +62,7 @@ public final class SimpleHttpExchangeMultipartFormTest {
         // exchange
         final SimpleHttpExchange exchange = exchangeRef.get();
 
-        Assertions.assertEquals(RequestMethod.POST, exchange.getRequestMethod(), "Client request method did not match exchange request method (POST)");
+        Assertions.assertEquals(HttpRequestMethod.POST, exchange.getRequestMethod(), "Client request method did not match exchange request method (POST)");
         Assertions.assertTrue(exchange.hasPost(), "Exchange was missing client POST map");
 
         Assertions.assertEquals(value, ((Map) exchange.getPostMap().get(key)).get("value"), "Client form value did not match server value");

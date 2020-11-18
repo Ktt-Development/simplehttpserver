@@ -2,7 +2,7 @@ package com.kttdevelopment.simplehttpserver.handler;
 
 import com.kttdevelopment.simplehttpserver.SimpleHttpExchange;
 import com.kttdevelopment.simplehttpserver.SimpleHttpHandler;
-import com.kttdevelopment.simplehttpserver.RequestMethod;
+import com.kttdevelopment.simplehttpserver.HttpRequestMethod;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
@@ -41,7 +41,7 @@ public class SSEHandler implements SimpleHttpHandler {
         exchange.getResponseHeaders().add("Access-Control-Max-Age", String.valueOf(TimeUnit.HOURS.toSeconds(1)));
         exchange.getResponseHeaders().add("Cache-Control","no-cache");
 
-        if(exchange.getRequestMethod() == RequestMethod.OPTIONS){
+        if(exchange.getRequestMethod().equals(HttpRequestMethod.OPTIONS)){
             exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
             return;
         }
