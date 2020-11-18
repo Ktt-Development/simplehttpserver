@@ -147,7 +147,7 @@ class DirectoryEntry {
 
         // for each file in parent directory, run adapter to find file that matches adapted name
         for(final File file : Objects.requireNonNullElse(parentFile.listFiles(), new File[0]))
-            if(adapter.getName(file))
+            if(fileName.equals(adapter.getName(file)))
                 return file;
         return null;
     }
