@@ -146,10 +146,9 @@ class DirectoryEntry {
         final String fileName = targetFile.getParentFile() == null ? targetFile.getPath() : targetFile.getName();
 
         // for each file in parent directory, run adapter to find file that matches adapted name
-        for(final File file : Objects.requireNonNullElse(parentFile.listFiles(), new File[0])){
-            if(fileName.equals(file.isDirectory() ? file.getName() : adapter.getName(file))) // use adapter name only if not a directory
+        for(final File file : Objects.requireNonNullElse(parentFile.listFiles(), new File[0]))
+            if(fileName.equals(adapter.getName(file)))
                 return file;
-        }
         return null;
     }
 
@@ -200,7 +199,7 @@ class DirectoryEntry {
         }else{
             try{
                 final File file = Objects.requireNonNull(getFile(path)); // check if file is allowed
-                return !file.isDirectory() ? adapter.getBytes(file, Files.readAllBytes(file.toPath())) : null; // adapt bytes here
+                return file.isFile() ? adapter.getBytes(file, Files.readAllBytes(file.toPath())) : null; // adapt bytes here
             }catch(final NullPointerException | IOException ignored){
                 return null;
             }
