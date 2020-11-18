@@ -1,7 +1,7 @@
 package com.kttdevelopment.simplehttpserver.simplehttpexchange.io;
 
 import com.kttdevelopment.simplehttpserver.*;
-import com.kttdevelopment.simplehttpserver.var.RequestMethod;
+import com.kttdevelopment.simplehttpserver.RequestMethod;
 import com.sun.net.httpserver.HttpContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

@@ -2,7 +2,7 @@ package com.kttdevelopment.simplehttpserver.handler;
 
 import com.kttdevelopment.simplehttpserver.SimpleHttpExchange;
 import com.kttdevelopment.simplehttpserver.SimpleHttpHandler;
-import com.kttdevelopment.simplehttpserver.var.RequestMethod;
+import com.kttdevelopment.simplehttpserver.RequestMethod;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;

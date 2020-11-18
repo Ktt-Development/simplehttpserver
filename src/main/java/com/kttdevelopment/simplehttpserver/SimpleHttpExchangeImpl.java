@@ -1,7 +1,6 @@
 package com.kttdevelopment.simplehttpserver;
 
 import com.sun.net.httpserver.*;
-import com.kttdevelopment.simplehttpserver.var.*;
 
 import java.io.*;
 import java.net.*;
