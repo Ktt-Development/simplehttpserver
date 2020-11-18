@@ -1,7 +1,7 @@
 package com.kttdevelopment.simplehttpserver.simplehttpexchange.io;
 
 import com.kttdevelopment.simplehttpserver.*;
-import com.kttdevelopment.simplehttpserver.var.RequestMethod;
+import com.kttdevelopment.simplehttpserver.HttpRequestMethod;
 import com.sun.net.httpserver.HttpContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -49,7 +49,7 @@ public final class SimpleHttpExchangeGetTest {
         // exchange
         final SimpleHttpExchange exchange = exchangeRef.get();
 
-        Assertions.assertEquals(RequestMethod.GET, exchange.getRequestMethod(), "Client request method did not match exchange request method (GET)");
+        Assertions.assertEquals(HttpRequestMethod.GET, exchange.getRequestMethod(), "Client request method did not match exchange request method (GET)");
         Assertions.assertTrue(exchange.hasGet(), "Exchange was missing client GET map");
         Assertions.assertEquals(queryValue, exchange.getGetMap().get(queryKey), "Exchange GET did not match client GET");
         Assertions.assertEquals(altValueRaw, exchange.getGetMap().get(altKey), "Exchange GET did not match client GET");
