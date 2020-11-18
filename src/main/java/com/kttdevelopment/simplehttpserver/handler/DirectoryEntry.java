@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @see FileHandler
  * @see FileEntry
  * @since 02.00.00
- * @version 4.2.0
+ * @version 4.3.0
  * @author Ktt Development
  */
 @SuppressWarnings("SpellCheckingInspection")
