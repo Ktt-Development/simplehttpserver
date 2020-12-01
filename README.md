@@ -52,7 +52,7 @@ SimpleHttpHandler handler = new SimpleHttpHandler(){
         Record record = form.getRecord("record");
         FileRecord file = (FileRecord) form.getRecord("file");
 
-        exchange.send(new File("OK.png"), HttpCode.HTTP_OK, true);
+        exchange.send(new File("OK.png"), true);
     }
 
 };
