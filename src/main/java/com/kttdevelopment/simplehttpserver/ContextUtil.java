@@ -14,7 +14,7 @@ public abstract class ContextUtil {
     // replace consecutive slashes and back slashes with a forward slash
     private static final Pattern forwardSlashRegex = Pattern.compile("/{2,}|\\\\+");
     // remove start and end slashes as well as whitespace
-    private static final Pattern stripSlash = Pattern.compile("^\\s*/*|/*\\s*$");
+    private static final Pattern stripSlashRegex = Pattern.compile("^\\s*/*|/*\\s*$");
 
     /**
      * Generates a uniform context with forward slashes removing any consecutive slashes.
@@ -30,7 +30,7 @@ public abstract class ContextUtil {
      */
     public static String getContext(final String context, final boolean leadingSlash, final boolean trailingSlash){
         final String linSlash = forwardSlashRegex.matcher(context).replaceAll("/");
-        final String strippedSlash = stripSlash.matcher(linSlash).replaceAll("");
+        final String strippedSlash = stripSlashRegex.matcher(linSlash).replaceAll("");
         return strippedSlash.length() == 0
             ? leadingSlash || trailingSlash ? "/" : ""
             : (leadingSlash ? "/" : "") + strippedSlash + (trailingSlash ? "/" : "");
