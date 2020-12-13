@@ -1,5 +1,7 @@
 package com.kttdevelopment.simplehttpserver;
 
+import java.util.regex.Pattern;
+
 /**
  * A utility class used to generate uniform contexts. Applications do not use this class.
  *
@@ -8,6 +10,11 @@ package com.kttdevelopment.simplehttpserver;
  * @author Ktt Development
  */
 public abstract class ContextUtil {
+
+    // replace consecutive slashes and back slashes with a forward slash
+    private static final Pattern forwardSlashRegex = Pattern.compile("/{2,}|\\\\+");
+    // remove start and end slashes as well as whitespace
+    private static final Pattern stripSlash = Pattern.compile("^[\\s/]*|[/\\s]*$");
 
     /**
      * Generates a uniform context with forward slashes removing any consecutive slashes.
@@ -22,11 +29,11 @@ public abstract class ContextUtil {
      * @author Ktt Development
      */
     public static String getContext(final String context, final boolean leadingSlash, final boolean trailingSlash){
-        final String linSlash = context.replace('\\','/').replaceAll("/{2,}","/");
-        if(linSlash.isBlank() || linSlash.equals("/")) // handle blank or '/' contexts
-            return leadingSlash || trailingSlash ? "/" : "";
-        final String ltSlash = (!(linSlash.charAt(0) == '/') ? '/' : "") + linSlash + (!(linSlash.charAt(linSlash.length()-1) == '/') ? '/' : "");
-        return ltSlash.substring(leadingSlash ? 0 : 1, ltSlash.length() + (trailingSlash ? 0 : -1));
+        final String linSlash = forwardSlashRegex.matcher(context).replaceAll("/");
+        final String strippedSlash = stripSlash.matcher(linSlash).replaceAll("");
+        return strippedSlash.length() == 0
+            ? leadingSlash || trailingSlash ? "/" : ""
+            : (leadingSlash ? "/" : "") + strippedSlash + (trailingSlash ? "/" : "");
     }
 
     /**
