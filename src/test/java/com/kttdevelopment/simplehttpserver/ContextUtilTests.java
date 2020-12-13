@@ -39,7 +39,12 @@ public final class ContextUtilTests {
             new test("testNoneBackSlash"                , "\\testNoneBackSlash\\"           , false  , false),
             new test("/testBackSlash/"                  , "\\testBackSlash\\"               , true   , true ),
             new test("/testConsecutiveBackSlash/"       , "\\\\testConsecutiveBackSlash\\\\", true   , true ),
-            new test("/testConsecutiveForwardSlash/"    , "//testConsecutiveForwardSlash//" , true   , true )
+            new test("/testConsecutiveForwardSlash/"    , "//testConsecutiveForwardSlash//" , true   , true ),
+            new test("/testWhitespace/"                 , " /testWhitespace/ "              , true   , true),
+            new test("/ testWhitespace /"               , "/ testWhitespace /"              , true   , true),
+            new test(" testWhitespace "                 , "/ testWhitespace /"              , false  , false),
+            new test("testWhitespace"                   , " testWhitespace "                , false  , false),
+            new test("/testWhitespace/"                 , " /testWhitespace/ "              , true   , true),
         };
 
         for(final test test : tests)
