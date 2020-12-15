@@ -39,7 +39,12 @@ public final class ContextUtilTests {
             new test("testNoneBackSlash"                , "\\testNoneBackSlash\\"           , false  , false),
             new test("/testBackSlash/"                  , "\\testBackSlash\\"               , true   , true ),
             new test("/testConsecutiveBackSlash/"       , "\\\\testConsecutiveBackSlash\\\\", true   , true ),
-            new test("/testConsecutiveForwardSlash/"    , "//testConsecutiveForwardSlash//" , true   , true )
+            new test("/testConsecutiveForwardSlash/"    , "//testConsecutiveForwardSlash//" , true   , true ),
+            new test("/testWhitespace/"                 , " /testWhitespace/ "              , true   , true),
+            new test("/ testWhitespace /"               , "/ testWhitespace /"              , true   , true),
+            new test(" testWhitespace "                 , "/ testWhitespace /"              , false  , false),
+            new test("testWhitespace"                   , " testWhitespace "                , false  , false),
+            new test("/testWhitespace/"                 , " /testWhitespace/ "              , true   , true),
         };
 
         for(final test test : tests)
@@ -66,24 +71,24 @@ public final class ContextUtilTests {
     @Test
     public final void testJoin(){
         final testJoin[] tests = {
-            new testJoin("testBlank"            , false  , false  ,"testBlank",""),
-            new testJoin("/testBlank/"          , true   , true   ,"testBlank",""),
-            new testJoin("testBlank"            , false  , false  ,"","testBlank"),
-            new testJoin("/testBlank/"          , true   , true   ,"","testBlank"),
-            new testJoin(""                     , false  , false  ,"",""),
-            new testJoin("/"                    , true   , true   ,"",""),
-            new testJoin("trailing/slash"       , false , false ,"trailing/","slash/"),
-            new testJoin("/trailing/slash/"     , true  , true  ,"trailing/","slash/"),
-            new testJoin("leading/slash"        , false , false ,"leading/","slash/"),
-            new testJoin("/leading/slash/"      , true  , true  ,"leading/","slash/"),
-            new testJoin("double/slash"         , false , false ,"/double/","/slash/"),
-            new testJoin("/double/slash/"       , true  , true  ,"/double/","/slash/"),
-            new testJoin("no/slash"             , false , false ,"no","slash"),
-            new testJoin("/no/slash/"           , true  , true  ,"no","slash"),
-            new testJoin("consecutive/slash"    , false , false ,"//consecutive//","//slash//"),
-            new testJoin("/consecutive/slash/"  , true  , true  ,"//consecutive//","//slash//"),
-            new testJoin("mixed/slash"          , false , false ,"\\mixed\\","//slash//"),
-            new testJoin("/mixed/slash/"        , true  , true  ,"\\mixed\\","//slash//"),
+            new testJoin("testBlank"            , false , false , "testBlank"        , ""),
+            new testJoin("/testBlank/"          , true  , true  , "testBlank"        , ""),
+            new testJoin("testBlank"            , false , false , ""                 , "testBlank"),
+            new testJoin("/testBlank/"          , true  , true  , ""                 , "testBlank"),
+            new testJoin(""                     , false , false , ""                 , ""),
+            new testJoin("/"                    , true  , true  , ""                 , ""),
+            new testJoin("trailing/slash"       , false , false , "trailing/"        , "slash/"),
+            new testJoin("/trailing/slash/"     , true  , true  , "trailing/"        , "slash/"),
+            new testJoin("leading/slash"        , false , false , "leading/"         , "slash/"),
+            new testJoin("/leading/slash/"      , true  , true  , "leading/"         , "slash/"),
+            new testJoin("double/slash"         , false , false , "/double/"         , "/slash/"),
+            new testJoin("/double/slash/"       , true  , true  , "/double/"         , "/slash/"),
+            new testJoin("no/slash"             , false , false , "no"               , "slash"),
+            new testJoin("/no/slash/"           , true  , true  , "no"               , "slash"),
+            new testJoin("consecutive/slash"    , false , false , "//consecutive//"  , "//slash//"),
+            new testJoin("/consecutive/slash/"  , true  , true  , "//consecutive//"  , "//slash//"),
+            new testJoin("mixed/slash"          , false , false , "\\mixed\\"        , "//slash//"),
+            new testJoin("/mixed/slash/"        , true  , true  , "\\mixed\\"        , "//slash//"),
         };
 
         for(final testJoin test : tests)
