@@ -8,9 +8,7 @@
         <br />
         This library simplifies complex operations for both the server, exchange, and handlers.
         <br />
-        <a href="https://docs.kttdevelopment.com/simplehttpserver/">Docs</a>
-        •
-        <a href="https://wiki.kttdevelopment.com/simplehttpserver/">Wiki</a>
+        <a href="https://docs.kttdevelopment.com/simplehttpserver/">Documentation</a>
         •
         <a href="https://github.com/Ktt-Development/simplehttpserver/issues">Issues</a>
     </p>
