@@ -22,7 +22,7 @@ public final class PredicateHandlerTests {
         final boolean condition = System.currentTimeMillis() % 2 == 1;
 
         final String context = "";
-        server.createContext(context, new PredicateHandler((SimpleHttpHandler) exchange -> exchange.send("A"), (SimpleHttpHandler) exchange -> exchange.send("B"), exchange -> condition));
+        server.createContext(context, new PredicateHandler(exchange -> condition, (SimpleHttpHandler) exchange -> exchange.send("A"), (SimpleHttpHandler) exchange -> exchange.send("B")));
         server.start();
 
         Assertions.assertFalse(server.getContexts().isEmpty(), "Server did not contain a temporary context");
