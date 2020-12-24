@@ -9,7 +9,7 @@ import com.kttdevelopment.simplehttpserver.SimpleHttpHandler;
  * @see SimpleHttpHandler
  * @see HttpHandler
  * @since 01.00.00
- * @version 02.00.00
+ * @version 4.4.0
  * @author Ktt Development
  */
 public class RootHandler extends PredicateHandler {
@@ -27,9 +27,9 @@ public class RootHandler extends PredicateHandler {
      */
     public RootHandler(final HttpHandler rootHandler, final HttpHandler elseHandler){
         super(
+            httpExchange -> httpExchange.getRequestURI().getPath().equals("/"),
             rootHandler,
-            elseHandler,
-            httpExchange -> httpExchange.getRequestURI().getPath().equals("/")
+            elseHandler
         );
     }
 

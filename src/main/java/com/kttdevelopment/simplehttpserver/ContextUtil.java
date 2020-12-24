@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
  * A utility class used to generate uniform contexts. Applications do not use this class.
  *
  * @since 03.05.03
- * @version 4.3.1
+ * @version 4.4.0
  * @author Ktt Development
  */
 public abstract class ContextUtil {
