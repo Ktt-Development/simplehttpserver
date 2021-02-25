@@ -64,7 +64,7 @@
 
     <groupId>com.kttdevelopment</groupId>
     <artifactId>simplehttpserver</artifactId>
-    <version>4.4.1</version>
+    <version>4.4.2</version>
 
     <name>simplehttpserver</name>
     <description>📕 SimpleHttpServer :: Simplified implementation of the sun http server :: Simplified handlers to execute complex operations</description>
@@ -150,7 +150,10 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <additionalJOption>--no-module-directories</additionalJOption>
+                    <additionalJOptions>
+                        <additionalJOption>--no-module-directories</additionalJOption>
+                        <additionalJOption>-link "https://docs.oracle.com/en/java/javase/11/docs/api/"</additionalJOption>
+                    </additionalJOptions>
                 </configuration>
             </plugin>
 
