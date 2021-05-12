@@ -18,7 +18,7 @@ jobs:
           passphrase: ${{ secrets.GPG_PASSPHRASE }}
 
       - name: ☕ Install OpenJDK
-        uses: AdoptOpenJDK/install-jdk@v1
+        uses: AdoptOpenJDK/install-jdk@v1.1.1
         with:
           version: '11'
           architecture: x64
