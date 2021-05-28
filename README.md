@@ -1,10 +1,15 @@
-<p align="center">
+<div align="center">
     <a href="https://github.com/Ktt-Development/simplehttpserver">
         <img src="https://raw.githubusercontent.com/Ktt-Development/simplehttpserver/main/branding/Logo.png" alt="Logo" width="100" height="100">
     </a>
     <h3 align="center">SimpleHttpServer</h3>
+    <a href="https://github.com/Ktt-Development/simplehttpserver/actions?query=workflow%3ADeploy"><img src="https://github.com/Ktt-Development/simplehttpserver/workflows/Deploy/badge.svg" alt="Deploy"></a>
+    <a href="https://github.com/Ktt-Development/simplehttpserver/actions?query=workflow%3A%22Java+CI%22"><img src="https://github.com/Ktt-Development/simplehttpserver/workflows/Java%20CI/badge.svg" alt="Java CI"></a>
+    <a href="https://mvnrepository.com/artifact/com.kttdevelopment/simplehttpserver"><img src="https://img.shields.io/maven-central/v/com.kttdevelopment/simplehttpserver" alt="Maven Central"></a>
+    <a href="https://github.com/Ktt-Development/simplehttpserver/releases"><img src="https://img.shields.io/github/v/release/ktt-development/simplehttpserver" alt="version"></a>
+    <a href="https://github.com/Ktt-Development/simplehttpserver/blob/main/LICENSE"><img src="https://img.shields.io/github/license/Ktt-Development/simplehttpserver" alt="license"></a>
     <p align="center">
-        A simplified implementation of the <a href="https://docs.oracle.com/en/java/javase/11/docs/api/jdk.httpserver/com/sun/net/httpserver/package-summary.html">sun http server</a> for JDK11. 
+        A simplified implementation of the <a href="https://docs.oracle.com/en/java/javase/11/docs/api/jdk.httpserver/com/sun/net/httpserver/package-summary.html">sun http server</a> for JDK11.
         <br />
         This library simplifies complex operations for both the server, exchange, and handlers.
         <br />
@@ -12,15 +17,7 @@
         •
         <a href="https://github.com/Ktt-Development/simplehttpserver/issues">Issues</a>
     </p>
-</p>
-
-[![Deploy](https://github.com/Ktt-Development/simplehttpserver/workflows/Deploy/badge.svg)](https://github.com/Ktt-Development/simplehttpserver/actions?query=workflow%3ADeploy)
-[![Java CI](https://github.com/Ktt-Development/simplehttpserver/workflows/Java%20CI/badge.svg)](https://github.com/Ktt-Development/simplehttpserver/actions?query=workflow%3A%22Java+CI%22)
-[![Maven Central](https://img.shields.io/maven-central/v/com.kttdevelopment/simplehttpserver)](https://mvnrepository.com/artifact/com.kttdevelopment/simplehttpserver)
-[![version](https://img.shields.io/github/v/release/ktt-development/simplehttpserver)](https://github.com/Ktt-Development/simplehttpserver/releases)
-[![license](https://img.shields.io/github/license/Ktt-Development/simplehttpserver)](https://github.com/Ktt-Development/simplehttpserver/blob/main/LICENSE)
----
-
+</div>
 
 # Setup
 Compiled binaries can be found on Maven Central.
@@ -31,7 +28,7 @@ For projects built locally, compiled binaries can also be found in releases.
 
 # Features
 
-## 📋 Complicated tasks made easy
+### 📋 Complicated tasks made easy
 
 Simplified exchange methods for:
 - Parsing HTTP `GET`/`POST` with `multipart/form-data` support.
@@ -45,7 +42,7 @@ SimpleHttpHandler handler = new SimpleHttpHandler(){
     @Override
     public void handle(SimpleHttpExchange exchange){
         Map POST = exchange.getPostMap();
-        
+
         MultipartFormData form = exchange.getMultipartFormData();
         Record record = form.getRecord("record");
         FileRecord file = (FileRecord) form.getRecord("file");
@@ -56,7 +53,7 @@ SimpleHttpHandler handler = new SimpleHttpHandler(){
 };
 ```
 
-## ⭐ Extended Features
+### ⭐ Extended Features
 
 Out of the box support for:
 - HTTP Cookies
@@ -74,7 +71,7 @@ HttpHandler handler = new HttpHandler(){
         HttpSession session = server.getHttpSession(exchange);
         String session_id = session.getSessionID();
 
-        Map<String,String> cookies = exchange.getCookies(); 
+        Map<String,String> cookies = exchange.getCookies();
 
         exchange.close();
     }
@@ -82,7 +79,7 @@ HttpHandler handler = new HttpHandler(){
 };
 ```
 
-## 💻 Simplified Handlers
+### 💻 Simplified Handlers
 
 Easy to use handlers:
 - Redirect Handler
@@ -104,3 +101,8 @@ SSE.push("Server sent events!");
 
 ThrottledHandler throttled = new ThrottledHandler(new HttpHandler(), new ServerExchangeThrottler())
 ```
+
+## Contributing
+
+- Found a bug? Open a new [issue](https://github.com/Ktt-Development/simplehttpserver/issues).
+- Want to contribute? Create a [fork](https://github.com/Ktt-Development/simplehttpserver/fork) and open a [pull request](https://github.com/Ktt-Development/simplehttpserver/pulls).
