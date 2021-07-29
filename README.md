@@ -3,8 +3,9 @@
         <img src="https://raw.githubusercontent.com/Ktt-Development/simplehttpserver/main/branding/Logo.png" alt="Logo" width="100" height="100">
     </a>
     <h3 align="center">SimpleHttpServer</h3>
-    <a href="https://github.com/Ktt-Development/simplehttpserver/actions?query=workflow%3ADeploy"><img src="https://github.com/Ktt-Development/simplehttpserver/workflows/Deploy/badge.svg" alt="Deploy"></a>
-    <a href="https://github.com/Ktt-Development/simplehttpserver/actions?query=workflow%3A%22Java+CI%22"><img src="https://github.com/Ktt-Development/simplehttpserver/workflows/Java%20CI/badge.svg" alt="Java CI"></a>
+    <a href="https://github.com/Ktt-Development/simplehttpserver/actions/workflows/java_ci.yml"><img src="https://github.com/Ktt-Development/simplehttpserver/actions/workflows/java_ci.yml/badge.svg" alt="Java CI"></a>
+    <a href="https://github.com/Ktt-Development/simplehttpserver/actions/workflows/codeql.yml"><img src="https://github.com/Ktt-Development/simplehttpserver/actions/workflows/codeql.yml/badge.svg" alt="CodeQL"></a>
+    <a href="https://github.com/Ktt-Development/simplehttpserver/actions/workflows/release.yml"><img src="https://github.com/Ktt-Development/simplehttpserver/actions/workflows/release.yml/badge.svg" alt="Deploy"></a>
     <a href="https://mvnrepository.com/artifact/com.kttdevelopment/simplehttpserver"><img src="https://img.shields.io/maven-central/v/com.kttdevelopment/simplehttpserver" alt="Maven Central"></a>
     <a href="https://github.com/Ktt-Development/simplehttpserver/releases"><img src="https://img.shields.io/github/v/release/ktt-development/simplehttpserver" alt="version"></a>
     <a href="https://github.com/Ktt-Development/simplehttpserver/blob/main/LICENSE"><img src="https://img.shields.io/github/license/Ktt-Development/simplehttpserver" alt="license"></a>
@@ -13,7 +14,7 @@
         <br />
         This library simplifies complex operations for both the server, exchange, and handlers.
         <br />
-        <a href="https://docs.kttdevelopment.com/simplehttpserver/">Documentation</a>
+        <a href="https://docs.katsute.dev/simplehttpserver/">Documentation</a>
         •
         <a href="https://github.com/Ktt-Development/simplehttpserver/issues">Issues</a>
     </p>
