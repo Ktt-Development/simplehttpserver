@@ -14,7 +14,7 @@
         <br />
         This library simplifies complex operations for both the server, exchange, and handlers.
         <br />
-        <a href="https://docs.katsute.dev/simplehttpserver/">Documentation</a>
+        <a href="https://github.com/Ktt-Development/simplehttpserver/tree/main/docs">Documentation</a>
         •
         <a href="https://github.com/Ktt-Development/simplehttpserver/issues">Issues</a>
     </p>
