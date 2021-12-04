@@ -56,7 +56,7 @@ SimpleHttpHandler handler = new SimpleHttpHandler(){
 
 # Response
 
-To send response headers you would first modify the headers inside the `getResponseHeaders` method, and then send them using the `sendResponseHeaders` method. This process is simplified by using any of the [`send`](https://github.com/Ktt-Development/simplehttpserver/blob/main/docs/exchange/simple-http-exchange#sending-data.md) methods in the exchange.
+To send response headers you would first modify the headers inside the `getResponseHeaders` method, and then send them using the `sendResponseHeaders` method. This process is simplified by using any of the [`send`](https://github.com/Ktt-Development/simplehttpserver/blob/main/docs/exchange/simple-http-exchange.md#sending-data) methods in the exchange.
 
 A request may run multiple times if an exchange does not return any headers.
 

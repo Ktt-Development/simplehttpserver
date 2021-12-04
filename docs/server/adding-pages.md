@@ -6,7 +6,7 @@ description: |
 
 # Adding Pages
 
-Pages (referred to as a context) can be added using the `createContext` method on a `SimpleHttpServer`. This method accepts a string, where the page will be located at; and a [handler](https://github.com/Ktt-Development/simplehttpserver/blob/main/docs/handler.md), which handles the request.
+Pages (referred to as a context) can be added using the `createContext` method on a `SimpleHttpServer`. This method accepts a string, where the page will be located at; and a [handler](https://github.com/Ktt-Development/simplehttpserver/blob/main/docs/handler/README.md), which handles the request.
 
 ```java
 SimpleHttpServer server = SimpleHttpServer.create(8080);

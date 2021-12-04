@@ -168,4 +168,4 @@ server.createContext("/", new ThrottledHandler(handler, throttler));
 
 <hr>
 
-[Multithreaded server is not processing requests in parallel](https://github.com/Ktt-Development/simplehttpserver/blob/main/docs/server/multithreaded-server#multithreaded-server-is-not-processing-requests-in-parallel.md)
+[Multithreaded server is not processing requests in parallel](https://github.com/Ktt-Development/simplehttpserver/blob/main/docs/server/multithreaded-server.md#multithreaded-server-is-not-processing-requests-in-parallel)
