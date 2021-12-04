@@ -6,7 +6,7 @@ description: |
 
 # Adding Pages
 
-Pages (referred to as a context) can be added using the `createContext` method on a `SimpleHttpServer`. This method accepts a string, where the page will be located at; and a [handler](https://github.com/Ktt-Development/simplehttpserver/tree/main/docs/handler.md), which handles the request.
+Pages (referred to as a context) can be added using the `createContext` method on a `SimpleHttpServer`. This method accepts a string, where the page will be located at; and a [handler](https://github.com/Ktt-Development/simplehttpserver/blob/main/docs/handler.md), which handles the request.
 
 ```java
 SimpleHttpServer server = SimpleHttpServer.create(8080);
@@ -36,4 +36,4 @@ Contexts in a server are case sensitive and will use the most specific context a
 
 This consequently means that any handler added to the root `/` context would handle any requests that don’t have a handler, since it’s the most specific one available.
 
-To resolve this issue the libary provides a [root handler](https://github.com/Ktt-Development/simplehttpserver/tree/main/docs/handler/root-handler.md).
+To resolve this issue the libary provides a [root handler](https://github.com/Ktt-Development/simplehttpserver/blob/main/docs/handler/root-handler.md).

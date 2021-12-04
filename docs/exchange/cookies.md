@@ -6,7 +6,7 @@ description: |
 
 # Retrieving Cookies
 
-To retrieve cookies from an exchange you use the `getCookies` method on a [simple http exchange](https://github.com/Ktt-Development/simplehttpserver/tree/main/docs/exchange/simple-http-exchange.md).
+To retrieve cookies from an exchange you use the `getCookies` method on a [simple http exchange](https://github.com/Ktt-Development/simplehttpserver/blob/main/docs/exchange/simple-http-exchange.md).
 
 ```java
 SimpleHttpHandler handler = new SimpleHttpHandler(){
@@ -21,11 +21,11 @@ SimpleHttpHandler handler = new SimpleHttpHandler(){
 
 # Creating and Modifying Cookies
 
-For simple key-value cookies, the `setCookie` method on a [simple http exchange](https://github.com/Ktt-Development/simplehttpserver/tree/main/docs/exchange/simple-http-exchange.md) can be used.
+For simple key-value cookies, the `setCookie` method on a [simple http exchange](https://github.com/Ktt-Development/simplehttpserver/blob/main/docs/exchange/simple-http-exchange.md) can be used.
 
 For cookies with additional parameters the `SimpleHttpCookie.Builder` can be used instead.
 
-The exchange **must** be [sent](https://github.com/Ktt-Development/simplehttpserver/tree/main/docs/exchange/simple-http-exchange#sending-data.md) in order for the cookies to be set.
+The exchange **must** be [sent](https://github.com/Ktt-Development/simplehttpserver/blob/main/docs/exchange/simple-http-exchange#sending-data.md) in order for the cookies to be set.
 
 ```java
 SimpleHttpHandler handler = new SimpleHttpHandler(){

@@ -8,7 +8,7 @@ description: |
 
 The `ThrottledHandler` limits the amount of simultaneous connections to a handler. The handler requires a [throttler](#throttlers), which determines how to allocate the connections.
 
-You must use a [*multithreaded server*](https://github.com/Ktt-Development/simplehttpserver/tree/main/docs/server/multithreaded-server.md) for this handler to work properly.
+You must use a [*multithreaded server*](https://github.com/Ktt-Development/simplehttpserver/blob/main/docs/server/multithreaded-server.md) for this handler to work properly.
 
 # Throttlers
 
@@ -92,7 +92,7 @@ The `SessionThrottler` limits the amount of simultaneous connections a single se
 
 A value of 0 means no connections allowed and -1 means unlimited connections allowed.
 
-A `HttpSessionHandler` is required in order the handler to retrive sessions from the server. See [http session](https://github.com/Ktt-Development/simplehttpserver/tree/main/docs/exchange/http-session.md) for more details.
+A `HttpSessionHandler` is required in order the handler to retrive sessions from the server. See [http session](https://github.com/Ktt-Development/simplehttpserver/blob/main/docs/exchange/http-session.md) for more details.
 
 ```java
 HttpHandler handler = new HttpHandler(){
@@ -168,4 +168,4 @@ server.createContext("/", new ThrottledHandler(handler, throttler));
 
 <hr>
 
-[Multithreaded server is not processing requests in parallel](https://github.com/Ktt-Development/simplehttpserver/tree/main/docs/server/multithreaded-server#multithreaded-server-is-not-processing-requests-in-parallel.md)
+[Multithreaded server is not processing requests in parallel](https://github.com/Ktt-Development/simplehttpserver/blob/main/docs/server/multithreaded-server#multithreaded-server-is-not-processing-requests-in-parallel.md)
