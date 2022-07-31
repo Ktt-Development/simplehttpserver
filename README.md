@@ -1,3 +1,22 @@
+## &nbsp;
+
+<div align="center">
+    <br>
+    <br>
+    <br>
+    <p>✨ This library is no longer maintained, try <a href="https://github.com/KatsuteDev/simplehttpserver">simplehttpserver5</a>. ✨</p>
+    <br>
+    <a href="https://github.com/KatsuteDev/simplehttpserver">
+        <img src="https://raw.githubusercontent.com/KatsuteDev/simplehttpserver/main/assets/icon.png" width=100>
+    </a>
+    <br>
+    <br>
+</div>
+
+## &nbsp;
+
+<br>
+
 <div align="center">
     <a href="https://github.com/Ktt-Development/simplehttpserver">
         <img src="https://raw.githubusercontent.com/Ktt-Development/simplehttpserver/main/branding/Logo.png" alt="Logo" width="100" height="100">
