@@ -9,7 +9,7 @@ jobs:
     environment: Maven Central
     steps:
       - name: 📦 Prepate Git Repo
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v3.0.2
 
       - name: 🔐 Import GPG key
         uses: crazy-max/ghaction-import-gpg@v4
